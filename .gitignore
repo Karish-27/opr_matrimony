@@ -1,0 +1,42 @@
+# Node modules
+node_modules/
+
+# Next.js build output
+.next/
+
+# Local env files
+.env
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# VSCode settings
+.vscode/
+
+# Prisma generated files
+prisma/migrations/*/README.md
+
+# Build artifacts
+*.log
+
+# Public uploads (user-generated content, not source)
+public/uploads/
+
+# Ignore lock files if not needed
+package-lock.json
+yarn.lock
+
+# Ignore test DBs
+*.sqlite
+
+# Ignore test output
+coverage/
+
+# Ignore next-env
+next-env.d.ts

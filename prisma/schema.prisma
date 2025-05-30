@@ -1,0 +1,112 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique // ✅ From register form
+  password  String // ✅ From register form  
+  firstName String // ✅ From register form
+  lastName  String // ✅ From register form
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relation to Profile
+  profile     Profile?
+  userProfile UserProfile?
+}
+
+model Profile {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  firstName String
+  lastName  String
+  age       Int?
+  regNo      String   @unique
+  liked      Boolean? @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relation to User
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserProfile {
+  id             Int      @id @default(autoincrement())
+  userId         Int      @unique
+  type           String
+  dietType       String
+  dob            DateTime
+  age            Int
+  height         String
+  color          String
+  education      String
+  career         String
+  salary         String
+  familyProperty String
+  expectation    String
+  phone          String
+  caste          String
+  marriageStatus String
+  profilePhotos  Json
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  parentInfo       ParentInfo?
+  horoscopeProfile HoroscopeProfile?
+}
+
+model ParentInfo {
+  id               Int    @id @default(autoincrement())
+  userId    Int    @unique
+  fatherName       String
+  motherName       String
+  fatherNative     String
+  motherNative     String
+  fatherProfession String
+  motherProfession String
+  phone            String
+  address          String
+  brothers         Int
+  elderBrothers    Int
+  youngerBrothers  Int
+  marriedBrothers  Int
+  sisters          Int
+  elderSisters     Int
+  youngerSisters   Int
+  marriedSisters   Int
+
+  userProfile UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model HoroscopeProfile {
+  id                 Int    @id @default(autoincrement())
+  userId      Int    @unique
+  zodiacSign         String
+  tamilYear          String
+  tamilMonth         String
+  udayathiNatchat    String
+  day                String
+  birthTime          String
+  starFoot           String
+  ascendant          String
+  birthplace         String
+  natalDirection     String
+  horoscopeDocuments Json?
+
+  userProfile UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
