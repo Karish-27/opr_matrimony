@@ -78,10 +78,8 @@ export async function POST(req: NextRequest) {
         },
         { status: 400 }
       );
-    }
-
-    // Login successful - return user data (excluding password)
-    return NextResponse.json({ 
+    }    // Login successful - set userId cookie and return user data (excluding password)
+    const response = NextResponse.json({ 
       message: "Login successful",
       user: { 
         id: user.id, 
@@ -90,6 +88,17 @@ export async function POST(req: NextRequest) {
         lastName: user.lastName
       } 
     });
+    
+    // Set a secure cookie with the user ID (expires in 7 days)
+    response.cookies.set('userId', String(user.id), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Only secure in production
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7 // 7 days
+    });
+    
+    return response;
 
   } catch (error) {
     console.error('Login error:', error);

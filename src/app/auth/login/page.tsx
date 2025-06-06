@@ -1,14 +1,17 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useTranslation } from "react-i18next";
 import "@/i18n";
+import Cookies from 'js-cookie';
+import { setUserIdInLocalStorage } from "@/utils/auth";
 
 const Login = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { t } = useTranslation();
 
@@ -73,15 +76,22 @@ const Login = () => {
         body: JSON.stringify({ 
           email: email.trim(), 
           password 
-        }),
-      });
-
-      const data = await res.json();
+        }),      });      const data = await res.json();
 
       if (res.ok) {
+        // Transfer userId from localStorage to cookies (server already set cookies)
+        // but keep localStorage for immediate client-side access
+        if (data.user && data.user.id) {
+          setUserIdInLocalStorage(String(data.user.id)); // Always store as string
+        }
         toast.success(t("login_success"));
+        
+        // Get redirect URL from query parameters
+        const redirectUrl = searchParams.get('redirect');
+        const targetUrl = redirectUrl && redirectUrl.startsWith('/') ? redirectUrl : "/profilelists";
+        
         setTimeout(() => {
-          router.push("/auth/userprofile");
+          router.push(targetUrl);
         }, 1500);
       } else {
         // Handle specific error messages from the server

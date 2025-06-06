@@ -82,15 +82,14 @@ export async function POST(req: Request) {
 
     // Hash password for security
     const saltRounds = 12;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    // Step 1: Create the user without the profile
+    const hashedPassword = await bcrypt.hash(password, saltRounds);    // Step 1: Create the user without the profile
     const createdUser = await prisma.user.create({
       data: {
         email: email.trim().toLowerCase(),
         password: hashedPassword,
         firstName: firstName.trim(),
         lastName: lastName.trim(),
+        credits: 2, // Set default 2 credits for new users
       },
     });
 
@@ -105,10 +104,8 @@ export async function POST(req: Request) {
         lastName: lastName.trim(),
         regNo,
       },
-    });
-
-    // Return success response (exclude password for security)
-    return NextResponse.json({
+    });    // Return success response (exclude password for security) and set cookie
+    const response = NextResponse.json({
       message: "Registration successful",
       userId: createdUser.id,
       user: {
@@ -125,6 +122,17 @@ export async function POST(req: Request) {
         },
       },
     }, { status: 201 }); // 201 Created is more appropriate for resource creation
+
+    // Set a secure cookie with the user ID (same as login) - this automatically logs the user in
+    response.cookies.set('userId', String(createdUser.id), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Only secure in production
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7 // 7 days
+    });
+
+    return response;
 
   } catch (error) {
     console.error('Registration error:', error);

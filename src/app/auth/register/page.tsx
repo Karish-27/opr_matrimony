@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useTranslation } from "react-i18next";
 import "@/i18n";
+import { setUserIdInLocalStorage } from "@/utils/auth";
 
 const register = () => {
   const router = useRouter();
@@ -102,14 +103,15 @@ const register = () => {
           firstName: firstName.trim(), 
           lastName: lastName.trim() 
         }),
-      });
-
-      const data = await res.json();
-      const userId = data.userId; // or registerData.user.id
-
+      });      const data = await res.json();
+      console.log("Registration response:", data);
+      
+      const userId = data.userId;
       if (res.ok) {
+        // Store userId in localStorage for immediate use
+        // Note: The server has already set the userId in cookies for long-term authentication
         if (userId) {
-          localStorage.setItem("userId", userId);
+          setUserIdInLocalStorage(String(Number(userId)));
         }
         toast.success(t("register_success"));
         setTimeout(() => {

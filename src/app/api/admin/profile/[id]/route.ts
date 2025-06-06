@@ -13,25 +13,31 @@ export async function GET(req: Request, context: { params: { id: string } }) {
     userProfile = await prisma.userProfile.findUnique({
       where: { id: Number(id) },
       include: {
-        user: { include: { profile: true } },
-        parentInfo: true,
-        horoscopeProfile: true,
+        profile: {
+          include: {
+            user: true,
+            parentInfo: true,
+            horoscopeProfile: true,
+          },
+        },
       },
     });
   } else {
     // Try regNo in Profile table
     userProfile = await prisma.userProfile.findFirst({
       where: {
-        user: {
-          profile: {
-            regNo: id,
-          },
+        profile: {
+          regNo: id,
         },
       },
       include: {
-        user: { include: { profile: true } },
-        parentInfo: true,
-        horoscopeProfile: true,
+        profile: {
+          include: {
+            user: true,
+            parentInfo: true,
+            horoscopeProfile: true,
+          },
+        },
       },
     });
   }
@@ -41,13 +47,13 @@ export async function GET(req: Request, context: { params: { id: string } }) {
   }
 
   const data = {
-    regNo: userProfile.user?.profile?.regNo || `VKR${userProfile.id}`,
-    name: `${userProfile.user?.firstName || ""} ${userProfile.user?.lastName || ""}`.trim(),
-    email: userProfile.user?.email || "",
+    regNo: userProfile.profile?.regNo || `VKR${userProfile.id}`,
+    name: `${userProfile.profile?.user?.firstName || ""} ${userProfile.profile?.user?.lastName || ""}`.trim(),
+    email: userProfile.profile?.user?.email || "",
     phone: userProfile.phone || "",
     dob: userProfile.dob ? userProfile.dob.toISOString().split("T")[0] : "",
     age: userProfile.age,
-    star: userProfile.horoscopeProfile?.starFoot || "",
+    star: userProfile.profile?.horoscopeProfile?.starFoot || "",
     marriageStatus: userProfile.marriageStatus,
     height: userProfile.height,
     qualification: userProfile.education,
@@ -59,25 +65,28 @@ export async function GET(req: Request, context: { params: { id: string } }) {
     career: userProfile.career,
     expectation: userProfile.expectation,
     profilePhotos: Array.isArray(userProfile.profilePhotos) ? userProfile.profilePhotos : [],
-    parentInfo: userProfile.parentInfo,
-    horoscopeProfile: userProfile.horoscopeProfile,
+    parentInfo: userProfile.profile?.parentInfo,
+    horoscopeProfile: userProfile.profile?.horoscopeProfile,
   };
 
   return NextResponse.json(data);
 }
 
 export async function PUT(req: Request, context: { params: { id: string } }) {
-  // Correct: await context.params before using id (Next.js dynamic API requirement)
   const params = await context.params;
   const { id } = params;
-  const body = await req.json();
+  let body: any;
+  
   try {
+    body = await req.json();
+    console.log('PUT request body:', body); // Add debugging
+    
     // Update UserProfile main fields
     const updatedProfile = await prisma.userProfile.update({
       where: { id: Number(id) },
       data: {
         phone: body.phone,
-        dob: body.dob,
+        dob: body.dob ? new Date(body.dob + 'T00:00:00.000Z') : new Date(),
         age: Number(body.age),
         height: body.height,
         color: body.color,
@@ -89,25 +98,52 @@ export async function PUT(req: Request, context: { params: { id: string } }) {
         dietType: body.typeOfFood,
         marriageStatus: body.marriageStatus,
         caste: body.caste,
+        type: body.type || 'User', // Add required type field with default
+        profilePhotos: body.profilePhotos || [], // Add required profilePhotos field with default
       },
       include: {
-        user: { include: { profile: true } },
-        parentInfo: true,
-        horoscopeProfile: true,
+        profile: {
+          include: {
+            user: true,
+            parentInfo: true,
+            horoscopeProfile: true,
+          },
+        },
       },
     });
+
     // Update User email if changed
-    if (body.email && updatedProfile.user?.email !== body.email) {
+    if (body.email && updatedProfile.profile?.user?.email !== body.email) {
       await prisma.user.update({
-        where: { id: updatedProfile.userId },
+        where: { id: updatedProfile.profile.user.id },
         data: { email: body.email },
       });
+      // Update the local object to reflect the new email
+      updatedProfile.profile.user.email = body.email;
     }
-    return NextResponse.json({ ...updatedProfile, user: { ...updatedProfile.user, email: body.email } });
+
+    // Update horoscope documents if provided
+    if (body.horoscopeProfile && updatedProfile.profile?.horoscopeProfile) {
+      await prisma.horoscopeProfile.update({
+        where: { id: updatedProfile.profile.horoscopeProfile.id },
+        data: {
+          horoscopeDocuments: body.horoscopeProfile.horoscopeDocuments || [],
+        },
+      });
+      // Update the local object
+      updatedProfile.profile.horoscopeProfile.horoscopeDocuments = body.horoscopeProfile.horoscopeDocuments || [];
+    }
+
+    return NextResponse.json(updatedProfile);
   } catch (error: unknown) {
+    console.error('Error updating profile:', error); // Add detailed logging
     let message = 'Unknown error';
     if (error instanceof Error) message = error.message;
-    return NextResponse.json({ error: 'Failed to update profile', details: message }, { status: 500 });
+    return NextResponse.json({ 
+      error: 'Failed to update profile', 
+      details: message,
+      requestBody: body // Include request body for debugging
+    }, { status: 500 });
   } finally {
     await prisma.$disconnect();
   }

@@ -38,6 +38,16 @@ export type ParentInfo = $Result.DefaultSelection<Prisma.$ParentInfoPayload>
  * 
  */
 export type HoroscopeProfile = $Result.DefaultSelection<Prisma.$HoroscopeProfilePayload>
+/**
+ * Model ProfileView
+ * 
+ */
+export type ProfileView = $Result.DefaultSelection<Prisma.$ProfileViewPayload>
+/**
+ * Model Payment
+ * 
+ */
+export type Payment = $Result.DefaultSelection<Prisma.$PaymentPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -213,6 +223,26 @@ export class PrismaClient<
     * ```
     */
   get horoscopeProfile(): Prisma.HoroscopeProfileDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.profileView`: Exposes CRUD operations for the **ProfileView** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProfileViews
+    * const profileViews = await prisma.profileView.findMany()
+    * ```
+    */
+  get profileView(): Prisma.ProfileViewDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.payment`: Exposes CRUD operations for the **Payment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Payments
+    * const payments = await prisma.payment.findMany()
+    * ```
+    */
+  get payment(): Prisma.PaymentDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -657,7 +687,9 @@ export namespace Prisma {
     Profile: 'Profile',
     UserProfile: 'UserProfile',
     ParentInfo: 'ParentInfo',
-    HoroscopeProfile: 'HoroscopeProfile'
+    HoroscopeProfile: 'HoroscopeProfile',
+    ProfileView: 'ProfileView',
+    Payment: 'Payment'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -676,7 +708,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "profile" | "userProfile" | "parentInfo" | "horoscopeProfile"
+      modelProps: "user" | "profile" | "userProfile" | "parentInfo" | "horoscopeProfile" | "profileView" | "payment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1010,6 +1042,138 @@ export namespace Prisma {
           }
         }
       }
+      ProfileView: {
+        payload: Prisma.$ProfileViewPayload<ExtArgs>
+        fields: Prisma.ProfileViewFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProfileViewFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileViewPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProfileViewFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileViewPayload>
+          }
+          findFirst: {
+            args: Prisma.ProfileViewFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileViewPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProfileViewFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileViewPayload>
+          }
+          findMany: {
+            args: Prisma.ProfileViewFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileViewPayload>[]
+          }
+          create: {
+            args: Prisma.ProfileViewCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileViewPayload>
+          }
+          createMany: {
+            args: Prisma.ProfileViewCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.ProfileViewDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileViewPayload>
+          }
+          update: {
+            args: Prisma.ProfileViewUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileViewPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProfileViewDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProfileViewUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ProfileViewUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProfileViewPayload>
+          }
+          aggregate: {
+            args: Prisma.ProfileViewAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProfileView>
+          }
+          groupBy: {
+            args: Prisma.ProfileViewGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProfileViewGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProfileViewCountArgs<ExtArgs>
+            result: $Utils.Optional<ProfileViewCountAggregateOutputType> | number
+          }
+        }
+      }
+      Payment: {
+        payload: Prisma.$PaymentPayload<ExtArgs>
+        fields: Prisma.PaymentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PaymentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PaymentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload>
+          }
+          findFirst: {
+            args: Prisma.PaymentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PaymentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload>
+          }
+          findMany: {
+            args: Prisma.PaymentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload>[]
+          }
+          create: {
+            args: Prisma.PaymentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload>
+          }
+          createMany: {
+            args: Prisma.PaymentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.PaymentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload>
+          }
+          update: {
+            args: Prisma.PaymentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload>
+          }
+          deleteMany: {
+            args: Prisma.PaymentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PaymentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PaymentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PaymentPayload>
+          }
+          aggregate: {
+            args: Prisma.PaymentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePayment>
+          }
+          groupBy: {
+            args: Prisma.PaymentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PaymentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PaymentCountArgs<ExtArgs>
+            result: $Utils.Optional<PaymentCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1099,6 +1263,8 @@ export namespace Prisma {
     userProfile?: UserProfileOmit
     parentInfo?: ParentInfoOmit
     horoscopeProfile?: HoroscopeProfileOmit
+    profileView?: ProfileViewOmit
+    payment?: PaymentOmit
   }
 
   /* Types for Logging */
@@ -1188,6 +1354,36 @@ export namespace Prisma {
    */
 
 
+  /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    profileViews: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    profileViews?: boolean | UserCountOutputTypeCountProfileViewsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountProfileViewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProfileViewWhereInput
+  }
+
 
   /**
    * Models
@@ -1207,10 +1403,12 @@ export namespace Prisma {
 
   export type UserAvgAggregateOutputType = {
     id: number | null
+    credits: number | null
   }
 
   export type UserSumAggregateOutputType = {
     id: number | null
+    credits: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -1219,6 +1417,8 @@ export namespace Prisma {
     password: string | null
     firstName: string | null
     lastName: string | null
+    isActive: boolean | null
+    credits: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1229,6 +1429,8 @@ export namespace Prisma {
     password: string | null
     firstName: string | null
     lastName: string | null
+    isActive: boolean | null
+    credits: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1239,6 +1441,8 @@ export namespace Prisma {
     password: number
     firstName: number
     lastName: number
+    isActive: number
+    credits: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1247,10 +1451,12 @@ export namespace Prisma {
 
   export type UserAvgAggregateInputType = {
     id?: true
+    credits?: true
   }
 
   export type UserSumAggregateInputType = {
     id?: true
+    credits?: true
   }
 
   export type UserMinAggregateInputType = {
@@ -1259,6 +1465,8 @@ export namespace Prisma {
     password?: true
     firstName?: true
     lastName?: true
+    isActive?: true
+    credits?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1269,6 +1477,8 @@ export namespace Prisma {
     password?: true
     firstName?: true
     lastName?: true
+    isActive?: true
+    credits?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1279,6 +1489,8 @@ export namespace Prisma {
     password?: true
     firstName?: true
     lastName?: true
+    isActive?: true
+    credits?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1376,6 +1588,8 @@ export namespace Prisma {
     password: string
     firstName: string
     lastName: string
+    isActive: boolean
+    credits: number
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -1405,10 +1619,13 @@ export namespace Prisma {
     password?: boolean
     firstName?: boolean
     lastName?: boolean
+    isActive?: boolean
+    credits?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     profile?: boolean | User$profileArgs<ExtArgs>
-    userProfile?: boolean | User$userProfileArgs<ExtArgs>
+    profileViews?: boolean | User$profileViewsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
 
@@ -1419,21 +1636,24 @@ export namespace Prisma {
     password?: boolean
     firstName?: boolean
     lastName?: boolean
+    isActive?: boolean
+    credits?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "firstName" | "lastName" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "password" | "firstName" | "lastName" | "isActive" | "credits" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     profile?: boolean | User$profileArgs<ExtArgs>
-    userProfile?: boolean | User$userProfileArgs<ExtArgs>
+    profileViews?: boolean | User$profileViewsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "User"
     objects: {
       profile: Prisma.$ProfilePayload<ExtArgs> | null
-      userProfile: Prisma.$UserProfilePayload<ExtArgs> | null
+      profileViews: Prisma.$ProfileViewPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -1441,6 +1661,8 @@ export namespace Prisma {
       password: string
       firstName: string
       lastName: string
+      isActive: boolean
+      credits: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -1784,7 +2006,7 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     profile<T extends User$profileArgs<ExtArgs> = {}>(args?: Subset<T, User$profileArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    userProfile<T extends User$userProfileArgs<ExtArgs> = {}>(args?: Subset<T, User$userProfileArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    profileViews<T extends User$profileViewsArgs<ExtArgs> = {}>(args?: Subset<T, User$profileViewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfileViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1819,6 +2041,8 @@ export namespace Prisma {
     readonly password: FieldRef<"User", 'String'>
     readonly firstName: FieldRef<"User", 'String'>
     readonly lastName: FieldRef<"User", 'String'>
+    readonly isActive: FieldRef<"User", 'Boolean'>
+    readonly credits: FieldRef<"User", 'Int'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -2183,22 +2407,27 @@ export namespace Prisma {
   }
 
   /**
-   * User.userProfile
+   * User.profileViews
    */
-  export type User$userProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$profileViewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the UserProfile
+     * Select specific fields to fetch from the ProfileView
      */
-    select?: UserProfileSelect<ExtArgs> | null
+    select?: ProfileViewSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the UserProfile
+     * Omit specific fields from the ProfileView
      */
-    omit?: UserProfileOmit<ExtArgs> | null
+    omit?: ProfileViewOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: UserProfileInclude<ExtArgs> | null
-    where?: UserProfileWhereInput
+    include?: ProfileViewInclude<ExtArgs> | null
+    where?: ProfileViewWhereInput
+    orderBy?: ProfileViewOrderByWithRelationInput | ProfileViewOrderByWithRelationInput[]
+    cursor?: ProfileViewWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProfileViewScalarFieldEnum | ProfileViewScalarFieldEnum[]
   }
 
   /**
@@ -2459,6 +2688,9 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    userProfile?: boolean | Profile$userProfileArgs<ExtArgs>
+    parentInfo?: boolean | Profile$parentInfoArgs<ExtArgs>
+    horoscopeProfile?: boolean | Profile$horoscopeProfileArgs<ExtArgs>
   }, ExtArgs["result"]["profile"]>
 
 
@@ -2478,12 +2710,18 @@ export namespace Prisma {
   export type ProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "firstName" | "lastName" | "age" | "regNo" | "liked" | "createdAt" | "updatedAt", ExtArgs["result"]["profile"]>
   export type ProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    userProfile?: boolean | Profile$userProfileArgs<ExtArgs>
+    parentInfo?: boolean | Profile$parentInfoArgs<ExtArgs>
+    horoscopeProfile?: boolean | Profile$horoscopeProfileArgs<ExtArgs>
   }
 
   export type $ProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Profile"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
+      userProfile: Prisma.$UserProfilePayload<ExtArgs> | null
+      parentInfo: Prisma.$ParentInfoPayload<ExtArgs> | null
+      horoscopeProfile: Prisma.$HoroscopeProfilePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -2836,6 +3074,9 @@ export namespace Prisma {
   export interface Prisma__ProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    userProfile<T extends Profile$userProfileArgs<ExtArgs> = {}>(args?: Subset<T, Profile$userProfileArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    parentInfo<T extends Profile$parentInfoArgs<ExtArgs> = {}>(args?: Subset<T, Profile$parentInfoArgs<ExtArgs>>): Prisma__ParentInfoClient<$Result.GetResult<Prisma.$ParentInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    horoscopeProfile<T extends Profile$horoscopeProfileArgs<ExtArgs> = {}>(args?: Subset<T, Profile$horoscopeProfileArgs<ExtArgs>>): Prisma__HoroscopeProfileClient<$Result.GetResult<Prisma.$HoroscopeProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3217,6 +3458,63 @@ export namespace Prisma {
   }
 
   /**
+   * Profile.userProfile
+   */
+  export type Profile$userProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserProfile
+     */
+    select?: UserProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserProfile
+     */
+    omit?: UserProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserProfileInclude<ExtArgs> | null
+    where?: UserProfileWhereInput
+  }
+
+  /**
+   * Profile.parentInfo
+   */
+  export type Profile$parentInfoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ParentInfo
+     */
+    select?: ParentInfoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ParentInfo
+     */
+    omit?: ParentInfoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ParentInfoInclude<ExtArgs> | null
+    where?: ParentInfoWhereInput
+  }
+
+  /**
+   * Profile.horoscopeProfile
+   */
+  export type Profile$horoscopeProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the HoroscopeProfile
+     */
+    select?: HoroscopeProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the HoroscopeProfile
+     */
+    omit?: HoroscopeProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: HoroscopeProfileInclude<ExtArgs> | null
+    where?: HoroscopeProfileWhereInput
+  }
+
+  /**
    * Profile without action
    */
   export type ProfileDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3549,9 +3847,7 @@ export namespace Prisma {
     profilePhotos?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    parentInfo?: boolean | UserProfile$parentInfoArgs<ExtArgs>
-    horoscopeProfile?: boolean | UserProfile$horoscopeProfileArgs<ExtArgs>
+    profile?: boolean | ProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["userProfile"]>
 
 
@@ -3580,17 +3876,13 @@ export namespace Prisma {
 
   export type UserProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "type" | "dietType" | "dob" | "age" | "height" | "color" | "education" | "career" | "salary" | "familyProperty" | "expectation" | "phone" | "caste" | "marriageStatus" | "profilePhotos" | "createdAt" | "updatedAt", ExtArgs["result"]["userProfile"]>
   export type UserProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>
-    parentInfo?: boolean | UserProfile$parentInfoArgs<ExtArgs>
-    horoscopeProfile?: boolean | UserProfile$horoscopeProfileArgs<ExtArgs>
+    profile?: boolean | ProfileDefaultArgs<ExtArgs>
   }
 
   export type $UserProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "UserProfile"
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>
-      parentInfo: Prisma.$ParentInfoPayload<ExtArgs> | null
-      horoscopeProfile: Prisma.$HoroscopeProfilePayload<ExtArgs> | null
+      profile: Prisma.$ProfilePayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -3952,9 +4244,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    parentInfo<T extends UserProfile$parentInfoArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$parentInfoArgs<ExtArgs>>): Prisma__ParentInfoClient<$Result.GetResult<Prisma.$ParentInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    horoscopeProfile<T extends UserProfile$horoscopeProfileArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$horoscopeProfileArgs<ExtArgs>>): Prisma__HoroscopeProfileClient<$Result.GetResult<Prisma.$HoroscopeProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    profile<T extends ProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProfileDefaultArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4346,44 +4636,6 @@ export namespace Prisma {
   }
 
   /**
-   * UserProfile.parentInfo
-   */
-  export type UserProfile$parentInfoArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ParentInfo
-     */
-    select?: ParentInfoSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ParentInfo
-     */
-    omit?: ParentInfoOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ParentInfoInclude<ExtArgs> | null
-    where?: ParentInfoWhereInput
-  }
-
-  /**
-   * UserProfile.horoscopeProfile
-   */
-  export type UserProfile$horoscopeProfileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the HoroscopeProfile
-     */
-    select?: HoroscopeProfileSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the HoroscopeProfile
-     */
-    omit?: HoroscopeProfileOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: HoroscopeProfileInclude<ExtArgs> | null
-    where?: HoroscopeProfileWhereInput
-  }
-
-  /**
    * UserProfile without action
    */
   export type UserProfileDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4740,7 +4992,7 @@ export namespace Prisma {
     elderSisters?: boolean
     youngerSisters?: boolean
     marriedSisters?: boolean
-    userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+    profile?: boolean | ProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["parentInfo"]>
 
 
@@ -4768,13 +5020,13 @@ export namespace Prisma {
 
   export type ParentInfoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "fatherName" | "motherName" | "fatherNative" | "motherNative" | "fatherProfession" | "motherProfession" | "phone" | "address" | "brothers" | "elderBrothers" | "youngerBrothers" | "marriedBrothers" | "sisters" | "elderSisters" | "youngerSisters" | "marriedSisters", ExtArgs["result"]["parentInfo"]>
   export type ParentInfoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+    profile?: boolean | ProfileDefaultArgs<ExtArgs>
   }
 
   export type $ParentInfoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ParentInfo"
     objects: {
-      userProfile: Prisma.$UserProfilePayload<ExtArgs>
+      profile: Prisma.$ProfilePayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -5135,7 +5387,7 @@ export namespace Prisma {
    */
   export interface Prisma__ParentInfoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    userProfile<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    profile<T extends ProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProfileDefaultArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5806,7 +6058,7 @@ export namespace Prisma {
     birthplace?: boolean
     natalDirection?: boolean
     horoscopeDocuments?: boolean
-    userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+    profile?: boolean | ProfileDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["horoscopeProfile"]>
 
 
@@ -5829,13 +6081,13 @@ export namespace Prisma {
 
   export type HoroscopeProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "zodiacSign" | "tamilYear" | "tamilMonth" | "udayathiNatchat" | "day" | "birthTime" | "starFoot" | "ascendant" | "birthplace" | "natalDirection" | "horoscopeDocuments", ExtArgs["result"]["horoscopeProfile"]>
   export type HoroscopeProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    userProfile?: boolean | UserProfileDefaultArgs<ExtArgs>
+    profile?: boolean | ProfileDefaultArgs<ExtArgs>
   }
 
   export type $HoroscopeProfilePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "HoroscopeProfile"
     objects: {
-      userProfile: Prisma.$UserProfilePayload<ExtArgs>
+      profile: Prisma.$ProfilePayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -6191,7 +6443,7 @@ export namespace Prisma {
    */
   export interface Prisma__HoroscopeProfileClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    userProfile<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    profile<T extends ProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProfileDefaultArgs<ExtArgs>>): Prisma__ProfileClient<$Result.GetResult<Prisma.$ProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6596,6 +6848,1897 @@ export namespace Prisma {
 
 
   /**
+   * Model ProfileView
+   */
+
+  export type AggregateProfileView = {
+    _count: ProfileViewCountAggregateOutputType | null
+    _avg: ProfileViewAvgAggregateOutputType | null
+    _sum: ProfileViewSumAggregateOutputType | null
+    _min: ProfileViewMinAggregateOutputType | null
+    _max: ProfileViewMaxAggregateOutputType | null
+  }
+
+  export type ProfileViewAvgAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    profileId: number | null
+  }
+
+  export type ProfileViewSumAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    profileId: number | null
+  }
+
+  export type ProfileViewMinAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    profileId: number | null
+    viewedAt: Date | null
+  }
+
+  export type ProfileViewMaxAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    profileId: number | null
+    viewedAt: Date | null
+  }
+
+  export type ProfileViewCountAggregateOutputType = {
+    id: number
+    userId: number
+    profileId: number
+    viewedAt: number
+    _all: number
+  }
+
+
+  export type ProfileViewAvgAggregateInputType = {
+    id?: true
+    userId?: true
+    profileId?: true
+  }
+
+  export type ProfileViewSumAggregateInputType = {
+    id?: true
+    userId?: true
+    profileId?: true
+  }
+
+  export type ProfileViewMinAggregateInputType = {
+    id?: true
+    userId?: true
+    profileId?: true
+    viewedAt?: true
+  }
+
+  export type ProfileViewMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    profileId?: true
+    viewedAt?: true
+  }
+
+  export type ProfileViewCountAggregateInputType = {
+    id?: true
+    userId?: true
+    profileId?: true
+    viewedAt?: true
+    _all?: true
+  }
+
+  export type ProfileViewAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProfileView to aggregate.
+     */
+    where?: ProfileViewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProfileViews to fetch.
+     */
+    orderBy?: ProfileViewOrderByWithRelationInput | ProfileViewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProfileViewWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProfileViews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProfileViews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProfileViews
+    **/
+    _count?: true | ProfileViewCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProfileViewAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProfileViewSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProfileViewMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProfileViewMaxAggregateInputType
+  }
+
+  export type GetProfileViewAggregateType<T extends ProfileViewAggregateArgs> = {
+        [P in keyof T & keyof AggregateProfileView]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProfileView[P]>
+      : GetScalarType<T[P], AggregateProfileView[P]>
+  }
+
+
+
+
+  export type ProfileViewGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProfileViewWhereInput
+    orderBy?: ProfileViewOrderByWithAggregationInput | ProfileViewOrderByWithAggregationInput[]
+    by: ProfileViewScalarFieldEnum[] | ProfileViewScalarFieldEnum
+    having?: ProfileViewScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProfileViewCountAggregateInputType | true
+    _avg?: ProfileViewAvgAggregateInputType
+    _sum?: ProfileViewSumAggregateInputType
+    _min?: ProfileViewMinAggregateInputType
+    _max?: ProfileViewMaxAggregateInputType
+  }
+
+  export type ProfileViewGroupByOutputType = {
+    id: number
+    userId: number
+    profileId: number
+    viewedAt: Date
+    _count: ProfileViewCountAggregateOutputType | null
+    _avg: ProfileViewAvgAggregateOutputType | null
+    _sum: ProfileViewSumAggregateOutputType | null
+    _min: ProfileViewMinAggregateOutputType | null
+    _max: ProfileViewMaxAggregateOutputType | null
+  }
+
+  type GetProfileViewGroupByPayload<T extends ProfileViewGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProfileViewGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProfileViewGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProfileViewGroupByOutputType[P]>
+            : GetScalarType<T[P], ProfileViewGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProfileViewSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    profileId?: boolean
+    viewedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["profileView"]>
+
+
+
+  export type ProfileViewSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    profileId?: boolean
+    viewedAt?: boolean
+  }
+
+  export type ProfileViewOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "profileId" | "viewedAt", ExtArgs["result"]["profileView"]>
+  export type ProfileViewInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ProfileViewPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProfileView"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      userId: number
+      profileId: number
+      viewedAt: Date
+    }, ExtArgs["result"]["profileView"]>
+    composites: {}
+  }
+
+  type ProfileViewGetPayload<S extends boolean | null | undefined | ProfileViewDefaultArgs> = $Result.GetResult<Prisma.$ProfileViewPayload, S>
+
+  type ProfileViewCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProfileViewFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProfileViewCountAggregateInputType | true
+    }
+
+  export interface ProfileViewDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProfileView'], meta: { name: 'ProfileView' } }
+    /**
+     * Find zero or one ProfileView that matches the filter.
+     * @param {ProfileViewFindUniqueArgs} args - Arguments to find a ProfileView
+     * @example
+     * // Get one ProfileView
+     * const profileView = await prisma.profileView.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProfileViewFindUniqueArgs>(args: SelectSubset<T, ProfileViewFindUniqueArgs<ExtArgs>>): Prisma__ProfileViewClient<$Result.GetResult<Prisma.$ProfileViewPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProfileView that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProfileViewFindUniqueOrThrowArgs} args - Arguments to find a ProfileView
+     * @example
+     * // Get one ProfileView
+     * const profileView = await prisma.profileView.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProfileViewFindUniqueOrThrowArgs>(args: SelectSubset<T, ProfileViewFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProfileViewClient<$Result.GetResult<Prisma.$ProfileViewPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProfileView that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileViewFindFirstArgs} args - Arguments to find a ProfileView
+     * @example
+     * // Get one ProfileView
+     * const profileView = await prisma.profileView.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProfileViewFindFirstArgs>(args?: SelectSubset<T, ProfileViewFindFirstArgs<ExtArgs>>): Prisma__ProfileViewClient<$Result.GetResult<Prisma.$ProfileViewPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProfileView that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileViewFindFirstOrThrowArgs} args - Arguments to find a ProfileView
+     * @example
+     * // Get one ProfileView
+     * const profileView = await prisma.profileView.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProfileViewFindFirstOrThrowArgs>(args?: SelectSubset<T, ProfileViewFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProfileViewClient<$Result.GetResult<Prisma.$ProfileViewPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProfileViews that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileViewFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProfileViews
+     * const profileViews = await prisma.profileView.findMany()
+     * 
+     * // Get first 10 ProfileViews
+     * const profileViews = await prisma.profileView.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const profileViewWithIdOnly = await prisma.profileView.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProfileViewFindManyArgs>(args?: SelectSubset<T, ProfileViewFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProfileViewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProfileView.
+     * @param {ProfileViewCreateArgs} args - Arguments to create a ProfileView.
+     * @example
+     * // Create one ProfileView
+     * const ProfileView = await prisma.profileView.create({
+     *   data: {
+     *     // ... data to create a ProfileView
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProfileViewCreateArgs>(args: SelectSubset<T, ProfileViewCreateArgs<ExtArgs>>): Prisma__ProfileViewClient<$Result.GetResult<Prisma.$ProfileViewPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProfileViews.
+     * @param {ProfileViewCreateManyArgs} args - Arguments to create many ProfileViews.
+     * @example
+     * // Create many ProfileViews
+     * const profileView = await prisma.profileView.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProfileViewCreateManyArgs>(args?: SelectSubset<T, ProfileViewCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a ProfileView.
+     * @param {ProfileViewDeleteArgs} args - Arguments to delete one ProfileView.
+     * @example
+     * // Delete one ProfileView
+     * const ProfileView = await prisma.profileView.delete({
+     *   where: {
+     *     // ... filter to delete one ProfileView
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProfileViewDeleteArgs>(args: SelectSubset<T, ProfileViewDeleteArgs<ExtArgs>>): Prisma__ProfileViewClient<$Result.GetResult<Prisma.$ProfileViewPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProfileView.
+     * @param {ProfileViewUpdateArgs} args - Arguments to update one ProfileView.
+     * @example
+     * // Update one ProfileView
+     * const profileView = await prisma.profileView.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProfileViewUpdateArgs>(args: SelectSubset<T, ProfileViewUpdateArgs<ExtArgs>>): Prisma__ProfileViewClient<$Result.GetResult<Prisma.$ProfileViewPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProfileViews.
+     * @param {ProfileViewDeleteManyArgs} args - Arguments to filter ProfileViews to delete.
+     * @example
+     * // Delete a few ProfileViews
+     * const { count } = await prisma.profileView.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProfileViewDeleteManyArgs>(args?: SelectSubset<T, ProfileViewDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProfileViews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileViewUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProfileViews
+     * const profileView = await prisma.profileView.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProfileViewUpdateManyArgs>(args: SelectSubset<T, ProfileViewUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ProfileView.
+     * @param {ProfileViewUpsertArgs} args - Arguments to update or create a ProfileView.
+     * @example
+     * // Update or create a ProfileView
+     * const profileView = await prisma.profileView.upsert({
+     *   create: {
+     *     // ... data to create a ProfileView
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProfileView we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProfileViewUpsertArgs>(args: SelectSubset<T, ProfileViewUpsertArgs<ExtArgs>>): Prisma__ProfileViewClient<$Result.GetResult<Prisma.$ProfileViewPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProfileViews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileViewCountArgs} args - Arguments to filter ProfileViews to count.
+     * @example
+     * // Count the number of ProfileViews
+     * const count = await prisma.profileView.count({
+     *   where: {
+     *     // ... the filter for the ProfileViews we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProfileViewCountArgs>(
+      args?: Subset<T, ProfileViewCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProfileViewCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProfileView.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileViewAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProfileViewAggregateArgs>(args: Subset<T, ProfileViewAggregateArgs>): Prisma.PrismaPromise<GetProfileViewAggregateType<T>>
+
+    /**
+     * Group by ProfileView.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProfileViewGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProfileViewGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProfileViewGroupByArgs['orderBy'] }
+        : { orderBy?: ProfileViewGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProfileViewGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProfileViewGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProfileView model
+   */
+  readonly fields: ProfileViewFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProfileView.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProfileViewClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProfileView model
+   */
+  interface ProfileViewFieldRefs {
+    readonly id: FieldRef<"ProfileView", 'Int'>
+    readonly userId: FieldRef<"ProfileView", 'Int'>
+    readonly profileId: FieldRef<"ProfileView", 'Int'>
+    readonly viewedAt: FieldRef<"ProfileView", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProfileView findUnique
+   */
+  export type ProfileViewFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileView
+     */
+    select?: ProfileViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProfileView
+     */
+    omit?: ProfileViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileViewInclude<ExtArgs> | null
+    /**
+     * Filter, which ProfileView to fetch.
+     */
+    where: ProfileViewWhereUniqueInput
+  }
+
+  /**
+   * ProfileView findUniqueOrThrow
+   */
+  export type ProfileViewFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileView
+     */
+    select?: ProfileViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProfileView
+     */
+    omit?: ProfileViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileViewInclude<ExtArgs> | null
+    /**
+     * Filter, which ProfileView to fetch.
+     */
+    where: ProfileViewWhereUniqueInput
+  }
+
+  /**
+   * ProfileView findFirst
+   */
+  export type ProfileViewFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileView
+     */
+    select?: ProfileViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProfileView
+     */
+    omit?: ProfileViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileViewInclude<ExtArgs> | null
+    /**
+     * Filter, which ProfileView to fetch.
+     */
+    where?: ProfileViewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProfileViews to fetch.
+     */
+    orderBy?: ProfileViewOrderByWithRelationInput | ProfileViewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProfileViews.
+     */
+    cursor?: ProfileViewWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProfileViews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProfileViews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProfileViews.
+     */
+    distinct?: ProfileViewScalarFieldEnum | ProfileViewScalarFieldEnum[]
+  }
+
+  /**
+   * ProfileView findFirstOrThrow
+   */
+  export type ProfileViewFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileView
+     */
+    select?: ProfileViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProfileView
+     */
+    omit?: ProfileViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileViewInclude<ExtArgs> | null
+    /**
+     * Filter, which ProfileView to fetch.
+     */
+    where?: ProfileViewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProfileViews to fetch.
+     */
+    orderBy?: ProfileViewOrderByWithRelationInput | ProfileViewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProfileViews.
+     */
+    cursor?: ProfileViewWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProfileViews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProfileViews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProfileViews.
+     */
+    distinct?: ProfileViewScalarFieldEnum | ProfileViewScalarFieldEnum[]
+  }
+
+  /**
+   * ProfileView findMany
+   */
+  export type ProfileViewFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileView
+     */
+    select?: ProfileViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProfileView
+     */
+    omit?: ProfileViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileViewInclude<ExtArgs> | null
+    /**
+     * Filter, which ProfileViews to fetch.
+     */
+    where?: ProfileViewWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProfileViews to fetch.
+     */
+    orderBy?: ProfileViewOrderByWithRelationInput | ProfileViewOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProfileViews.
+     */
+    cursor?: ProfileViewWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProfileViews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProfileViews.
+     */
+    skip?: number
+    distinct?: ProfileViewScalarFieldEnum | ProfileViewScalarFieldEnum[]
+  }
+
+  /**
+   * ProfileView create
+   */
+  export type ProfileViewCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileView
+     */
+    select?: ProfileViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProfileView
+     */
+    omit?: ProfileViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileViewInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProfileView.
+     */
+    data: XOR<ProfileViewCreateInput, ProfileViewUncheckedCreateInput>
+  }
+
+  /**
+   * ProfileView createMany
+   */
+  export type ProfileViewCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProfileViews.
+     */
+    data: ProfileViewCreateManyInput | ProfileViewCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProfileView update
+   */
+  export type ProfileViewUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileView
+     */
+    select?: ProfileViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProfileView
+     */
+    omit?: ProfileViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileViewInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProfileView.
+     */
+    data: XOR<ProfileViewUpdateInput, ProfileViewUncheckedUpdateInput>
+    /**
+     * Choose, which ProfileView to update.
+     */
+    where: ProfileViewWhereUniqueInput
+  }
+
+  /**
+   * ProfileView updateMany
+   */
+  export type ProfileViewUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProfileViews.
+     */
+    data: XOR<ProfileViewUpdateManyMutationInput, ProfileViewUncheckedUpdateManyInput>
+    /**
+     * Filter which ProfileViews to update
+     */
+    where?: ProfileViewWhereInput
+    /**
+     * Limit how many ProfileViews to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProfileView upsert
+   */
+  export type ProfileViewUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileView
+     */
+    select?: ProfileViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProfileView
+     */
+    omit?: ProfileViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileViewInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProfileView to update in case it exists.
+     */
+    where: ProfileViewWhereUniqueInput
+    /**
+     * In case the ProfileView found by the `where` argument doesn't exist, create a new ProfileView with this data.
+     */
+    create: XOR<ProfileViewCreateInput, ProfileViewUncheckedCreateInput>
+    /**
+     * In case the ProfileView was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProfileViewUpdateInput, ProfileViewUncheckedUpdateInput>
+  }
+
+  /**
+   * ProfileView delete
+   */
+  export type ProfileViewDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileView
+     */
+    select?: ProfileViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProfileView
+     */
+    omit?: ProfileViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileViewInclude<ExtArgs> | null
+    /**
+     * Filter which ProfileView to delete.
+     */
+    where: ProfileViewWhereUniqueInput
+  }
+
+  /**
+   * ProfileView deleteMany
+   */
+  export type ProfileViewDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProfileViews to delete
+     */
+    where?: ProfileViewWhereInput
+    /**
+     * Limit how many ProfileViews to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProfileView without action
+   */
+  export type ProfileViewDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProfileView
+     */
+    select?: ProfileViewSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProfileView
+     */
+    omit?: ProfileViewOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProfileViewInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Payment
+   */
+
+  export type AggregatePayment = {
+    _count: PaymentCountAggregateOutputType | null
+    _avg: PaymentAvgAggregateOutputType | null
+    _sum: PaymentSumAggregateOutputType | null
+    _min: PaymentMinAggregateOutputType | null
+    _max: PaymentMaxAggregateOutputType | null
+  }
+
+  export type PaymentAvgAggregateOutputType = {
+    id: number | null
+    transactionAmount: number | null
+  }
+
+  export type PaymentSumAggregateOutputType = {
+    id: number | null
+    transactionAmount: number | null
+  }
+
+  export type PaymentMinAggregateOutputType = {
+    id: number | null
+    customerName: string | null
+    transactionAmount: number | null
+    transactionDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PaymentMaxAggregateOutputType = {
+    id: number | null
+    customerName: string | null
+    transactionAmount: number | null
+    transactionDate: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PaymentCountAggregateOutputType = {
+    id: number
+    customerName: number
+    transactionAmount: number
+    transactionDate: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PaymentAvgAggregateInputType = {
+    id?: true
+    transactionAmount?: true
+  }
+
+  export type PaymentSumAggregateInputType = {
+    id?: true
+    transactionAmount?: true
+  }
+
+  export type PaymentMinAggregateInputType = {
+    id?: true
+    customerName?: true
+    transactionAmount?: true
+    transactionDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PaymentMaxAggregateInputType = {
+    id?: true
+    customerName?: true
+    transactionAmount?: true
+    transactionDate?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PaymentCountAggregateInputType = {
+    id?: true
+    customerName?: true
+    transactionAmount?: true
+    transactionDate?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PaymentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Payment to aggregate.
+     */
+    where?: PaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Payments to fetch.
+     */
+    orderBy?: PaymentOrderByWithRelationInput | PaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Payments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Payments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Payments
+    **/
+    _count?: true | PaymentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PaymentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PaymentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PaymentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PaymentMaxAggregateInputType
+  }
+
+  export type GetPaymentAggregateType<T extends PaymentAggregateArgs> = {
+        [P in keyof T & keyof AggregatePayment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePayment[P]>
+      : GetScalarType<T[P], AggregatePayment[P]>
+  }
+
+
+
+
+  export type PaymentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PaymentWhereInput
+    orderBy?: PaymentOrderByWithAggregationInput | PaymentOrderByWithAggregationInput[]
+    by: PaymentScalarFieldEnum[] | PaymentScalarFieldEnum
+    having?: PaymentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PaymentCountAggregateInputType | true
+    _avg?: PaymentAvgAggregateInputType
+    _sum?: PaymentSumAggregateInputType
+    _min?: PaymentMinAggregateInputType
+    _max?: PaymentMaxAggregateInputType
+  }
+
+  export type PaymentGroupByOutputType = {
+    id: number
+    customerName: string
+    transactionAmount: number
+    transactionDate: Date
+    createdAt: Date
+    updatedAt: Date
+    _count: PaymentCountAggregateOutputType | null
+    _avg: PaymentAvgAggregateOutputType | null
+    _sum: PaymentSumAggregateOutputType | null
+    _min: PaymentMinAggregateOutputType | null
+    _max: PaymentMaxAggregateOutputType | null
+  }
+
+  type GetPaymentGroupByPayload<T extends PaymentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PaymentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PaymentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PaymentGroupByOutputType[P]>
+            : GetScalarType<T[P], PaymentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PaymentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    customerName?: boolean
+    transactionAmount?: boolean
+    transactionDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["payment"]>
+
+
+
+  export type PaymentSelectScalar = {
+    id?: boolean
+    customerName?: boolean
+    transactionAmount?: boolean
+    transactionDate?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "customerName" | "transactionAmount" | "transactionDate" | "createdAt" | "updatedAt", ExtArgs["result"]["payment"]>
+
+  export type $PaymentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Payment"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      customerName: string
+      transactionAmount: number
+      transactionDate: Date
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["payment"]>
+    composites: {}
+  }
+
+  type PaymentGetPayload<S extends boolean | null | undefined | PaymentDefaultArgs> = $Result.GetResult<Prisma.$PaymentPayload, S>
+
+  type PaymentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PaymentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PaymentCountAggregateInputType | true
+    }
+
+  export interface PaymentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Payment'], meta: { name: 'Payment' } }
+    /**
+     * Find zero or one Payment that matches the filter.
+     * @param {PaymentFindUniqueArgs} args - Arguments to find a Payment
+     * @example
+     * // Get one Payment
+     * const payment = await prisma.payment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PaymentFindUniqueArgs>(args: SelectSubset<T, PaymentFindUniqueArgs<ExtArgs>>): Prisma__PaymentClient<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Payment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PaymentFindUniqueOrThrowArgs} args - Arguments to find a Payment
+     * @example
+     * // Get one Payment
+     * const payment = await prisma.payment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PaymentFindUniqueOrThrowArgs>(args: SelectSubset<T, PaymentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PaymentClient<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Payment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentFindFirstArgs} args - Arguments to find a Payment
+     * @example
+     * // Get one Payment
+     * const payment = await prisma.payment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PaymentFindFirstArgs>(args?: SelectSubset<T, PaymentFindFirstArgs<ExtArgs>>): Prisma__PaymentClient<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Payment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentFindFirstOrThrowArgs} args - Arguments to find a Payment
+     * @example
+     * // Get one Payment
+     * const payment = await prisma.payment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PaymentFindFirstOrThrowArgs>(args?: SelectSubset<T, PaymentFindFirstOrThrowArgs<ExtArgs>>): Prisma__PaymentClient<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Payments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Payments
+     * const payments = await prisma.payment.findMany()
+     * 
+     * // Get first 10 Payments
+     * const payments = await prisma.payment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const paymentWithIdOnly = await prisma.payment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PaymentFindManyArgs>(args?: SelectSubset<T, PaymentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Payment.
+     * @param {PaymentCreateArgs} args - Arguments to create a Payment.
+     * @example
+     * // Create one Payment
+     * const Payment = await prisma.payment.create({
+     *   data: {
+     *     // ... data to create a Payment
+     *   }
+     * })
+     * 
+     */
+    create<T extends PaymentCreateArgs>(args: SelectSubset<T, PaymentCreateArgs<ExtArgs>>): Prisma__PaymentClient<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Payments.
+     * @param {PaymentCreateManyArgs} args - Arguments to create many Payments.
+     * @example
+     * // Create many Payments
+     * const payment = await prisma.payment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PaymentCreateManyArgs>(args?: SelectSubset<T, PaymentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Payment.
+     * @param {PaymentDeleteArgs} args - Arguments to delete one Payment.
+     * @example
+     * // Delete one Payment
+     * const Payment = await prisma.payment.delete({
+     *   where: {
+     *     // ... filter to delete one Payment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PaymentDeleteArgs>(args: SelectSubset<T, PaymentDeleteArgs<ExtArgs>>): Prisma__PaymentClient<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Payment.
+     * @param {PaymentUpdateArgs} args - Arguments to update one Payment.
+     * @example
+     * // Update one Payment
+     * const payment = await prisma.payment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PaymentUpdateArgs>(args: SelectSubset<T, PaymentUpdateArgs<ExtArgs>>): Prisma__PaymentClient<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Payments.
+     * @param {PaymentDeleteManyArgs} args - Arguments to filter Payments to delete.
+     * @example
+     * // Delete a few Payments
+     * const { count } = await prisma.payment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PaymentDeleteManyArgs>(args?: SelectSubset<T, PaymentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Payments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Payments
+     * const payment = await prisma.payment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PaymentUpdateManyArgs>(args: SelectSubset<T, PaymentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Payment.
+     * @param {PaymentUpsertArgs} args - Arguments to update or create a Payment.
+     * @example
+     * // Update or create a Payment
+     * const payment = await prisma.payment.upsert({
+     *   create: {
+     *     // ... data to create a Payment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Payment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PaymentUpsertArgs>(args: SelectSubset<T, PaymentUpsertArgs<ExtArgs>>): Prisma__PaymentClient<$Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Payments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentCountArgs} args - Arguments to filter Payments to count.
+     * @example
+     * // Count the number of Payments
+     * const count = await prisma.payment.count({
+     *   where: {
+     *     // ... the filter for the Payments we want to count
+     *   }
+     * })
+    **/
+    count<T extends PaymentCountArgs>(
+      args?: Subset<T, PaymentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PaymentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Payment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PaymentAggregateArgs>(args: Subset<T, PaymentAggregateArgs>): Prisma.PrismaPromise<GetPaymentAggregateType<T>>
+
+    /**
+     * Group by Payment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PaymentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PaymentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PaymentGroupByArgs['orderBy'] }
+        : { orderBy?: PaymentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PaymentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPaymentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Payment model
+   */
+  readonly fields: PaymentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Payment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PaymentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Payment model
+   */
+  interface PaymentFieldRefs {
+    readonly id: FieldRef<"Payment", 'Int'>
+    readonly customerName: FieldRef<"Payment", 'String'>
+    readonly transactionAmount: FieldRef<"Payment", 'Float'>
+    readonly transactionDate: FieldRef<"Payment", 'DateTime'>
+    readonly createdAt: FieldRef<"Payment", 'DateTime'>
+    readonly updatedAt: FieldRef<"Payment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Payment findUnique
+   */
+  export type PaymentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Payment
+     */
+    omit?: PaymentOmit<ExtArgs> | null
+    /**
+     * Filter, which Payment to fetch.
+     */
+    where: PaymentWhereUniqueInput
+  }
+
+  /**
+   * Payment findUniqueOrThrow
+   */
+  export type PaymentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Payment
+     */
+    omit?: PaymentOmit<ExtArgs> | null
+    /**
+     * Filter, which Payment to fetch.
+     */
+    where: PaymentWhereUniqueInput
+  }
+
+  /**
+   * Payment findFirst
+   */
+  export type PaymentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Payment
+     */
+    omit?: PaymentOmit<ExtArgs> | null
+    /**
+     * Filter, which Payment to fetch.
+     */
+    where?: PaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Payments to fetch.
+     */
+    orderBy?: PaymentOrderByWithRelationInput | PaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Payments.
+     */
+    cursor?: PaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Payments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Payments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Payments.
+     */
+    distinct?: PaymentScalarFieldEnum | PaymentScalarFieldEnum[]
+  }
+
+  /**
+   * Payment findFirstOrThrow
+   */
+  export type PaymentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Payment
+     */
+    omit?: PaymentOmit<ExtArgs> | null
+    /**
+     * Filter, which Payment to fetch.
+     */
+    where?: PaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Payments to fetch.
+     */
+    orderBy?: PaymentOrderByWithRelationInput | PaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Payments.
+     */
+    cursor?: PaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Payments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Payments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Payments.
+     */
+    distinct?: PaymentScalarFieldEnum | PaymentScalarFieldEnum[]
+  }
+
+  /**
+   * Payment findMany
+   */
+  export type PaymentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Payment
+     */
+    omit?: PaymentOmit<ExtArgs> | null
+    /**
+     * Filter, which Payments to fetch.
+     */
+    where?: PaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Payments to fetch.
+     */
+    orderBy?: PaymentOrderByWithRelationInput | PaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Payments.
+     */
+    cursor?: PaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Payments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Payments.
+     */
+    skip?: number
+    distinct?: PaymentScalarFieldEnum | PaymentScalarFieldEnum[]
+  }
+
+  /**
+   * Payment create
+   */
+  export type PaymentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Payment
+     */
+    omit?: PaymentOmit<ExtArgs> | null
+    /**
+     * The data needed to create a Payment.
+     */
+    data: XOR<PaymentCreateInput, PaymentUncheckedCreateInput>
+  }
+
+  /**
+   * Payment createMany
+   */
+  export type PaymentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Payments.
+     */
+    data: PaymentCreateManyInput | PaymentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Payment update
+   */
+  export type PaymentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Payment
+     */
+    omit?: PaymentOmit<ExtArgs> | null
+    /**
+     * The data needed to update a Payment.
+     */
+    data: XOR<PaymentUpdateInput, PaymentUncheckedUpdateInput>
+    /**
+     * Choose, which Payment to update.
+     */
+    where: PaymentWhereUniqueInput
+  }
+
+  /**
+   * Payment updateMany
+   */
+  export type PaymentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Payments.
+     */
+    data: XOR<PaymentUpdateManyMutationInput, PaymentUncheckedUpdateManyInput>
+    /**
+     * Filter which Payments to update
+     */
+    where?: PaymentWhereInput
+    /**
+     * Limit how many Payments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Payment upsert
+   */
+  export type PaymentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Payment
+     */
+    omit?: PaymentOmit<ExtArgs> | null
+    /**
+     * The filter to search for the Payment to update in case it exists.
+     */
+    where: PaymentWhereUniqueInput
+    /**
+     * In case the Payment found by the `where` argument doesn't exist, create a new Payment with this data.
+     */
+    create: XOR<PaymentCreateInput, PaymentUncheckedCreateInput>
+    /**
+     * In case the Payment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PaymentUpdateInput, PaymentUncheckedUpdateInput>
+  }
+
+  /**
+   * Payment delete
+   */
+  export type PaymentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Payment
+     */
+    omit?: PaymentOmit<ExtArgs> | null
+    /**
+     * Filter which Payment to delete.
+     */
+    where: PaymentWhereUniqueInput
+  }
+
+  /**
+   * Payment deleteMany
+   */
+  export type PaymentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Payments to delete
+     */
+    where?: PaymentWhereInput
+    /**
+     * Limit how many Payments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Payment without action
+   */
+  export type PaymentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Payment
+     */
+    select?: PaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Payment
+     */
+    omit?: PaymentOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -6615,6 +8758,8 @@ export namespace Prisma {
     password: 'password',
     firstName: 'firstName',
     lastName: 'lastName',
+    isActive: 'isActive',
+    credits: 'credits',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -6703,6 +8848,28 @@ export namespace Prisma {
   };
 
   export type HoroscopeProfileScalarFieldEnum = (typeof HoroscopeProfileScalarFieldEnum)[keyof typeof HoroscopeProfileScalarFieldEnum]
+
+
+  export const ProfileViewScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    profileId: 'profileId',
+    viewedAt: 'viewedAt'
+  };
+
+  export type ProfileViewScalarFieldEnum = (typeof ProfileViewScalarFieldEnum)[keyof typeof ProfileViewScalarFieldEnum]
+
+
+  export const PaymentScalarFieldEnum: {
+    id: 'id',
+    customerName: 'customerName',
+    transactionAmount: 'transactionAmount',
+    transactionDate: 'transactionDate',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -6820,6 +8987,13 @@ export namespace Prisma {
   export type HoroscopeProfileOrderByRelevanceFieldEnum = (typeof HoroscopeProfileOrderByRelevanceFieldEnum)[keyof typeof HoroscopeProfileOrderByRelevanceFieldEnum]
 
 
+  export const PaymentOrderByRelevanceFieldEnum: {
+    customerName: 'customerName'
+  };
+
+  export type PaymentOrderByRelevanceFieldEnum = (typeof PaymentOrderByRelevanceFieldEnum)[keyof typeof PaymentOrderByRelevanceFieldEnum]
+
+
   /**
    * Field references
    */
@@ -6840,16 +9014,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'DateTime'
+   * Reference to a field of type 'Boolean'
    */
-  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
   /**
-   * Reference to a field of type 'Boolean'
+   * Reference to a field of type 'DateTime'
    */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+  export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
     
 
 
@@ -6886,10 +9060,12 @@ export namespace Prisma {
     password?: StringFilter<"User"> | string
     firstName?: StringFilter<"User"> | string
     lastName?: StringFilter<"User"> | string
+    isActive?: BoolFilter<"User"> | boolean
+    credits?: IntFilter<"User"> | number
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     profile?: XOR<ProfileNullableScalarRelationFilter, ProfileWhereInput> | null
-    userProfile?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
+    profileViews?: ProfileViewListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -6898,10 +9074,12 @@ export namespace Prisma {
     password?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    isActive?: SortOrder
+    credits?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     profile?: ProfileOrderByWithRelationInput
-    userProfile?: UserProfileOrderByWithRelationInput
+    profileViews?: ProfileViewOrderByRelationAggregateInput
     _relevance?: UserOrderByRelevanceInput
   }
 
@@ -6914,10 +9092,12 @@ export namespace Prisma {
     password?: StringFilter<"User"> | string
     firstName?: StringFilter<"User"> | string
     lastName?: StringFilter<"User"> | string
+    isActive?: BoolFilter<"User"> | boolean
+    credits?: IntFilter<"User"> | number
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     profile?: XOR<ProfileNullableScalarRelationFilter, ProfileWhereInput> | null
-    userProfile?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
+    profileViews?: ProfileViewListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -6926,6 +9106,8 @@ export namespace Prisma {
     password?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    isActive?: SortOrder
+    credits?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -6944,6 +9126,8 @@ export namespace Prisma {
     password?: StringWithAggregatesFilter<"User"> | string
     firstName?: StringWithAggregatesFilter<"User"> | string
     lastName?: StringWithAggregatesFilter<"User"> | string
+    isActive?: BoolWithAggregatesFilter<"User"> | boolean
+    credits?: IntWithAggregatesFilter<"User"> | number
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -6962,6 +9146,9 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Profile"> | Date | string
     updatedAt?: DateTimeFilter<"Profile"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    userProfile?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
+    parentInfo?: XOR<ParentInfoNullableScalarRelationFilter, ParentInfoWhereInput> | null
+    horoscopeProfile?: XOR<HoroscopeProfileNullableScalarRelationFilter, HoroscopeProfileWhereInput> | null
   }
 
   export type ProfileOrderByWithRelationInput = {
@@ -6975,6 +9162,9 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
+    userProfile?: UserProfileOrderByWithRelationInput
+    parentInfo?: ParentInfoOrderByWithRelationInput
+    horoscopeProfile?: HoroscopeProfileOrderByWithRelationInput
     _relevance?: ProfileOrderByRelevanceInput
   }
 
@@ -6992,6 +9182,9 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Profile"> | Date | string
     updatedAt?: DateTimeFilter<"Profile"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    userProfile?: XOR<UserProfileNullableScalarRelationFilter, UserProfileWhereInput> | null
+    parentInfo?: XOR<ParentInfoNullableScalarRelationFilter, ParentInfoWhereInput> | null
+    horoscopeProfile?: XOR<HoroscopeProfileNullableScalarRelationFilter, HoroscopeProfileWhereInput> | null
   }, "id" | "userId" | "regNo">
 
   export type ProfileOrderByWithAggregationInput = {
@@ -7049,9 +9242,7 @@ export namespace Prisma {
     profilePhotos?: JsonFilter<"UserProfile">
     createdAt?: DateTimeFilter<"UserProfile"> | Date | string
     updatedAt?: DateTimeFilter<"UserProfile"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    parentInfo?: XOR<ParentInfoNullableScalarRelationFilter, ParentInfoWhereInput> | null
-    horoscopeProfile?: XOR<HoroscopeProfileNullableScalarRelationFilter, HoroscopeProfileWhereInput> | null
+    profile?: XOR<ProfileScalarRelationFilter, ProfileWhereInput>
   }
 
   export type UserProfileOrderByWithRelationInput = {
@@ -7074,9 +9265,7 @@ export namespace Prisma {
     profilePhotos?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    user?: UserOrderByWithRelationInput
-    parentInfo?: ParentInfoOrderByWithRelationInput
-    horoscopeProfile?: HoroscopeProfileOrderByWithRelationInput
+    profile?: ProfileOrderByWithRelationInput
     _relevance?: UserProfileOrderByRelevanceInput
   }
 
@@ -7103,9 +9292,7 @@ export namespace Prisma {
     profilePhotos?: JsonFilter<"UserProfile">
     createdAt?: DateTimeFilter<"UserProfile"> | Date | string
     updatedAt?: DateTimeFilter<"UserProfile"> | Date | string
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>
-    parentInfo?: XOR<ParentInfoNullableScalarRelationFilter, ParentInfoWhereInput> | null
-    horoscopeProfile?: XOR<HoroscopeProfileNullableScalarRelationFilter, HoroscopeProfileWhereInput> | null
+    profile?: XOR<ProfileScalarRelationFilter, ProfileWhereInput>
   }, "id" | "userId">
 
   export type UserProfileOrderByWithAggregationInput = {
@@ -7182,7 +9369,7 @@ export namespace Prisma {
     elderSisters?: IntFilter<"ParentInfo"> | number
     youngerSisters?: IntFilter<"ParentInfo"> | number
     marriedSisters?: IntFilter<"ParentInfo"> | number
-    userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    profile?: XOR<ProfileScalarRelationFilter, ProfileWhereInput>
   }
 
   export type ParentInfoOrderByWithRelationInput = {
@@ -7204,7 +9391,7 @@ export namespace Prisma {
     elderSisters?: SortOrder
     youngerSisters?: SortOrder
     marriedSisters?: SortOrder
-    userProfile?: UserProfileOrderByWithRelationInput
+    profile?: ProfileOrderByWithRelationInput
     _relevance?: ParentInfoOrderByRelevanceInput
   }
 
@@ -7230,7 +9417,7 @@ export namespace Prisma {
     elderSisters?: IntFilter<"ParentInfo"> | number
     youngerSisters?: IntFilter<"ParentInfo"> | number
     marriedSisters?: IntFilter<"ParentInfo"> | number
-    userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    profile?: XOR<ProfileScalarRelationFilter, ProfileWhereInput>
   }, "id" | "userId">
 
   export type ParentInfoOrderByWithAggregationInput = {
@@ -7300,7 +9487,7 @@ export namespace Prisma {
     birthplace?: StringFilter<"HoroscopeProfile"> | string
     natalDirection?: StringFilter<"HoroscopeProfile"> | string
     horoscopeDocuments?: JsonNullableFilter<"HoroscopeProfile">
-    userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    profile?: XOR<ProfileScalarRelationFilter, ProfileWhereInput>
   }
 
   export type HoroscopeProfileOrderByWithRelationInput = {
@@ -7317,7 +9504,7 @@ export namespace Prisma {
     birthplace?: SortOrder
     natalDirection?: SortOrder
     horoscopeDocuments?: SortOrderInput | SortOrder
-    userProfile?: UserProfileOrderByWithRelationInput
+    profile?: ProfileOrderByWithRelationInput
     _relevance?: HoroscopeProfileOrderByRelevanceInput
   }
 
@@ -7338,7 +9525,7 @@ export namespace Prisma {
     birthplace?: StringFilter<"HoroscopeProfile"> | string
     natalDirection?: StringFilter<"HoroscopeProfile"> | string
     horoscopeDocuments?: JsonNullableFilter<"HoroscopeProfile">
-    userProfile?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    profile?: XOR<ProfileScalarRelationFilter, ProfileWhereInput>
   }, "id" | "userId">
 
   export type HoroscopeProfileOrderByWithAggregationInput = {
@@ -7381,15 +9568,130 @@ export namespace Prisma {
     horoscopeDocuments?: JsonNullableWithAggregatesFilter<"HoroscopeProfile">
   }
 
+  export type ProfileViewWhereInput = {
+    AND?: ProfileViewWhereInput | ProfileViewWhereInput[]
+    OR?: ProfileViewWhereInput[]
+    NOT?: ProfileViewWhereInput | ProfileViewWhereInput[]
+    id?: IntFilter<"ProfileView"> | number
+    userId?: IntFilter<"ProfileView"> | number
+    profileId?: IntFilter<"ProfileView"> | number
+    viewedAt?: DateTimeFilter<"ProfileView"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ProfileViewOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    profileId?: SortOrder
+    viewedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type ProfileViewWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    userId_profileId?: ProfileViewUserIdProfileIdCompoundUniqueInput
+    AND?: ProfileViewWhereInput | ProfileViewWhereInput[]
+    OR?: ProfileViewWhereInput[]
+    NOT?: ProfileViewWhereInput | ProfileViewWhereInput[]
+    userId?: IntFilter<"ProfileView"> | number
+    profileId?: IntFilter<"ProfileView"> | number
+    viewedAt?: DateTimeFilter<"ProfileView"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId_profileId">
+
+  export type ProfileViewOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    profileId?: SortOrder
+    viewedAt?: SortOrder
+    _count?: ProfileViewCountOrderByAggregateInput
+    _avg?: ProfileViewAvgOrderByAggregateInput
+    _max?: ProfileViewMaxOrderByAggregateInput
+    _min?: ProfileViewMinOrderByAggregateInput
+    _sum?: ProfileViewSumOrderByAggregateInput
+  }
+
+  export type ProfileViewScalarWhereWithAggregatesInput = {
+    AND?: ProfileViewScalarWhereWithAggregatesInput | ProfileViewScalarWhereWithAggregatesInput[]
+    OR?: ProfileViewScalarWhereWithAggregatesInput[]
+    NOT?: ProfileViewScalarWhereWithAggregatesInput | ProfileViewScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"ProfileView"> | number
+    userId?: IntWithAggregatesFilter<"ProfileView"> | number
+    profileId?: IntWithAggregatesFilter<"ProfileView"> | number
+    viewedAt?: DateTimeWithAggregatesFilter<"ProfileView"> | Date | string
+  }
+
+  export type PaymentWhereInput = {
+    AND?: PaymentWhereInput | PaymentWhereInput[]
+    OR?: PaymentWhereInput[]
+    NOT?: PaymentWhereInput | PaymentWhereInput[]
+    id?: IntFilter<"Payment"> | number
+    customerName?: StringFilter<"Payment"> | string
+    transactionAmount?: FloatFilter<"Payment"> | number
+    transactionDate?: DateTimeFilter<"Payment"> | Date | string
+    createdAt?: DateTimeFilter<"Payment"> | Date | string
+    updatedAt?: DateTimeFilter<"Payment"> | Date | string
+  }
+
+  export type PaymentOrderByWithRelationInput = {
+    id?: SortOrder
+    customerName?: SortOrder
+    transactionAmount?: SortOrder
+    transactionDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _relevance?: PaymentOrderByRelevanceInput
+  }
+
+  export type PaymentWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: PaymentWhereInput | PaymentWhereInput[]
+    OR?: PaymentWhereInput[]
+    NOT?: PaymentWhereInput | PaymentWhereInput[]
+    customerName?: StringFilter<"Payment"> | string
+    transactionAmount?: FloatFilter<"Payment"> | number
+    transactionDate?: DateTimeFilter<"Payment"> | Date | string
+    createdAt?: DateTimeFilter<"Payment"> | Date | string
+    updatedAt?: DateTimeFilter<"Payment"> | Date | string
+  }, "id">
+
+  export type PaymentOrderByWithAggregationInput = {
+    id?: SortOrder
+    customerName?: SortOrder
+    transactionAmount?: SortOrder
+    transactionDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PaymentCountOrderByAggregateInput
+    _avg?: PaymentAvgOrderByAggregateInput
+    _max?: PaymentMaxOrderByAggregateInput
+    _min?: PaymentMinOrderByAggregateInput
+    _sum?: PaymentSumOrderByAggregateInput
+  }
+
+  export type PaymentScalarWhereWithAggregatesInput = {
+    AND?: PaymentScalarWhereWithAggregatesInput | PaymentScalarWhereWithAggregatesInput[]
+    OR?: PaymentScalarWhereWithAggregatesInput[]
+    NOT?: PaymentScalarWhereWithAggregatesInput | PaymentScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Payment"> | number
+    customerName?: StringWithAggregatesFilter<"Payment"> | string
+    transactionAmount?: FloatWithAggregatesFilter<"Payment"> | number
+    transactionDate?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Payment"> | Date | string
+  }
+
   export type UserCreateInput = {
     email: string
     password: string
     firstName: string
     lastName: string
+    isActive?: boolean
+    credits?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileCreateNestedOneWithoutUserInput
-    userProfile?: UserProfileCreateNestedOneWithoutUserInput
+    profileViews?: ProfileViewCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -7398,10 +9700,12 @@ export namespace Prisma {
     password: string
     firstName: string
     lastName: string
+    isActive?: boolean
+    credits?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
-    userProfile?: UserProfileUncheckedCreateNestedOneWithoutUserInput
+    profileViews?: ProfileViewUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -7409,10 +9713,12 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    credits?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUpdateOneWithoutUserNestedInput
-    userProfile?: UserProfileUpdateOneWithoutUserNestedInput
+    profileViews?: ProfileViewUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -7421,10 +9727,12 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    credits?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
-    userProfile?: UserProfileUncheckedUpdateOneWithoutUserNestedInput
+    profileViews?: ProfileViewUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -7433,6 +9741,8 @@ export namespace Prisma {
     password: string
     firstName: string
     lastName: string
+    isActive?: boolean
+    credits?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7442,6 +9752,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    credits?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7452,6 +9764,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    credits?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7465,6 +9779,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutProfileInput
+    userProfile?: UserProfileCreateNestedOneWithoutProfileInput
+    parentInfo?: ParentInfoCreateNestedOneWithoutProfileInput
+    horoscopeProfile?: HoroscopeProfileCreateNestedOneWithoutProfileInput
   }
 
   export type ProfileUncheckedCreateInput = {
@@ -7477,6 +9794,9 @@ export namespace Prisma {
     liked?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    userProfile?: UserProfileUncheckedCreateNestedOneWithoutProfileInput
+    parentInfo?: ParentInfoUncheckedCreateNestedOneWithoutProfileInput
+    horoscopeProfile?: HoroscopeProfileUncheckedCreateNestedOneWithoutProfileInput
   }
 
   export type ProfileUpdateInput = {
@@ -7488,6 +9808,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutProfileNestedInput
+    userProfile?: UserProfileUpdateOneWithoutProfileNestedInput
+    parentInfo?: ParentInfoUpdateOneWithoutProfileNestedInput
+    horoscopeProfile?: HoroscopeProfileUpdateOneWithoutProfileNestedInput
   }
 
   export type ProfileUncheckedUpdateInput = {
@@ -7500,6 +9823,9 @@ export namespace Prisma {
     liked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userProfile?: UserProfileUncheckedUpdateOneWithoutProfileNestedInput
+    parentInfo?: ParentInfoUncheckedUpdateOneWithoutProfileNestedInput
+    horoscopeProfile?: HoroscopeProfileUncheckedUpdateOneWithoutProfileNestedInput
   }
 
   export type ProfileCreateManyInput = {
@@ -7554,9 +9880,7 @@ export namespace Prisma {
     profilePhotos: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutUserProfileInput
-    parentInfo?: ParentInfoCreateNestedOneWithoutUserProfileInput
-    horoscopeProfile?: HoroscopeProfileCreateNestedOneWithoutUserProfileInput
+    profile: ProfileCreateNestedOneWithoutUserProfileInput
   }
 
   export type UserProfileUncheckedCreateInput = {
@@ -7579,8 +9903,6 @@ export namespace Prisma {
     profilePhotos: JsonNullValueInput | InputJsonValue
     createdAt?: Date | string
     updatedAt?: Date | string
-    parentInfo?: ParentInfoUncheckedCreateNestedOneWithoutUserProfileInput
-    horoscopeProfile?: HoroscopeProfileUncheckedCreateNestedOneWithoutUserProfileInput
   }
 
   export type UserProfileUpdateInput = {
@@ -7601,9 +9923,7 @@ export namespace Prisma {
     profilePhotos?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutUserProfileNestedInput
-    parentInfo?: ParentInfoUpdateOneWithoutUserProfileNestedInput
-    horoscopeProfile?: HoroscopeProfileUpdateOneWithoutUserProfileNestedInput
+    profile?: ProfileUpdateOneRequiredWithoutUserProfileNestedInput
   }
 
   export type UserProfileUncheckedUpdateInput = {
@@ -7626,8 +9946,6 @@ export namespace Prisma {
     profilePhotos?: JsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    parentInfo?: ParentInfoUncheckedUpdateOneWithoutUserProfileNestedInput
-    horoscopeProfile?: HoroscopeProfileUncheckedUpdateOneWithoutUserProfileNestedInput
   }
 
   export type UserProfileCreateManyInput = {
@@ -7711,7 +10029,7 @@ export namespace Prisma {
     elderSisters: number
     youngerSisters: number
     marriedSisters: number
-    userProfile: UserProfileCreateNestedOneWithoutParentInfoInput
+    profile: ProfileCreateNestedOneWithoutParentInfoInput
   }
 
   export type ParentInfoUncheckedCreateInput = {
@@ -7752,7 +10070,7 @@ export namespace Prisma {
     elderSisters?: IntFieldUpdateOperationsInput | number
     youngerSisters?: IntFieldUpdateOperationsInput | number
     marriedSisters?: IntFieldUpdateOperationsInput | number
-    userProfile?: UserProfileUpdateOneRequiredWithoutParentInfoNestedInput
+    profile?: ProfileUpdateOneRequiredWithoutParentInfoNestedInput
   }
 
   export type ParentInfoUncheckedUpdateInput = {
@@ -7849,7 +10167,7 @@ export namespace Prisma {
     birthplace: string
     natalDirection: string
     horoscopeDocuments?: NullableJsonNullValueInput | InputJsonValue
-    userProfile: UserProfileCreateNestedOneWithoutHoroscopeProfileInput
+    profile: ProfileCreateNestedOneWithoutHoroscopeProfileInput
   }
 
   export type HoroscopeProfileUncheckedCreateInput = {
@@ -7880,7 +10198,7 @@ export namespace Prisma {
     birthplace?: StringFieldUpdateOperationsInput | string
     natalDirection?: StringFieldUpdateOperationsInput | string
     horoscopeDocuments?: NullableJsonNullValueInput | InputJsonValue
-    userProfile?: UserProfileUpdateOneRequiredWithoutHoroscopeProfileNestedInput
+    profile?: ProfileUpdateOneRequiredWithoutHoroscopeProfileNestedInput
   }
 
   export type HoroscopeProfileUncheckedUpdateInput = {
@@ -7945,6 +10263,111 @@ export namespace Prisma {
     horoscopeDocuments?: NullableJsonNullValueInput | InputJsonValue
   }
 
+  export type ProfileViewCreateInput = {
+    profileId: number
+    viewedAt?: Date | string
+    user: UserCreateNestedOneWithoutProfileViewsInput
+  }
+
+  export type ProfileViewUncheckedCreateInput = {
+    id?: number
+    userId: number
+    profileId: number
+    viewedAt?: Date | string
+  }
+
+  export type ProfileViewUpdateInput = {
+    profileId?: IntFieldUpdateOperationsInput | number
+    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutProfileViewsNestedInput
+  }
+
+  export type ProfileViewUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    profileId?: IntFieldUpdateOperationsInput | number
+    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProfileViewCreateManyInput = {
+    id?: number
+    userId: number
+    profileId: number
+    viewedAt?: Date | string
+  }
+
+  export type ProfileViewUpdateManyMutationInput = {
+    profileId?: IntFieldUpdateOperationsInput | number
+    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProfileViewUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    profileId?: IntFieldUpdateOperationsInput | number
+    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PaymentCreateInput = {
+    customerName: string
+    transactionAmount: number
+    transactionDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PaymentUncheckedCreateInput = {
+    id?: number
+    customerName: string
+    transactionAmount: number
+    transactionDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PaymentUpdateInput = {
+    customerName?: StringFieldUpdateOperationsInput | string
+    transactionAmount?: FloatFieldUpdateOperationsInput | number
+    transactionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PaymentUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    customerName?: StringFieldUpdateOperationsInput | string
+    transactionAmount?: FloatFieldUpdateOperationsInput | number
+    transactionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PaymentCreateManyInput = {
+    id?: number
+    customerName: string
+    transactionAmount: number
+    transactionDate: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PaymentUpdateManyMutationInput = {
+    customerName?: StringFieldUpdateOperationsInput | string
+    transactionAmount?: FloatFieldUpdateOperationsInput | number
+    transactionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PaymentUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    customerName?: StringFieldUpdateOperationsInput | string
+    transactionAmount?: FloatFieldUpdateOperationsInput | number
+    transactionDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -7971,6 +10394,11 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[]
@@ -7987,9 +10415,14 @@ export namespace Prisma {
     isNot?: ProfileWhereInput | null
   }
 
-  export type UserProfileNullableScalarRelationFilter = {
-    is?: UserProfileWhereInput | null
-    isNot?: UserProfileWhereInput | null
+  export type ProfileViewListRelationFilter = {
+    every?: ProfileViewWhereInput
+    some?: ProfileViewWhereInput
+    none?: ProfileViewWhereInput
+  }
+
+  export type ProfileViewOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type UserOrderByRelevanceInput = {
@@ -8004,12 +10437,15 @@ export namespace Prisma {
     password?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    isActive?: SortOrder
+    credits?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
     id?: SortOrder
+    credits?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -8018,6 +10454,8 @@ export namespace Prisma {
     password?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    isActive?: SortOrder
+    credits?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -8028,12 +10466,15 @@ export namespace Prisma {
     password?: SortOrder
     firstName?: SortOrder
     lastName?: SortOrder
+    isActive?: SortOrder
+    credits?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
     id?: SortOrder
+    credits?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -8070,6 +10511,14 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[]
@@ -8103,6 +10552,21 @@ export namespace Prisma {
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
+  }
+
+  export type UserProfileNullableScalarRelationFilter = {
+    is?: UserProfileWhereInput | null
+    isNot?: UserProfileWhereInput | null
+  }
+
+  export type ParentInfoNullableScalarRelationFilter = {
+    is?: ParentInfoWhereInput | null
+    isNot?: ParentInfoWhereInput | null
+  }
+
+  export type HoroscopeProfileNullableScalarRelationFilter = {
+    is?: HoroscopeProfileWhereInput | null
+    isNot?: HoroscopeProfileWhereInput | null
   }
 
   export type SortOrderInput = {
@@ -8211,14 +10675,9 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type ParentInfoNullableScalarRelationFilter = {
-    is?: ParentInfoWhereInput | null
-    isNot?: ParentInfoWhereInput | null
-  }
-
-  export type HoroscopeProfileNullableScalarRelationFilter = {
-    is?: HoroscopeProfileWhereInput | null
-    isNot?: HoroscopeProfileWhereInput | null
+  export type ProfileScalarRelationFilter = {
+    is?: ProfileWhereInput
+    isNot?: ProfileWhereInput
   }
 
   export type UserProfileOrderByRelevanceInput = {
@@ -8327,11 +10786,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedJsonFilter<$PrismaModel>
     _max?: NestedJsonFilter<$PrismaModel>
-  }
-
-  export type UserProfileScalarRelationFilter = {
-    is?: UserProfileWhereInput
-    isNot?: UserProfileWhereInput
   }
 
   export type ParentInfoOrderByRelevanceInput = {
@@ -8540,16 +10994,125 @@ export namespace Prisma {
     _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
+  export type ProfileViewUserIdProfileIdCompoundUniqueInput = {
+    userId: number
+    profileId: number
+  }
+
+  export type ProfileViewCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    profileId?: SortOrder
+    viewedAt?: SortOrder
+  }
+
+  export type ProfileViewAvgOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    profileId?: SortOrder
+  }
+
+  export type ProfileViewMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    profileId?: SortOrder
+    viewedAt?: SortOrder
+  }
+
+  export type ProfileViewMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    profileId?: SortOrder
+    viewedAt?: SortOrder
+  }
+
+  export type ProfileViewSumOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    profileId?: SortOrder
+  }
+
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type PaymentOrderByRelevanceInput = {
+    fields: PaymentOrderByRelevanceFieldEnum | PaymentOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type PaymentCountOrderByAggregateInput = {
+    id?: SortOrder
+    customerName?: SortOrder
+    transactionAmount?: SortOrder
+    transactionDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PaymentAvgOrderByAggregateInput = {
+    id?: SortOrder
+    transactionAmount?: SortOrder
+  }
+
+  export type PaymentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    customerName?: SortOrder
+    transactionAmount?: SortOrder
+    transactionDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PaymentMinOrderByAggregateInput = {
+    id?: SortOrder
+    customerName?: SortOrder
+    transactionAmount?: SortOrder
+    transactionDate?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PaymentSumOrderByAggregateInput = {
+    id?: SortOrder
+    transactionAmount?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
   export type ProfileCreateNestedOneWithoutUserInput = {
     create?: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
     connectOrCreate?: ProfileCreateOrConnectWithoutUserInput
     connect?: ProfileWhereUniqueInput
   }
 
-  export type UserProfileCreateNestedOneWithoutUserInput = {
-    create?: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserProfileCreateOrConnectWithoutUserInput
-    connect?: UserProfileWhereUniqueInput
+  export type ProfileViewCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProfileViewCreateWithoutUserInput, ProfileViewUncheckedCreateWithoutUserInput> | ProfileViewCreateWithoutUserInput[] | ProfileViewUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProfileViewCreateOrConnectWithoutUserInput | ProfileViewCreateOrConnectWithoutUserInput[]
+    createMany?: ProfileViewCreateManyUserInputEnvelope
+    connect?: ProfileViewWhereUniqueInput | ProfileViewWhereUniqueInput[]
   }
 
   export type ProfileUncheckedCreateNestedOneWithoutUserInput = {
@@ -8558,14 +11121,27 @@ export namespace Prisma {
     connect?: ProfileWhereUniqueInput
   }
 
-  export type UserProfileUncheckedCreateNestedOneWithoutUserInput = {
-    create?: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserProfileCreateOrConnectWithoutUserInput
-    connect?: UserProfileWhereUniqueInput
+  export type ProfileViewUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProfileViewCreateWithoutUserInput, ProfileViewUncheckedCreateWithoutUserInput> | ProfileViewCreateWithoutUserInput[] | ProfileViewUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProfileViewCreateOrConnectWithoutUserInput | ProfileViewCreateOrConnectWithoutUserInput[]
+    createMany?: ProfileViewCreateManyUserInputEnvelope
+    connect?: ProfileViewWhereUniqueInput | ProfileViewWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -8582,22 +11158,18 @@ export namespace Prisma {
     update?: XOR<XOR<ProfileUpdateToOneWithWhereWithoutUserInput, ProfileUpdateWithoutUserInput>, ProfileUncheckedUpdateWithoutUserInput>
   }
 
-  export type UserProfileUpdateOneWithoutUserNestedInput = {
-    create?: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserProfileCreateOrConnectWithoutUserInput
-    upsert?: UserProfileUpsertWithoutUserInput
-    disconnect?: UserProfileWhereInput | boolean
-    delete?: UserProfileWhereInput | boolean
-    connect?: UserProfileWhereUniqueInput
-    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutUserInput, UserProfileUpdateWithoutUserInput>, UserProfileUncheckedUpdateWithoutUserInput>
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type ProfileViewUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProfileViewCreateWithoutUserInput, ProfileViewUncheckedCreateWithoutUserInput> | ProfileViewCreateWithoutUserInput[] | ProfileViewUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProfileViewCreateOrConnectWithoutUserInput | ProfileViewCreateOrConnectWithoutUserInput[]
+    upsert?: ProfileViewUpsertWithWhereUniqueWithoutUserInput | ProfileViewUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProfileViewCreateManyUserInputEnvelope
+    set?: ProfileViewWhereUniqueInput | ProfileViewWhereUniqueInput[]
+    disconnect?: ProfileViewWhereUniqueInput | ProfileViewWhereUniqueInput[]
+    delete?: ProfileViewWhereUniqueInput | ProfileViewWhereUniqueInput[]
+    connect?: ProfileViewWhereUniqueInput | ProfileViewWhereUniqueInput[]
+    update?: ProfileViewUpdateWithWhereUniqueWithoutUserInput | ProfileViewUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProfileViewUpdateManyWithWhereWithoutUserInput | ProfileViewUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProfileViewScalarWhereInput | ProfileViewScalarWhereInput[]
   }
 
   export type ProfileUncheckedUpdateOneWithoutUserNestedInput = {
@@ -8610,20 +11182,60 @@ export namespace Prisma {
     update?: XOR<XOR<ProfileUpdateToOneWithWhereWithoutUserInput, ProfileUpdateWithoutUserInput>, ProfileUncheckedUpdateWithoutUserInput>
   }
 
-  export type UserProfileUncheckedUpdateOneWithoutUserNestedInput = {
-    create?: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserProfileCreateOrConnectWithoutUserInput
-    upsert?: UserProfileUpsertWithoutUserInput
-    disconnect?: UserProfileWhereInput | boolean
-    delete?: UserProfileWhereInput | boolean
-    connect?: UserProfileWhereUniqueInput
-    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutUserInput, UserProfileUpdateWithoutUserInput>, UserProfileUncheckedUpdateWithoutUserInput>
+  export type ProfileViewUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProfileViewCreateWithoutUserInput, ProfileViewUncheckedCreateWithoutUserInput> | ProfileViewCreateWithoutUserInput[] | ProfileViewUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProfileViewCreateOrConnectWithoutUserInput | ProfileViewCreateOrConnectWithoutUserInput[]
+    upsert?: ProfileViewUpsertWithWhereUniqueWithoutUserInput | ProfileViewUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProfileViewCreateManyUserInputEnvelope
+    set?: ProfileViewWhereUniqueInput | ProfileViewWhereUniqueInput[]
+    disconnect?: ProfileViewWhereUniqueInput | ProfileViewWhereUniqueInput[]
+    delete?: ProfileViewWhereUniqueInput | ProfileViewWhereUniqueInput[]
+    connect?: ProfileViewWhereUniqueInput | ProfileViewWhereUniqueInput[]
+    update?: ProfileViewUpdateWithWhereUniqueWithoutUserInput | ProfileViewUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProfileViewUpdateManyWithWhereWithoutUserInput | ProfileViewUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProfileViewScalarWhereInput | ProfileViewScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutProfileInput = {
     create?: XOR<UserCreateWithoutProfileInput, UserUncheckedCreateWithoutProfileInput>
     connectOrCreate?: UserCreateOrConnectWithoutProfileInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type UserProfileCreateNestedOneWithoutProfileInput = {
+    create?: XOR<UserProfileCreateWithoutProfileInput, UserProfileUncheckedCreateWithoutProfileInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutProfileInput
+    connect?: UserProfileWhereUniqueInput
+  }
+
+  export type ParentInfoCreateNestedOneWithoutProfileInput = {
+    create?: XOR<ParentInfoCreateWithoutProfileInput, ParentInfoUncheckedCreateWithoutProfileInput>
+    connectOrCreate?: ParentInfoCreateOrConnectWithoutProfileInput
+    connect?: ParentInfoWhereUniqueInput
+  }
+
+  export type HoroscopeProfileCreateNestedOneWithoutProfileInput = {
+    create?: XOR<HoroscopeProfileCreateWithoutProfileInput, HoroscopeProfileUncheckedCreateWithoutProfileInput>
+    connectOrCreate?: HoroscopeProfileCreateOrConnectWithoutProfileInput
+    connect?: HoroscopeProfileWhereUniqueInput
+  }
+
+  export type UserProfileUncheckedCreateNestedOneWithoutProfileInput = {
+    create?: XOR<UserProfileCreateWithoutProfileInput, UserProfileUncheckedCreateWithoutProfileInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutProfileInput
+    connect?: UserProfileWhereUniqueInput
+  }
+
+  export type ParentInfoUncheckedCreateNestedOneWithoutProfileInput = {
+    create?: XOR<ParentInfoCreateWithoutProfileInput, ParentInfoUncheckedCreateWithoutProfileInput>
+    connectOrCreate?: ParentInfoCreateOrConnectWithoutProfileInput
+    connect?: ParentInfoWhereUniqueInput
+  }
+
+  export type HoroscopeProfileUncheckedCreateNestedOneWithoutProfileInput = {
+    create?: XOR<HoroscopeProfileCreateWithoutProfileInput, HoroscopeProfileUncheckedCreateWithoutProfileInput>
+    connectOrCreate?: HoroscopeProfileCreateOrConnectWithoutProfileInput
+    connect?: HoroscopeProfileWhereUniqueInput
   }
 
   export type NullableIntFieldUpdateOperationsInput = {
@@ -8646,110 +11258,128 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutProfileInput, UserUpdateWithoutProfileInput>, UserUncheckedUpdateWithoutProfileInput>
   }
 
-  export type UserCreateNestedOneWithoutUserProfileInput = {
-    create?: XOR<UserCreateWithoutUserProfileInput, UserUncheckedCreateWithoutUserProfileInput>
-    connectOrCreate?: UserCreateOrConnectWithoutUserProfileInput
-    connect?: UserWhereUniqueInput
+  export type UserProfileUpdateOneWithoutProfileNestedInput = {
+    create?: XOR<UserProfileCreateWithoutProfileInput, UserProfileUncheckedCreateWithoutProfileInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutProfileInput
+    upsert?: UserProfileUpsertWithoutProfileInput
+    disconnect?: UserProfileWhereInput | boolean
+    delete?: UserProfileWhereInput | boolean
+    connect?: UserProfileWhereUniqueInput
+    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutProfileInput, UserProfileUpdateWithoutProfileInput>, UserProfileUncheckedUpdateWithoutProfileInput>
   }
 
-  export type ParentInfoCreateNestedOneWithoutUserProfileInput = {
-    create?: XOR<ParentInfoCreateWithoutUserProfileInput, ParentInfoUncheckedCreateWithoutUserProfileInput>
-    connectOrCreate?: ParentInfoCreateOrConnectWithoutUserProfileInput
-    connect?: ParentInfoWhereUniqueInput
-  }
-
-  export type HoroscopeProfileCreateNestedOneWithoutUserProfileInput = {
-    create?: XOR<HoroscopeProfileCreateWithoutUserProfileInput, HoroscopeProfileUncheckedCreateWithoutUserProfileInput>
-    connectOrCreate?: HoroscopeProfileCreateOrConnectWithoutUserProfileInput
-    connect?: HoroscopeProfileWhereUniqueInput
-  }
-
-  export type ParentInfoUncheckedCreateNestedOneWithoutUserProfileInput = {
-    create?: XOR<ParentInfoCreateWithoutUserProfileInput, ParentInfoUncheckedCreateWithoutUserProfileInput>
-    connectOrCreate?: ParentInfoCreateOrConnectWithoutUserProfileInput
-    connect?: ParentInfoWhereUniqueInput
-  }
-
-  export type HoroscopeProfileUncheckedCreateNestedOneWithoutUserProfileInput = {
-    create?: XOR<HoroscopeProfileCreateWithoutUserProfileInput, HoroscopeProfileUncheckedCreateWithoutUserProfileInput>
-    connectOrCreate?: HoroscopeProfileCreateOrConnectWithoutUserProfileInput
-    connect?: HoroscopeProfileWhereUniqueInput
-  }
-
-  export type UserUpdateOneRequiredWithoutUserProfileNestedInput = {
-    create?: XOR<UserCreateWithoutUserProfileInput, UserUncheckedCreateWithoutUserProfileInput>
-    connectOrCreate?: UserCreateOrConnectWithoutUserProfileInput
-    upsert?: UserUpsertWithoutUserProfileInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutUserProfileInput, UserUpdateWithoutUserProfileInput>, UserUncheckedUpdateWithoutUserProfileInput>
-  }
-
-  export type ParentInfoUpdateOneWithoutUserProfileNestedInput = {
-    create?: XOR<ParentInfoCreateWithoutUserProfileInput, ParentInfoUncheckedCreateWithoutUserProfileInput>
-    connectOrCreate?: ParentInfoCreateOrConnectWithoutUserProfileInput
-    upsert?: ParentInfoUpsertWithoutUserProfileInput
+  export type ParentInfoUpdateOneWithoutProfileNestedInput = {
+    create?: XOR<ParentInfoCreateWithoutProfileInput, ParentInfoUncheckedCreateWithoutProfileInput>
+    connectOrCreate?: ParentInfoCreateOrConnectWithoutProfileInput
+    upsert?: ParentInfoUpsertWithoutProfileInput
     disconnect?: ParentInfoWhereInput | boolean
     delete?: ParentInfoWhereInput | boolean
     connect?: ParentInfoWhereUniqueInput
-    update?: XOR<XOR<ParentInfoUpdateToOneWithWhereWithoutUserProfileInput, ParentInfoUpdateWithoutUserProfileInput>, ParentInfoUncheckedUpdateWithoutUserProfileInput>
+    update?: XOR<XOR<ParentInfoUpdateToOneWithWhereWithoutProfileInput, ParentInfoUpdateWithoutProfileInput>, ParentInfoUncheckedUpdateWithoutProfileInput>
   }
 
-  export type HoroscopeProfileUpdateOneWithoutUserProfileNestedInput = {
-    create?: XOR<HoroscopeProfileCreateWithoutUserProfileInput, HoroscopeProfileUncheckedCreateWithoutUserProfileInput>
-    connectOrCreate?: HoroscopeProfileCreateOrConnectWithoutUserProfileInput
-    upsert?: HoroscopeProfileUpsertWithoutUserProfileInput
+  export type HoroscopeProfileUpdateOneWithoutProfileNestedInput = {
+    create?: XOR<HoroscopeProfileCreateWithoutProfileInput, HoroscopeProfileUncheckedCreateWithoutProfileInput>
+    connectOrCreate?: HoroscopeProfileCreateOrConnectWithoutProfileInput
+    upsert?: HoroscopeProfileUpsertWithoutProfileInput
     disconnect?: HoroscopeProfileWhereInput | boolean
     delete?: HoroscopeProfileWhereInput | boolean
     connect?: HoroscopeProfileWhereUniqueInput
-    update?: XOR<XOR<HoroscopeProfileUpdateToOneWithWhereWithoutUserProfileInput, HoroscopeProfileUpdateWithoutUserProfileInput>, HoroscopeProfileUncheckedUpdateWithoutUserProfileInput>
+    update?: XOR<XOR<HoroscopeProfileUpdateToOneWithWhereWithoutProfileInput, HoroscopeProfileUpdateWithoutProfileInput>, HoroscopeProfileUncheckedUpdateWithoutProfileInput>
   }
 
-  export type ParentInfoUncheckedUpdateOneWithoutUserProfileNestedInput = {
-    create?: XOR<ParentInfoCreateWithoutUserProfileInput, ParentInfoUncheckedCreateWithoutUserProfileInput>
-    connectOrCreate?: ParentInfoCreateOrConnectWithoutUserProfileInput
-    upsert?: ParentInfoUpsertWithoutUserProfileInput
+  export type UserProfileUncheckedUpdateOneWithoutProfileNestedInput = {
+    create?: XOR<UserProfileCreateWithoutProfileInput, UserProfileUncheckedCreateWithoutProfileInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutProfileInput
+    upsert?: UserProfileUpsertWithoutProfileInput
+    disconnect?: UserProfileWhereInput | boolean
+    delete?: UserProfileWhereInput | boolean
+    connect?: UserProfileWhereUniqueInput
+    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutProfileInput, UserProfileUpdateWithoutProfileInput>, UserProfileUncheckedUpdateWithoutProfileInput>
+  }
+
+  export type ParentInfoUncheckedUpdateOneWithoutProfileNestedInput = {
+    create?: XOR<ParentInfoCreateWithoutProfileInput, ParentInfoUncheckedCreateWithoutProfileInput>
+    connectOrCreate?: ParentInfoCreateOrConnectWithoutProfileInput
+    upsert?: ParentInfoUpsertWithoutProfileInput
     disconnect?: ParentInfoWhereInput | boolean
     delete?: ParentInfoWhereInput | boolean
     connect?: ParentInfoWhereUniqueInput
-    update?: XOR<XOR<ParentInfoUpdateToOneWithWhereWithoutUserProfileInput, ParentInfoUpdateWithoutUserProfileInput>, ParentInfoUncheckedUpdateWithoutUserProfileInput>
+    update?: XOR<XOR<ParentInfoUpdateToOneWithWhereWithoutProfileInput, ParentInfoUpdateWithoutProfileInput>, ParentInfoUncheckedUpdateWithoutProfileInput>
   }
 
-  export type HoroscopeProfileUncheckedUpdateOneWithoutUserProfileNestedInput = {
-    create?: XOR<HoroscopeProfileCreateWithoutUserProfileInput, HoroscopeProfileUncheckedCreateWithoutUserProfileInput>
-    connectOrCreate?: HoroscopeProfileCreateOrConnectWithoutUserProfileInput
-    upsert?: HoroscopeProfileUpsertWithoutUserProfileInput
+  export type HoroscopeProfileUncheckedUpdateOneWithoutProfileNestedInput = {
+    create?: XOR<HoroscopeProfileCreateWithoutProfileInput, HoroscopeProfileUncheckedCreateWithoutProfileInput>
+    connectOrCreate?: HoroscopeProfileCreateOrConnectWithoutProfileInput
+    upsert?: HoroscopeProfileUpsertWithoutProfileInput
     disconnect?: HoroscopeProfileWhereInput | boolean
     delete?: HoroscopeProfileWhereInput | boolean
     connect?: HoroscopeProfileWhereUniqueInput
-    update?: XOR<XOR<HoroscopeProfileUpdateToOneWithWhereWithoutUserProfileInput, HoroscopeProfileUpdateWithoutUserProfileInput>, HoroscopeProfileUncheckedUpdateWithoutUserProfileInput>
+    update?: XOR<XOR<HoroscopeProfileUpdateToOneWithWhereWithoutProfileInput, HoroscopeProfileUpdateWithoutProfileInput>, HoroscopeProfileUncheckedUpdateWithoutProfileInput>
   }
 
-  export type UserProfileCreateNestedOneWithoutParentInfoInput = {
-    create?: XOR<UserProfileCreateWithoutParentInfoInput, UserProfileUncheckedCreateWithoutParentInfoInput>
-    connectOrCreate?: UserProfileCreateOrConnectWithoutParentInfoInput
-    connect?: UserProfileWhereUniqueInput
+  export type ProfileCreateNestedOneWithoutUserProfileInput = {
+    create?: XOR<ProfileCreateWithoutUserProfileInput, ProfileUncheckedCreateWithoutUserProfileInput>
+    connectOrCreate?: ProfileCreateOrConnectWithoutUserProfileInput
+    connect?: ProfileWhereUniqueInput
   }
 
-  export type UserProfileUpdateOneRequiredWithoutParentInfoNestedInput = {
-    create?: XOR<UserProfileCreateWithoutParentInfoInput, UserProfileUncheckedCreateWithoutParentInfoInput>
-    connectOrCreate?: UserProfileCreateOrConnectWithoutParentInfoInput
-    upsert?: UserProfileUpsertWithoutParentInfoInput
-    connect?: UserProfileWhereUniqueInput
-    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutParentInfoInput, UserProfileUpdateWithoutParentInfoInput>, UserProfileUncheckedUpdateWithoutParentInfoInput>
+  export type ProfileUpdateOneRequiredWithoutUserProfileNestedInput = {
+    create?: XOR<ProfileCreateWithoutUserProfileInput, ProfileUncheckedCreateWithoutUserProfileInput>
+    connectOrCreate?: ProfileCreateOrConnectWithoutUserProfileInput
+    upsert?: ProfileUpsertWithoutUserProfileInput
+    connect?: ProfileWhereUniqueInput
+    update?: XOR<XOR<ProfileUpdateToOneWithWhereWithoutUserProfileInput, ProfileUpdateWithoutUserProfileInput>, ProfileUncheckedUpdateWithoutUserProfileInput>
   }
 
-  export type UserProfileCreateNestedOneWithoutHoroscopeProfileInput = {
-    create?: XOR<UserProfileCreateWithoutHoroscopeProfileInput, UserProfileUncheckedCreateWithoutHoroscopeProfileInput>
-    connectOrCreate?: UserProfileCreateOrConnectWithoutHoroscopeProfileInput
-    connect?: UserProfileWhereUniqueInput
+  export type ProfileCreateNestedOneWithoutParentInfoInput = {
+    create?: XOR<ProfileCreateWithoutParentInfoInput, ProfileUncheckedCreateWithoutParentInfoInput>
+    connectOrCreate?: ProfileCreateOrConnectWithoutParentInfoInput
+    connect?: ProfileWhereUniqueInput
   }
 
-  export type UserProfileUpdateOneRequiredWithoutHoroscopeProfileNestedInput = {
-    create?: XOR<UserProfileCreateWithoutHoroscopeProfileInput, UserProfileUncheckedCreateWithoutHoroscopeProfileInput>
-    connectOrCreate?: UserProfileCreateOrConnectWithoutHoroscopeProfileInput
-    upsert?: UserProfileUpsertWithoutHoroscopeProfileInput
-    connect?: UserProfileWhereUniqueInput
-    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutHoroscopeProfileInput, UserProfileUpdateWithoutHoroscopeProfileInput>, UserProfileUncheckedUpdateWithoutHoroscopeProfileInput>
+  export type ProfileUpdateOneRequiredWithoutParentInfoNestedInput = {
+    create?: XOR<ProfileCreateWithoutParentInfoInput, ProfileUncheckedCreateWithoutParentInfoInput>
+    connectOrCreate?: ProfileCreateOrConnectWithoutParentInfoInput
+    upsert?: ProfileUpsertWithoutParentInfoInput
+    connect?: ProfileWhereUniqueInput
+    update?: XOR<XOR<ProfileUpdateToOneWithWhereWithoutParentInfoInput, ProfileUpdateWithoutParentInfoInput>, ProfileUncheckedUpdateWithoutParentInfoInput>
+  }
+
+  export type ProfileCreateNestedOneWithoutHoroscopeProfileInput = {
+    create?: XOR<ProfileCreateWithoutHoroscopeProfileInput, ProfileUncheckedCreateWithoutHoroscopeProfileInput>
+    connectOrCreate?: ProfileCreateOrConnectWithoutHoroscopeProfileInput
+    connect?: ProfileWhereUniqueInput
+  }
+
+  export type ProfileUpdateOneRequiredWithoutHoroscopeProfileNestedInput = {
+    create?: XOR<ProfileCreateWithoutHoroscopeProfileInput, ProfileUncheckedCreateWithoutHoroscopeProfileInput>
+    connectOrCreate?: ProfileCreateOrConnectWithoutHoroscopeProfileInput
+    upsert?: ProfileUpsertWithoutHoroscopeProfileInput
+    connect?: ProfileWhereUniqueInput
+    update?: XOR<XOR<ProfileUpdateToOneWithWhereWithoutHoroscopeProfileInput, ProfileUpdateWithoutHoroscopeProfileInput>, ProfileUncheckedUpdateWithoutHoroscopeProfileInput>
+  }
+
+  export type UserCreateNestedOneWithoutProfileViewsInput = {
+    create?: XOR<UserCreateWithoutProfileViewsInput, UserUncheckedCreateWithoutProfileViewsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutProfileViewsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutProfileViewsNestedInput = {
+    create?: XOR<UserCreateWithoutProfileViewsInput, UserUncheckedCreateWithoutProfileViewsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutProfileViewsInput
+    upsert?: UserUpsertWithoutProfileViewsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutProfileViewsInput, UserUpdateWithoutProfileViewsInput>, UserUncheckedUpdateWithoutProfileViewsInput>
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -8776,6 +11406,11 @@ export namespace Prisma {
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     search?: string
     not?: NestedStringFilter<$PrismaModel> | string
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -8832,6 +11467,14 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -8945,6 +11588,22 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
   export type ProfileCreateWithoutUserInput = {
     firstName: string
     lastName: string
@@ -8953,6 +11612,9 @@ export namespace Prisma {
     liked?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    userProfile?: UserProfileCreateNestedOneWithoutProfileInput
+    parentInfo?: ParentInfoCreateNestedOneWithoutProfileInput
+    horoscopeProfile?: HoroscopeProfileCreateNestedOneWithoutProfileInput
   }
 
   export type ProfileUncheckedCreateWithoutUserInput = {
@@ -8964,6 +11626,9 @@ export namespace Prisma {
     liked?: boolean | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    userProfile?: UserProfileUncheckedCreateNestedOneWithoutProfileInput
+    parentInfo?: ParentInfoUncheckedCreateNestedOneWithoutProfileInput
+    horoscopeProfile?: HoroscopeProfileUncheckedCreateNestedOneWithoutProfileInput
   }
 
   export type ProfileCreateOrConnectWithoutUserInput = {
@@ -8971,54 +11636,25 @@ export namespace Prisma {
     create: XOR<ProfileCreateWithoutUserInput, ProfileUncheckedCreateWithoutUserInput>
   }
 
-  export type UserProfileCreateWithoutUserInput = {
-    type: string
-    dietType: string
-    dob: Date | string
-    age: number
-    height: string
-    color: string
-    education: string
-    career: string
-    salary: string
-    familyProperty: string
-    expectation: string
-    phone: string
-    caste: string
-    marriageStatus: string
-    profilePhotos: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    parentInfo?: ParentInfoCreateNestedOneWithoutUserProfileInput
-    horoscopeProfile?: HoroscopeProfileCreateNestedOneWithoutUserProfileInput
+  export type ProfileViewCreateWithoutUserInput = {
+    profileId: number
+    viewedAt?: Date | string
   }
 
-  export type UserProfileUncheckedCreateWithoutUserInput = {
+  export type ProfileViewUncheckedCreateWithoutUserInput = {
     id?: number
-    type: string
-    dietType: string
-    dob: Date | string
-    age: number
-    height: string
-    color: string
-    education: string
-    career: string
-    salary: string
-    familyProperty: string
-    expectation: string
-    phone: string
-    caste: string
-    marriageStatus: string
-    profilePhotos: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    parentInfo?: ParentInfoUncheckedCreateNestedOneWithoutUserProfileInput
-    horoscopeProfile?: HoroscopeProfileUncheckedCreateNestedOneWithoutUserProfileInput
+    profileId: number
+    viewedAt?: Date | string
   }
 
-  export type UserProfileCreateOrConnectWithoutUserInput = {
-    where: UserProfileWhereUniqueInput
-    create: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
+  export type ProfileViewCreateOrConnectWithoutUserInput = {
+    where: ProfileViewWhereUniqueInput
+    create: XOR<ProfileViewCreateWithoutUserInput, ProfileViewUncheckedCreateWithoutUserInput>
+  }
+
+  export type ProfileViewCreateManyUserInputEnvelope = {
+    data: ProfileViewCreateManyUserInput | ProfileViewCreateManyUserInput[]
+    skipDuplicates?: boolean
   }
 
   export type ProfileUpsertWithoutUserInput = {
@@ -9040,6 +11676,9 @@ export namespace Prisma {
     liked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userProfile?: UserProfileUpdateOneWithoutProfileNestedInput
+    parentInfo?: ParentInfoUpdateOneWithoutProfileNestedInput
+    horoscopeProfile?: HoroscopeProfileUpdateOneWithoutProfileNestedInput
   }
 
   export type ProfileUncheckedUpdateWithoutUserInput = {
@@ -9051,62 +11690,35 @@ export namespace Prisma {
     liked?: NullableBoolFieldUpdateOperationsInput | boolean | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userProfile?: UserProfileUncheckedUpdateOneWithoutProfileNestedInput
+    parentInfo?: ParentInfoUncheckedUpdateOneWithoutProfileNestedInput
+    horoscopeProfile?: HoroscopeProfileUncheckedUpdateOneWithoutProfileNestedInput
   }
 
-  export type UserProfileUpsertWithoutUserInput = {
-    update: XOR<UserProfileUpdateWithoutUserInput, UserProfileUncheckedUpdateWithoutUserInput>
-    create: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
-    where?: UserProfileWhereInput
+  export type ProfileViewUpsertWithWhereUniqueWithoutUserInput = {
+    where: ProfileViewWhereUniqueInput
+    update: XOR<ProfileViewUpdateWithoutUserInput, ProfileViewUncheckedUpdateWithoutUserInput>
+    create: XOR<ProfileViewCreateWithoutUserInput, ProfileViewUncheckedCreateWithoutUserInput>
   }
 
-  export type UserProfileUpdateToOneWithWhereWithoutUserInput = {
-    where?: UserProfileWhereInput
-    data: XOR<UserProfileUpdateWithoutUserInput, UserProfileUncheckedUpdateWithoutUserInput>
+  export type ProfileViewUpdateWithWhereUniqueWithoutUserInput = {
+    where: ProfileViewWhereUniqueInput
+    data: XOR<ProfileViewUpdateWithoutUserInput, ProfileViewUncheckedUpdateWithoutUserInput>
   }
 
-  export type UserProfileUpdateWithoutUserInput = {
-    type?: StringFieldUpdateOperationsInput | string
-    dietType?: StringFieldUpdateOperationsInput | string
-    dob?: DateTimeFieldUpdateOperationsInput | Date | string
-    age?: IntFieldUpdateOperationsInput | number
-    height?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
-    education?: StringFieldUpdateOperationsInput | string
-    career?: StringFieldUpdateOperationsInput | string
-    salary?: StringFieldUpdateOperationsInput | string
-    familyProperty?: StringFieldUpdateOperationsInput | string
-    expectation?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    caste?: StringFieldUpdateOperationsInput | string
-    marriageStatus?: StringFieldUpdateOperationsInput | string
-    profilePhotos?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    parentInfo?: ParentInfoUpdateOneWithoutUserProfileNestedInput
-    horoscopeProfile?: HoroscopeProfileUpdateOneWithoutUserProfileNestedInput
+  export type ProfileViewUpdateManyWithWhereWithoutUserInput = {
+    where: ProfileViewScalarWhereInput
+    data: XOR<ProfileViewUpdateManyMutationInput, ProfileViewUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type UserProfileUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    type?: StringFieldUpdateOperationsInput | string
-    dietType?: StringFieldUpdateOperationsInput | string
-    dob?: DateTimeFieldUpdateOperationsInput | Date | string
-    age?: IntFieldUpdateOperationsInput | number
-    height?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
-    education?: StringFieldUpdateOperationsInput | string
-    career?: StringFieldUpdateOperationsInput | string
-    salary?: StringFieldUpdateOperationsInput | string
-    familyProperty?: StringFieldUpdateOperationsInput | string
-    expectation?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    caste?: StringFieldUpdateOperationsInput | string
-    marriageStatus?: StringFieldUpdateOperationsInput | string
-    profilePhotos?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    parentInfo?: ParentInfoUncheckedUpdateOneWithoutUserProfileNestedInput
-    horoscopeProfile?: HoroscopeProfileUncheckedUpdateOneWithoutUserProfileNestedInput
+  export type ProfileViewScalarWhereInput = {
+    AND?: ProfileViewScalarWhereInput | ProfileViewScalarWhereInput[]
+    OR?: ProfileViewScalarWhereInput[]
+    NOT?: ProfileViewScalarWhereInput | ProfileViewScalarWhereInput[]
+    id?: IntFilter<"ProfileView"> | number
+    userId?: IntFilter<"ProfileView"> | number
+    profileId?: IntFilter<"ProfileView"> | number
+    viewedAt?: DateTimeFilter<"ProfileView"> | Date | string
   }
 
   export type UserCreateWithoutProfileInput = {
@@ -9114,9 +11726,11 @@ export namespace Prisma {
     password: string
     firstName: string
     lastName: string
+    isActive?: boolean
+    credits?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    userProfile?: UserProfileCreateNestedOneWithoutUserInput
+    profileViews?: ProfileViewCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProfileInput = {
@@ -9125,14 +11739,140 @@ export namespace Prisma {
     password: string
     firstName: string
     lastName: string
+    isActive?: boolean
+    credits?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    userProfile?: UserProfileUncheckedCreateNestedOneWithoutUserInput
+    profileViews?: ProfileViewUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProfileInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutProfileInput, UserUncheckedCreateWithoutProfileInput>
+  }
+
+  export type UserProfileCreateWithoutProfileInput = {
+    type: string
+    dietType: string
+    dob: Date | string
+    age: number
+    height: string
+    color: string
+    education: string
+    career: string
+    salary: string
+    familyProperty: string
+    expectation: string
+    phone: string
+    caste: string
+    marriageStatus: string
+    profilePhotos: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserProfileUncheckedCreateWithoutProfileInput = {
+    id?: number
+    type: string
+    dietType: string
+    dob: Date | string
+    age: number
+    height: string
+    color: string
+    education: string
+    career: string
+    salary: string
+    familyProperty: string
+    expectation: string
+    phone: string
+    caste: string
+    marriageStatus: string
+    profilePhotos: JsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserProfileCreateOrConnectWithoutProfileInput = {
+    where: UserProfileWhereUniqueInput
+    create: XOR<UserProfileCreateWithoutProfileInput, UserProfileUncheckedCreateWithoutProfileInput>
+  }
+
+  export type ParentInfoCreateWithoutProfileInput = {
+    fatherName: string
+    motherName: string
+    fatherNative: string
+    motherNative: string
+    fatherProfession: string
+    motherProfession: string
+    phone: string
+    address: string
+    brothers: number
+    elderBrothers: number
+    youngerBrothers: number
+    marriedBrothers: number
+    sisters: number
+    elderSisters: number
+    youngerSisters: number
+    marriedSisters: number
+  }
+
+  export type ParentInfoUncheckedCreateWithoutProfileInput = {
+    id?: number
+    fatherName: string
+    motherName: string
+    fatherNative: string
+    motherNative: string
+    fatherProfession: string
+    motherProfession: string
+    phone: string
+    address: string
+    brothers: number
+    elderBrothers: number
+    youngerBrothers: number
+    marriedBrothers: number
+    sisters: number
+    elderSisters: number
+    youngerSisters: number
+    marriedSisters: number
+  }
+
+  export type ParentInfoCreateOrConnectWithoutProfileInput = {
+    where: ParentInfoWhereUniqueInput
+    create: XOR<ParentInfoCreateWithoutProfileInput, ParentInfoUncheckedCreateWithoutProfileInput>
+  }
+
+  export type HoroscopeProfileCreateWithoutProfileInput = {
+    zodiacSign: string
+    tamilYear: string
+    tamilMonth: string
+    udayathiNatchat: string
+    day: string
+    birthTime: string
+    starFoot: string
+    ascendant: string
+    birthplace: string
+    natalDirection: string
+    horoscopeDocuments?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type HoroscopeProfileUncheckedCreateWithoutProfileInput = {
+    id?: number
+    zodiacSign: string
+    tamilYear: string
+    tamilMonth: string
+    udayathiNatchat: string
+    day: string
+    birthTime: string
+    starFoot: string
+    ascendant: string
+    birthplace: string
+    natalDirection: string
+    horoscopeDocuments?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type HoroscopeProfileCreateOrConnectWithoutProfileInput = {
+    where: HoroscopeProfileWhereUniqueInput
+    create: XOR<HoroscopeProfileCreateWithoutProfileInput, HoroscopeProfileUncheckedCreateWithoutProfileInput>
   }
 
   export type UserUpsertWithoutProfileInput = {
@@ -9151,9 +11891,11 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    credits?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userProfile?: UserProfileUpdateOneWithoutUserNestedInput
+    profileViews?: ProfileViewUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProfileInput = {
@@ -9162,447 +11904,452 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    credits?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userProfile?: UserProfileUncheckedUpdateOneWithoutUserNestedInput
+    profileViews?: ProfileViewUncheckedUpdateManyWithoutUserNestedInput
   }
 
-  export type UserCreateWithoutUserProfileInput = {
+  export type UserProfileUpsertWithoutProfileInput = {
+    update: XOR<UserProfileUpdateWithoutProfileInput, UserProfileUncheckedUpdateWithoutProfileInput>
+    create: XOR<UserProfileCreateWithoutProfileInput, UserProfileUncheckedCreateWithoutProfileInput>
+    where?: UserProfileWhereInput
+  }
+
+  export type UserProfileUpdateToOneWithWhereWithoutProfileInput = {
+    where?: UserProfileWhereInput
+    data: XOR<UserProfileUpdateWithoutProfileInput, UserProfileUncheckedUpdateWithoutProfileInput>
+  }
+
+  export type UserProfileUpdateWithoutProfileInput = {
+    type?: StringFieldUpdateOperationsInput | string
+    dietType?: StringFieldUpdateOperationsInput | string
+    dob?: DateTimeFieldUpdateOperationsInput | Date | string
+    age?: IntFieldUpdateOperationsInput | number
+    height?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
+    education?: StringFieldUpdateOperationsInput | string
+    career?: StringFieldUpdateOperationsInput | string
+    salary?: StringFieldUpdateOperationsInput | string
+    familyProperty?: StringFieldUpdateOperationsInput | string
+    expectation?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    caste?: StringFieldUpdateOperationsInput | string
+    marriageStatus?: StringFieldUpdateOperationsInput | string
+    profilePhotos?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserProfileUncheckedUpdateWithoutProfileInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: StringFieldUpdateOperationsInput | string
+    dietType?: StringFieldUpdateOperationsInput | string
+    dob?: DateTimeFieldUpdateOperationsInput | Date | string
+    age?: IntFieldUpdateOperationsInput | number
+    height?: StringFieldUpdateOperationsInput | string
+    color?: StringFieldUpdateOperationsInput | string
+    education?: StringFieldUpdateOperationsInput | string
+    career?: StringFieldUpdateOperationsInput | string
+    salary?: StringFieldUpdateOperationsInput | string
+    familyProperty?: StringFieldUpdateOperationsInput | string
+    expectation?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    caste?: StringFieldUpdateOperationsInput | string
+    marriageStatus?: StringFieldUpdateOperationsInput | string
+    profilePhotos?: JsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ParentInfoUpsertWithoutProfileInput = {
+    update: XOR<ParentInfoUpdateWithoutProfileInput, ParentInfoUncheckedUpdateWithoutProfileInput>
+    create: XOR<ParentInfoCreateWithoutProfileInput, ParentInfoUncheckedCreateWithoutProfileInput>
+    where?: ParentInfoWhereInput
+  }
+
+  export type ParentInfoUpdateToOneWithWhereWithoutProfileInput = {
+    where?: ParentInfoWhereInput
+    data: XOR<ParentInfoUpdateWithoutProfileInput, ParentInfoUncheckedUpdateWithoutProfileInput>
+  }
+
+  export type ParentInfoUpdateWithoutProfileInput = {
+    fatherName?: StringFieldUpdateOperationsInput | string
+    motherName?: StringFieldUpdateOperationsInput | string
+    fatherNative?: StringFieldUpdateOperationsInput | string
+    motherNative?: StringFieldUpdateOperationsInput | string
+    fatherProfession?: StringFieldUpdateOperationsInput | string
+    motherProfession?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    brothers?: IntFieldUpdateOperationsInput | number
+    elderBrothers?: IntFieldUpdateOperationsInput | number
+    youngerBrothers?: IntFieldUpdateOperationsInput | number
+    marriedBrothers?: IntFieldUpdateOperationsInput | number
+    sisters?: IntFieldUpdateOperationsInput | number
+    elderSisters?: IntFieldUpdateOperationsInput | number
+    youngerSisters?: IntFieldUpdateOperationsInput | number
+    marriedSisters?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type ParentInfoUncheckedUpdateWithoutProfileInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    fatherName?: StringFieldUpdateOperationsInput | string
+    motherName?: StringFieldUpdateOperationsInput | string
+    fatherNative?: StringFieldUpdateOperationsInput | string
+    motherNative?: StringFieldUpdateOperationsInput | string
+    fatherProfession?: StringFieldUpdateOperationsInput | string
+    motherProfession?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    brothers?: IntFieldUpdateOperationsInput | number
+    elderBrothers?: IntFieldUpdateOperationsInput | number
+    youngerBrothers?: IntFieldUpdateOperationsInput | number
+    marriedBrothers?: IntFieldUpdateOperationsInput | number
+    sisters?: IntFieldUpdateOperationsInput | number
+    elderSisters?: IntFieldUpdateOperationsInput | number
+    youngerSisters?: IntFieldUpdateOperationsInput | number
+    marriedSisters?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type HoroscopeProfileUpsertWithoutProfileInput = {
+    update: XOR<HoroscopeProfileUpdateWithoutProfileInput, HoroscopeProfileUncheckedUpdateWithoutProfileInput>
+    create: XOR<HoroscopeProfileCreateWithoutProfileInput, HoroscopeProfileUncheckedCreateWithoutProfileInput>
+    where?: HoroscopeProfileWhereInput
+  }
+
+  export type HoroscopeProfileUpdateToOneWithWhereWithoutProfileInput = {
+    where?: HoroscopeProfileWhereInput
+    data: XOR<HoroscopeProfileUpdateWithoutProfileInput, HoroscopeProfileUncheckedUpdateWithoutProfileInput>
+  }
+
+  export type HoroscopeProfileUpdateWithoutProfileInput = {
+    zodiacSign?: StringFieldUpdateOperationsInput | string
+    tamilYear?: StringFieldUpdateOperationsInput | string
+    tamilMonth?: StringFieldUpdateOperationsInput | string
+    udayathiNatchat?: StringFieldUpdateOperationsInput | string
+    day?: StringFieldUpdateOperationsInput | string
+    birthTime?: StringFieldUpdateOperationsInput | string
+    starFoot?: StringFieldUpdateOperationsInput | string
+    ascendant?: StringFieldUpdateOperationsInput | string
+    birthplace?: StringFieldUpdateOperationsInput | string
+    natalDirection?: StringFieldUpdateOperationsInput | string
+    horoscopeDocuments?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type HoroscopeProfileUncheckedUpdateWithoutProfileInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    zodiacSign?: StringFieldUpdateOperationsInput | string
+    tamilYear?: StringFieldUpdateOperationsInput | string
+    tamilMonth?: StringFieldUpdateOperationsInput | string
+    udayathiNatchat?: StringFieldUpdateOperationsInput | string
+    day?: StringFieldUpdateOperationsInput | string
+    birthTime?: StringFieldUpdateOperationsInput | string
+    starFoot?: StringFieldUpdateOperationsInput | string
+    ascendant?: StringFieldUpdateOperationsInput | string
+    birthplace?: StringFieldUpdateOperationsInput | string
+    natalDirection?: StringFieldUpdateOperationsInput | string
+    horoscopeDocuments?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type ProfileCreateWithoutUserProfileInput = {
+    firstName: string
+    lastName: string
+    age?: number | null
+    regNo: string
+    liked?: boolean | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutProfileInput
+    parentInfo?: ParentInfoCreateNestedOneWithoutProfileInput
+    horoscopeProfile?: HoroscopeProfileCreateNestedOneWithoutProfileInput
+  }
+
+  export type ProfileUncheckedCreateWithoutUserProfileInput = {
+    id?: number
+    userId: number
+    firstName: string
+    lastName: string
+    age?: number | null
+    regNo: string
+    liked?: boolean | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parentInfo?: ParentInfoUncheckedCreateNestedOneWithoutProfileInput
+    horoscopeProfile?: HoroscopeProfileUncheckedCreateNestedOneWithoutProfileInput
+  }
+
+  export type ProfileCreateOrConnectWithoutUserProfileInput = {
+    where: ProfileWhereUniqueInput
+    create: XOR<ProfileCreateWithoutUserProfileInput, ProfileUncheckedCreateWithoutUserProfileInput>
+  }
+
+  export type ProfileUpsertWithoutUserProfileInput = {
+    update: XOR<ProfileUpdateWithoutUserProfileInput, ProfileUncheckedUpdateWithoutUserProfileInput>
+    create: XOR<ProfileCreateWithoutUserProfileInput, ProfileUncheckedCreateWithoutUserProfileInput>
+    where?: ProfileWhereInput
+  }
+
+  export type ProfileUpdateToOneWithWhereWithoutUserProfileInput = {
+    where?: ProfileWhereInput
+    data: XOR<ProfileUpdateWithoutUserProfileInput, ProfileUncheckedUpdateWithoutUserProfileInput>
+  }
+
+  export type ProfileUpdateWithoutUserProfileInput = {
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    regNo?: StringFieldUpdateOperationsInput | string
+    liked?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutProfileNestedInput
+    parentInfo?: ParentInfoUpdateOneWithoutProfileNestedInput
+    horoscopeProfile?: HoroscopeProfileUpdateOneWithoutProfileNestedInput
+  }
+
+  export type ProfileUncheckedUpdateWithoutUserProfileInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    regNo?: StringFieldUpdateOperationsInput | string
+    liked?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentInfo?: ParentInfoUncheckedUpdateOneWithoutProfileNestedInput
+    horoscopeProfile?: HoroscopeProfileUncheckedUpdateOneWithoutProfileNestedInput
+  }
+
+  export type ProfileCreateWithoutParentInfoInput = {
+    firstName: string
+    lastName: string
+    age?: number | null
+    regNo: string
+    liked?: boolean | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutProfileInput
+    userProfile?: UserProfileCreateNestedOneWithoutProfileInput
+    horoscopeProfile?: HoroscopeProfileCreateNestedOneWithoutProfileInput
+  }
+
+  export type ProfileUncheckedCreateWithoutParentInfoInput = {
+    id?: number
+    userId: number
+    firstName: string
+    lastName: string
+    age?: number | null
+    regNo: string
+    liked?: boolean | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    userProfile?: UserProfileUncheckedCreateNestedOneWithoutProfileInput
+    horoscopeProfile?: HoroscopeProfileUncheckedCreateNestedOneWithoutProfileInput
+  }
+
+  export type ProfileCreateOrConnectWithoutParentInfoInput = {
+    where: ProfileWhereUniqueInput
+    create: XOR<ProfileCreateWithoutParentInfoInput, ProfileUncheckedCreateWithoutParentInfoInput>
+  }
+
+  export type ProfileUpsertWithoutParentInfoInput = {
+    update: XOR<ProfileUpdateWithoutParentInfoInput, ProfileUncheckedUpdateWithoutParentInfoInput>
+    create: XOR<ProfileCreateWithoutParentInfoInput, ProfileUncheckedCreateWithoutParentInfoInput>
+    where?: ProfileWhereInput
+  }
+
+  export type ProfileUpdateToOneWithWhereWithoutParentInfoInput = {
+    where?: ProfileWhereInput
+    data: XOR<ProfileUpdateWithoutParentInfoInput, ProfileUncheckedUpdateWithoutParentInfoInput>
+  }
+
+  export type ProfileUpdateWithoutParentInfoInput = {
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    regNo?: StringFieldUpdateOperationsInput | string
+    liked?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutProfileNestedInput
+    userProfile?: UserProfileUpdateOneWithoutProfileNestedInput
+    horoscopeProfile?: HoroscopeProfileUpdateOneWithoutProfileNestedInput
+  }
+
+  export type ProfileUncheckedUpdateWithoutParentInfoInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    regNo?: StringFieldUpdateOperationsInput | string
+    liked?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userProfile?: UserProfileUncheckedUpdateOneWithoutProfileNestedInput
+    horoscopeProfile?: HoroscopeProfileUncheckedUpdateOneWithoutProfileNestedInput
+  }
+
+  export type ProfileCreateWithoutHoroscopeProfileInput = {
+    firstName: string
+    lastName: string
+    age?: number | null
+    regNo: string
+    liked?: boolean | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutProfileInput
+    userProfile?: UserProfileCreateNestedOneWithoutProfileInput
+    parentInfo?: ParentInfoCreateNestedOneWithoutProfileInput
+  }
+
+  export type ProfileUncheckedCreateWithoutHoroscopeProfileInput = {
+    id?: number
+    userId: number
+    firstName: string
+    lastName: string
+    age?: number | null
+    regNo: string
+    liked?: boolean | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    userProfile?: UserProfileUncheckedCreateNestedOneWithoutProfileInput
+    parentInfo?: ParentInfoUncheckedCreateNestedOneWithoutProfileInput
+  }
+
+  export type ProfileCreateOrConnectWithoutHoroscopeProfileInput = {
+    where: ProfileWhereUniqueInput
+    create: XOR<ProfileCreateWithoutHoroscopeProfileInput, ProfileUncheckedCreateWithoutHoroscopeProfileInput>
+  }
+
+  export type ProfileUpsertWithoutHoroscopeProfileInput = {
+    update: XOR<ProfileUpdateWithoutHoroscopeProfileInput, ProfileUncheckedUpdateWithoutHoroscopeProfileInput>
+    create: XOR<ProfileCreateWithoutHoroscopeProfileInput, ProfileUncheckedCreateWithoutHoroscopeProfileInput>
+    where?: ProfileWhereInput
+  }
+
+  export type ProfileUpdateToOneWithWhereWithoutHoroscopeProfileInput = {
+    where?: ProfileWhereInput
+    data: XOR<ProfileUpdateWithoutHoroscopeProfileInput, ProfileUncheckedUpdateWithoutHoroscopeProfileInput>
+  }
+
+  export type ProfileUpdateWithoutHoroscopeProfileInput = {
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    regNo?: StringFieldUpdateOperationsInput | string
+    liked?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutProfileNestedInput
+    userProfile?: UserProfileUpdateOneWithoutProfileNestedInput
+    parentInfo?: ParentInfoUpdateOneWithoutProfileNestedInput
+  }
+
+  export type ProfileUncheckedUpdateWithoutHoroscopeProfileInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    age?: NullableIntFieldUpdateOperationsInput | number | null
+    regNo?: StringFieldUpdateOperationsInput | string
+    liked?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    userProfile?: UserProfileUncheckedUpdateOneWithoutProfileNestedInput
+    parentInfo?: ParentInfoUncheckedUpdateOneWithoutProfileNestedInput
+  }
+
+  export type UserCreateWithoutProfileViewsInput = {
     email: string
     password: string
     firstName: string
     lastName: string
+    isActive?: boolean
+    credits?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileCreateNestedOneWithoutUserInput
   }
 
-  export type UserUncheckedCreateWithoutUserProfileInput = {
+  export type UserUncheckedCreateWithoutProfileViewsInput = {
     id?: number
     email: string
     password: string
     firstName: string
     lastName: string
+    isActive?: boolean
+    credits?: number
     createdAt?: Date | string
     updatedAt?: Date | string
     profile?: ProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
-  export type UserCreateOrConnectWithoutUserProfileInput = {
+  export type UserCreateOrConnectWithoutProfileViewsInput = {
     where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutUserProfileInput, UserUncheckedCreateWithoutUserProfileInput>
+    create: XOR<UserCreateWithoutProfileViewsInput, UserUncheckedCreateWithoutProfileViewsInput>
   }
 
-  export type ParentInfoCreateWithoutUserProfileInput = {
-    fatherName: string
-    motherName: string
-    fatherNative: string
-    motherNative: string
-    fatherProfession: string
-    motherProfession: string
-    phone: string
-    address: string
-    brothers: number
-    elderBrothers: number
-    youngerBrothers: number
-    marriedBrothers: number
-    sisters: number
-    elderSisters: number
-    youngerSisters: number
-    marriedSisters: number
-  }
-
-  export type ParentInfoUncheckedCreateWithoutUserProfileInput = {
-    id?: number
-    fatherName: string
-    motherName: string
-    fatherNative: string
-    motherNative: string
-    fatherProfession: string
-    motherProfession: string
-    phone: string
-    address: string
-    brothers: number
-    elderBrothers: number
-    youngerBrothers: number
-    marriedBrothers: number
-    sisters: number
-    elderSisters: number
-    youngerSisters: number
-    marriedSisters: number
-  }
-
-  export type ParentInfoCreateOrConnectWithoutUserProfileInput = {
-    where: ParentInfoWhereUniqueInput
-    create: XOR<ParentInfoCreateWithoutUserProfileInput, ParentInfoUncheckedCreateWithoutUserProfileInput>
-  }
-
-  export type HoroscopeProfileCreateWithoutUserProfileInput = {
-    zodiacSign: string
-    tamilYear: string
-    tamilMonth: string
-    udayathiNatchat: string
-    day: string
-    birthTime: string
-    starFoot: string
-    ascendant: string
-    birthplace: string
-    natalDirection: string
-    horoscopeDocuments?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type HoroscopeProfileUncheckedCreateWithoutUserProfileInput = {
-    id?: number
-    zodiacSign: string
-    tamilYear: string
-    tamilMonth: string
-    udayathiNatchat: string
-    day: string
-    birthTime: string
-    starFoot: string
-    ascendant: string
-    birthplace: string
-    natalDirection: string
-    horoscopeDocuments?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type HoroscopeProfileCreateOrConnectWithoutUserProfileInput = {
-    where: HoroscopeProfileWhereUniqueInput
-    create: XOR<HoroscopeProfileCreateWithoutUserProfileInput, HoroscopeProfileUncheckedCreateWithoutUserProfileInput>
-  }
-
-  export type UserUpsertWithoutUserProfileInput = {
-    update: XOR<UserUpdateWithoutUserProfileInput, UserUncheckedUpdateWithoutUserProfileInput>
-    create: XOR<UserCreateWithoutUserProfileInput, UserUncheckedCreateWithoutUserProfileInput>
+  export type UserUpsertWithoutProfileViewsInput = {
+    update: XOR<UserUpdateWithoutProfileViewsInput, UserUncheckedUpdateWithoutProfileViewsInput>
+    create: XOR<UserCreateWithoutProfileViewsInput, UserUncheckedCreateWithoutProfileViewsInput>
     where?: UserWhereInput
   }
 
-  export type UserUpdateToOneWithWhereWithoutUserProfileInput = {
+  export type UserUpdateToOneWithWhereWithoutProfileViewsInput = {
     where?: UserWhereInput
-    data: XOR<UserUpdateWithoutUserProfileInput, UserUncheckedUpdateWithoutUserProfileInput>
+    data: XOR<UserUpdateWithoutProfileViewsInput, UserUncheckedUpdateWithoutProfileViewsInput>
   }
 
-  export type UserUpdateWithoutUserProfileInput = {
+  export type UserUpdateWithoutProfileViewsInput = {
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    credits?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUpdateOneWithoutUserNestedInput
   }
 
-  export type UserUncheckedUpdateWithoutUserProfileInput = {
+  export type UserUncheckedUpdateWithoutProfileViewsInput = {
     id?: IntFieldUpdateOperationsInput | number
     email?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
     firstName?: StringFieldUpdateOperationsInput | string
     lastName?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    credits?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: ProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
-  export type ParentInfoUpsertWithoutUserProfileInput = {
-    update: XOR<ParentInfoUpdateWithoutUserProfileInput, ParentInfoUncheckedUpdateWithoutUserProfileInput>
-    create: XOR<ParentInfoCreateWithoutUserProfileInput, ParentInfoUncheckedCreateWithoutUserProfileInput>
-    where?: ParentInfoWhereInput
-  }
-
-  export type ParentInfoUpdateToOneWithWhereWithoutUserProfileInput = {
-    where?: ParentInfoWhereInput
-    data: XOR<ParentInfoUpdateWithoutUserProfileInput, ParentInfoUncheckedUpdateWithoutUserProfileInput>
-  }
-
-  export type ParentInfoUpdateWithoutUserProfileInput = {
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
-    fatherNative?: StringFieldUpdateOperationsInput | string
-    motherNative?: StringFieldUpdateOperationsInput | string
-    fatherProfession?: StringFieldUpdateOperationsInput | string
-    motherProfession?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    brothers?: IntFieldUpdateOperationsInput | number
-    elderBrothers?: IntFieldUpdateOperationsInput | number
-    youngerBrothers?: IntFieldUpdateOperationsInput | number
-    marriedBrothers?: IntFieldUpdateOperationsInput | number
-    sisters?: IntFieldUpdateOperationsInput | number
-    elderSisters?: IntFieldUpdateOperationsInput | number
-    youngerSisters?: IntFieldUpdateOperationsInput | number
-    marriedSisters?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type ParentInfoUncheckedUpdateWithoutUserProfileInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    fatherName?: StringFieldUpdateOperationsInput | string
-    motherName?: StringFieldUpdateOperationsInput | string
-    fatherNative?: StringFieldUpdateOperationsInput | string
-    motherNative?: StringFieldUpdateOperationsInput | string
-    fatherProfession?: StringFieldUpdateOperationsInput | string
-    motherProfession?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    address?: StringFieldUpdateOperationsInput | string
-    brothers?: IntFieldUpdateOperationsInput | number
-    elderBrothers?: IntFieldUpdateOperationsInput | number
-    youngerBrothers?: IntFieldUpdateOperationsInput | number
-    marriedBrothers?: IntFieldUpdateOperationsInput | number
-    sisters?: IntFieldUpdateOperationsInput | number
-    elderSisters?: IntFieldUpdateOperationsInput | number
-    youngerSisters?: IntFieldUpdateOperationsInput | number
-    marriedSisters?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type HoroscopeProfileUpsertWithoutUserProfileInput = {
-    update: XOR<HoroscopeProfileUpdateWithoutUserProfileInput, HoroscopeProfileUncheckedUpdateWithoutUserProfileInput>
-    create: XOR<HoroscopeProfileCreateWithoutUserProfileInput, HoroscopeProfileUncheckedCreateWithoutUserProfileInput>
-    where?: HoroscopeProfileWhereInput
-  }
-
-  export type HoroscopeProfileUpdateToOneWithWhereWithoutUserProfileInput = {
-    where?: HoroscopeProfileWhereInput
-    data: XOR<HoroscopeProfileUpdateWithoutUserProfileInput, HoroscopeProfileUncheckedUpdateWithoutUserProfileInput>
-  }
-
-  export type HoroscopeProfileUpdateWithoutUserProfileInput = {
-    zodiacSign?: StringFieldUpdateOperationsInput | string
-    tamilYear?: StringFieldUpdateOperationsInput | string
-    tamilMonth?: StringFieldUpdateOperationsInput | string
-    udayathiNatchat?: StringFieldUpdateOperationsInput | string
-    day?: StringFieldUpdateOperationsInput | string
-    birthTime?: StringFieldUpdateOperationsInput | string
-    starFoot?: StringFieldUpdateOperationsInput | string
-    ascendant?: StringFieldUpdateOperationsInput | string
-    birthplace?: StringFieldUpdateOperationsInput | string
-    natalDirection?: StringFieldUpdateOperationsInput | string
-    horoscopeDocuments?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type HoroscopeProfileUncheckedUpdateWithoutUserProfileInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    zodiacSign?: StringFieldUpdateOperationsInput | string
-    tamilYear?: StringFieldUpdateOperationsInput | string
-    tamilMonth?: StringFieldUpdateOperationsInput | string
-    udayathiNatchat?: StringFieldUpdateOperationsInput | string
-    day?: StringFieldUpdateOperationsInput | string
-    birthTime?: StringFieldUpdateOperationsInput | string
-    starFoot?: StringFieldUpdateOperationsInput | string
-    ascendant?: StringFieldUpdateOperationsInput | string
-    birthplace?: StringFieldUpdateOperationsInput | string
-    natalDirection?: StringFieldUpdateOperationsInput | string
-    horoscopeDocuments?: NullableJsonNullValueInput | InputJsonValue
-  }
-
-  export type UserProfileCreateWithoutParentInfoInput = {
-    type: string
-    dietType: string
-    dob: Date | string
-    age: number
-    height: string
-    color: string
-    education: string
-    career: string
-    salary: string
-    familyProperty: string
-    expectation: string
-    phone: string
-    caste: string
-    marriageStatus: string
-    profilePhotos: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutUserProfileInput
-    horoscopeProfile?: HoroscopeProfileCreateNestedOneWithoutUserProfileInput
-  }
-
-  export type UserProfileUncheckedCreateWithoutParentInfoInput = {
+  export type ProfileViewCreateManyUserInput = {
     id?: number
-    userId: number
-    type: string
-    dietType: string
-    dob: Date | string
-    age: number
-    height: string
-    color: string
-    education: string
-    career: string
-    salary: string
-    familyProperty: string
-    expectation: string
-    phone: string
-    caste: string
-    marriageStatus: string
-    profilePhotos: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    horoscopeProfile?: HoroscopeProfileUncheckedCreateNestedOneWithoutUserProfileInput
+    profileId: number
+    viewedAt?: Date | string
   }
 
-  export type UserProfileCreateOrConnectWithoutParentInfoInput = {
-    where: UserProfileWhereUniqueInput
-    create: XOR<UserProfileCreateWithoutParentInfoInput, UserProfileUncheckedCreateWithoutParentInfoInput>
+  export type ProfileViewUpdateWithoutUserInput = {
+    profileId?: IntFieldUpdateOperationsInput | number
+    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type UserProfileUpsertWithoutParentInfoInput = {
-    update: XOR<UserProfileUpdateWithoutParentInfoInput, UserProfileUncheckedUpdateWithoutParentInfoInput>
-    create: XOR<UserProfileCreateWithoutParentInfoInput, UserProfileUncheckedCreateWithoutParentInfoInput>
-    where?: UserProfileWhereInput
-  }
-
-  export type UserProfileUpdateToOneWithWhereWithoutParentInfoInput = {
-    where?: UserProfileWhereInput
-    data: XOR<UserProfileUpdateWithoutParentInfoInput, UserProfileUncheckedUpdateWithoutParentInfoInput>
-  }
-
-  export type UserProfileUpdateWithoutParentInfoInput = {
-    type?: StringFieldUpdateOperationsInput | string
-    dietType?: StringFieldUpdateOperationsInput | string
-    dob?: DateTimeFieldUpdateOperationsInput | Date | string
-    age?: IntFieldUpdateOperationsInput | number
-    height?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
-    education?: StringFieldUpdateOperationsInput | string
-    career?: StringFieldUpdateOperationsInput | string
-    salary?: StringFieldUpdateOperationsInput | string
-    familyProperty?: StringFieldUpdateOperationsInput | string
-    expectation?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    caste?: StringFieldUpdateOperationsInput | string
-    marriageStatus?: StringFieldUpdateOperationsInput | string
-    profilePhotos?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutUserProfileNestedInput
-    horoscopeProfile?: HoroscopeProfileUpdateOneWithoutUserProfileNestedInput
-  }
-
-  export type UserProfileUncheckedUpdateWithoutParentInfoInput = {
+  export type ProfileViewUncheckedUpdateWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    type?: StringFieldUpdateOperationsInput | string
-    dietType?: StringFieldUpdateOperationsInput | string
-    dob?: DateTimeFieldUpdateOperationsInput | Date | string
-    age?: IntFieldUpdateOperationsInput | number
-    height?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
-    education?: StringFieldUpdateOperationsInput | string
-    career?: StringFieldUpdateOperationsInput | string
-    salary?: StringFieldUpdateOperationsInput | string
-    familyProperty?: StringFieldUpdateOperationsInput | string
-    expectation?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    caste?: StringFieldUpdateOperationsInput | string
-    marriageStatus?: StringFieldUpdateOperationsInput | string
-    profilePhotos?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    horoscopeProfile?: HoroscopeProfileUncheckedUpdateOneWithoutUserProfileNestedInput
+    profileId?: IntFieldUpdateOperationsInput | number
+    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type UserProfileCreateWithoutHoroscopeProfileInput = {
-    type: string
-    dietType: string
-    dob: Date | string
-    age: number
-    height: string
-    color: string
-    education: string
-    career: string
-    salary: string
-    familyProperty: string
-    expectation: string
-    phone: string
-    caste: string
-    marriageStatus: string
-    profilePhotos: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutUserProfileInput
-    parentInfo?: ParentInfoCreateNestedOneWithoutUserProfileInput
-  }
-
-  export type UserProfileUncheckedCreateWithoutHoroscopeProfileInput = {
-    id?: number
-    userId: number
-    type: string
-    dietType: string
-    dob: Date | string
-    age: number
-    height: string
-    color: string
-    education: string
-    career: string
-    salary: string
-    familyProperty: string
-    expectation: string
-    phone: string
-    caste: string
-    marriageStatus: string
-    profilePhotos: JsonNullValueInput | InputJsonValue
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    parentInfo?: ParentInfoUncheckedCreateNestedOneWithoutUserProfileInput
-  }
-
-  export type UserProfileCreateOrConnectWithoutHoroscopeProfileInput = {
-    where: UserProfileWhereUniqueInput
-    create: XOR<UserProfileCreateWithoutHoroscopeProfileInput, UserProfileUncheckedCreateWithoutHoroscopeProfileInput>
-  }
-
-  export type UserProfileUpsertWithoutHoroscopeProfileInput = {
-    update: XOR<UserProfileUpdateWithoutHoroscopeProfileInput, UserProfileUncheckedUpdateWithoutHoroscopeProfileInput>
-    create: XOR<UserProfileCreateWithoutHoroscopeProfileInput, UserProfileUncheckedCreateWithoutHoroscopeProfileInput>
-    where?: UserProfileWhereInput
-  }
-
-  export type UserProfileUpdateToOneWithWhereWithoutHoroscopeProfileInput = {
-    where?: UserProfileWhereInput
-    data: XOR<UserProfileUpdateWithoutHoroscopeProfileInput, UserProfileUncheckedUpdateWithoutHoroscopeProfileInput>
-  }
-
-  export type UserProfileUpdateWithoutHoroscopeProfileInput = {
-    type?: StringFieldUpdateOperationsInput | string
-    dietType?: StringFieldUpdateOperationsInput | string
-    dob?: DateTimeFieldUpdateOperationsInput | Date | string
-    age?: IntFieldUpdateOperationsInput | number
-    height?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
-    education?: StringFieldUpdateOperationsInput | string
-    career?: StringFieldUpdateOperationsInput | string
-    salary?: StringFieldUpdateOperationsInput | string
-    familyProperty?: StringFieldUpdateOperationsInput | string
-    expectation?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    caste?: StringFieldUpdateOperationsInput | string
-    marriageStatus?: StringFieldUpdateOperationsInput | string
-    profilePhotos?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutUserProfileNestedInput
-    parentInfo?: ParentInfoUpdateOneWithoutUserProfileNestedInput
-  }
-
-  export type UserProfileUncheckedUpdateWithoutHoroscopeProfileInput = {
+  export type ProfileViewUncheckedUpdateManyWithoutUserInput = {
     id?: IntFieldUpdateOperationsInput | number
-    userId?: IntFieldUpdateOperationsInput | number
-    type?: StringFieldUpdateOperationsInput | string
-    dietType?: StringFieldUpdateOperationsInput | string
-    dob?: DateTimeFieldUpdateOperationsInput | Date | string
-    age?: IntFieldUpdateOperationsInput | number
-    height?: StringFieldUpdateOperationsInput | string
-    color?: StringFieldUpdateOperationsInput | string
-    education?: StringFieldUpdateOperationsInput | string
-    career?: StringFieldUpdateOperationsInput | string
-    salary?: StringFieldUpdateOperationsInput | string
-    familyProperty?: StringFieldUpdateOperationsInput | string
-    expectation?: StringFieldUpdateOperationsInput | string
-    phone?: StringFieldUpdateOperationsInput | string
-    caste?: StringFieldUpdateOperationsInput | string
-    marriageStatus?: StringFieldUpdateOperationsInput | string
-    profilePhotos?: JsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    parentInfo?: ParentInfoUncheckedUpdateOneWithoutUserProfileNestedInput
+    profileId?: IntFieldUpdateOperationsInput | number
+    viewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

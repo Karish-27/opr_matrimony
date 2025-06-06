@@ -9,6 +9,14 @@ const ProfileDetail = () => {
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState<any>(null);
+  const [imageUploading, setImageUploading] = useState(false);
+  const [horoscopeUploading, setHoroscopeUploading] = useState(false);
+  
+  // Image gallery state
+  const [showImageGallery, setShowImageGallery] = useState(false);
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [galleryType, setGalleryType] = useState<'profile' | 'horoscope'>('profile');
 
   useEffect(() => {
     if (!id) return;
@@ -21,10 +29,139 @@ const ProfileDetail = () => {
       });
   }, [id]);
 
+  // Keyboard navigation for image gallery
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!showImageGallery) return;
+      
+      if (event.key === 'Escape') {
+        handleGalleryClose();
+      } else if (event.key === 'ArrowLeft') {
+        handlePrevImage();
+      } else if (event.key === 'ArrowRight') {
+        handleNextImage();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [showImageGallery, currentImageIndex, galleryImages.length]);
+
+  // Image gallery handlers
+  const handleImageClick = (images: string[], imageIndex: number = 0, type: 'profile' | 'horoscope' = 'profile') => {
+    setGalleryImages(images);
+    setCurrentImageIndex(imageIndex);
+    setGalleryType(type);
+    setShowImageGallery(true);
+  };
+
+  const handleGalleryClose = () => {
+    setShowImageGallery(false);
+    setGalleryImages([]);
+    setCurrentImageIndex(0);
+  };
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prev) => 
+      prev === 0 ? galleryImages.length - 1 : prev - 1
+    );
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) => 
+      prev === galleryImages.length - 1 ? 0 : prev + 1
+    );
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setForm((prev: any) => ({ ...prev, [name]: value }));
   };
+  const handleImageUpload = async (files: FileList, type: 'profile' | 'horoscope') => {
+    const formData = new FormData();
+    
+    for (let i = 0; i < files.length; i++) {
+      formData.append('files', files[i]);
+    }
+    formData.append('type', type);
+    formData.append('profileId', id as string);
+
+    if (type === 'profile') {
+      setImageUploading(true);
+    } else {
+      setHoroscopeUploading(true);
+    }
+
+    try {
+      const res = await fetch('/api/profiledataapi/userprofile/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        
+        if (type === 'profile') {
+          setForm((prev: any) => ({ 
+            ...prev, 
+            profilePhotos: data.urls 
+          }));
+          setProfile((prev: any) => ({ 
+            ...prev, 
+            profilePhotos: data.urls 
+          }));
+        } else {
+          setForm((prev: any) => ({ 
+            ...prev, 
+            horoscopeProfile: {
+              ...prev.horoscopeProfile,
+              horoscopeDocuments: data.urls
+            }
+          }));
+          setProfile((prev: any) => ({ 
+            ...prev, 
+            horoscopeProfile: {
+              ...prev.horoscopeProfile,
+              horoscopeDocuments: data.urls
+            }
+          }));
+        }
+        alert(`${type === 'profile' ? 'Profile' : 'Horoscope'} images uploaded successfully!`);
+      } else {
+        const errorData = await res.json();
+        alert(errorData.error || 'Failed to upload images');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Error uploading images');
+    } finally {
+      if (type === 'profile') {
+        setImageUploading(false);
+      } else {
+        setHoroscopeUploading(false);
+      }
+    }
+  };
+
+  const handleRemoveImage = (index: number, type: 'profile' | 'horoscope') => {
+    if (type === 'profile') {
+      const newPhotos = [...(form.profilePhotos || [])];
+      newPhotos.splice(index, 1);
+      setForm((prev: any) => ({ ...prev, profilePhotos: newPhotos }));
+    } else {
+      const newDocs = [...(form.horoscopeProfile?.horoscopeDocuments || [])];
+      newDocs.splice(index, 1);
+      setForm((prev: any) => ({ 
+        ...prev, 
+        horoscopeProfile: {
+          ...prev.horoscopeProfile,
+          horoscopeDocuments: newDocs
+        }
+      }));
+    }
+  };
+
+  
 
   const handleSave = async () => {
     const res = await fetch(`/api/admin/profile/${id}`, {
@@ -93,8 +230,7 @@ const ProfileDetail = () => {
                 <div><b>Career</b><br />{editMode ? <input name="career" value={form.career} onChange={handleInputChange} /> : career}</div>
                 <div><b>Expectation</b><br />{editMode ? <input name="expectation" value={form.expectation} onChange={handleInputChange} /> : expectation}</div>
               </div>
-            </div>
-            <div style={{ minWidth: 220, textAlign: "right" }}>
+            </div>            <div style={{ minWidth: 220, textAlign: "right" }}>
               <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginBottom: 8 }}>
                 <button
                   style={{ background: "#ff9000", color: "#fff", border: "none", borderRadius: 5, padding: "8px 18px", fontWeight: 500, cursor: "pointer" }}
@@ -105,14 +241,121 @@ const ProfileDetail = () => {
                   style={{ background: editMode ? "#52c41a" : "#ff9000", color: "#fff", border: "none", borderRadius: 5, padding: "8px 18px", fontWeight: 500, cursor: "pointer" }}
                   onClick={editMode ? handleSave : () => setEditMode(true)}
                 >{editMode ? 'Save' : 'Edit'}</button>
-                <button style={{ background: "#ff4d4f", color: "#fff", border: "none", borderRadius: 5, padding: "8px 18px", fontWeight: 500, cursor: "pointer" }}>Delete</button>
               </div>
-              <img src={profilePhotos?.[0] || "/images/profilepicture.png"} alt="Profile" style={{ width: 170, height: 200, borderRadius: 10, objectFit: "cover", marginBottom: 8, border: "1px solid #eee" }} />
-              <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
-                {profilePhotos?.slice(1, 4).map((img: string, i: number) => (
-                  <img key={i} src={img} alt="Gallery" style={{ width: 48, height: 48, borderRadius: 6, objectFit: "cover", border: "1px solid #eee" }} />
+                {/* Profile Photo Section */}
+              <div style={{ position: "relative", marginBottom: 8 }}>
+                <img 
+                  src={form?.profilePhotos?.[0] || "/images/profilepicture.png"} 
+                  alt="Profile" 
+                  style={{ width: 170, height: 200, borderRadius: 10, objectFit: "cover", border: "1px solid #eee", cursor: "pointer" }} 
+                  onClick={() => form?.profilePhotos && form.profilePhotos.length > 0 && handleImageClick(form.profilePhotos, 0, 'profile')}
+                  title="Click to view gallery"
+                />{editMode && (
+                  <div style={{ 
+                    position: "absolute", 
+                    top: 5, 
+                    right: 5, 
+                    background: "rgba(0,0,0,0.7)", 
+                    borderRadius: 4, 
+                    padding: 6,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }}>
+                    <label style={{ cursor: "pointer", color: "white", fontSize: 16, display: "flex", alignItems: "center" }}>
+                      📷
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={(e) => e.target.files && handleImageUpload(e.target.files, 'profile')}
+                        style={{ display: "none" }}
+                        disabled={imageUploading}
+                      />
+                    </label>
+                  </div>
+                )}
+              </div>              {/* Gallery Photos */}
+              <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
+                {form?.profilePhotos?.slice(1, 4).map((img: string, i: number) => (
+                  <div key={i} style={{ position: "relative" }}>
+                    <img 
+                      src={img} 
+                      alt="Gallery" 
+                      style={{ width: 48, height: 48, borderRadius: 6, objectFit: "cover", border: "1px solid #eee", cursor: "pointer" }} 
+                      onClick={() => handleImageClick(form.profilePhotos, i + 1, 'profile')}
+                      title="Click to view gallery"
+                    />
+                    {editMode && (
+                      <button
+                        onClick={() => handleRemoveImage(i + 1, 'profile')}
+                        style={{
+                          position: "absolute",
+                          top: -5,
+                          right: -5,
+                          background: "#ff4d4f",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: 16,
+                          height: 16,
+                          fontSize: 10,
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center"
+                        }}
+                        title="Remove image"
+                      >
+                        ×
+                      </button>
+                    )}
+                  </div>
                 ))}
+                  {/* Add more photos button */}
+                {editMode && form?.profilePhotos?.length < 4 && (
+                  <label style={{ 
+                    cursor: "pointer", 
+                    width: 48, 
+                    height: 48, 
+                    border: "2px dashed #ccc", 
+                    borderRadius: 6, 
+                    display: "flex", 
+                    alignItems: "center", 
+                    justifyContent: "center",
+                    background: "#fafafa",
+                    fontSize: 20,
+                    color: "#666",
+                    transition: "all 0.2s ease"
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = "#1890ff";
+                    e.currentTarget.style.background = "#f0f8ff";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "#ccc";
+                    e.currentTarget.style.background = "#fafafa";
+                  }}
+                  title="Add more photos"
+                  >
+                    +
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={(e) => e.target.files && handleImageUpload(e.target.files, 'profile')}
+                      style={{ display: "none" }}
+                      disabled={imageUploading}
+                    />
+                  </label>
+                )}
               </div>
+              
+              {imageUploading && (
+                <div style={{ fontSize: 12, color: "#666", marginTop: 8 }}>
+                  Uploading images...
+                </div>
+              )}
             </div>
           </div>
 
@@ -154,72 +397,323 @@ const ProfileDetail = () => {
               <div><b>Birthplace</b><br />{horoscopeProfile?.birthplace}</div>
               <div><b>Presence of natal direction</b><br />{horoscopeProfile?.natalDirection}</div>
             </div>
-          </div>
-
-          {/* Horoscope Chart */}
+          </div>          {/* Horoscope Chart */}
           <div style={{ marginTop: 36 }}>
-            <div style={{ fontWeight: 600, fontSize: 17, marginBottom: 12 }}>Horoscope Chart</div>
-            <div style={{ display: "flex", gap: 24 }}>
-              <table style={{ borderCollapse: "collapse", width: 300, background: "#fafafa", borderRadius: 8, fontSize: 14, textAlign: "center" }}>
-                <tbody>
-                  <tr>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                  </tr>
-                  <tr>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                  </tr>
-                  <tr>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                  </tr>
-                  <tr>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                  </tr>
-                </tbody>
-              </table>
-              <table style={{ borderCollapse: "collapse", width: 300, background: "#fafafa", borderRadius: 8, fontSize: 14, textAlign: "center" }}>
-                <tbody>
-                  <tr>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                  </tr>
-                  <tr>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                  </tr>
-                  <tr>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                  </tr>
-                  <tr>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                    <td style={{ border: "1px solid #eee", height: 40 }}></td>
-                  </tr>
-                </tbody>
-              </table>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <div style={{ fontWeight: 600, fontSize: 17 }}>Horoscope Chart</div>
+              {editMode && (
+                <label style={{ 
+                  background: "#1890ff", 
+                  color: "white", 
+                  border: "none", 
+                  borderRadius: 5, 
+                  padding: "8px 16px", 
+                  cursor: "pointer",
+                  fontSize: 14,
+                  fontWeight: 500
+                }}>
+                  {horoscopeUploading ? "Uploading..." : "Upload Horoscope Charts"}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={(e) => e.target.files && handleImageUpload(e.target.files, 'horoscope')}
+                    style={{ display: "none" }}
+                    disabled={horoscopeUploading}
+                  />
+                </label>
+              )}
+            </div>
+            
+            {/* Check if horoscope chart images exist in the profile, otherwise show default images */}
+            {form?.horoscopeProfile?.horoscopeDocuments && 
+             Array.isArray(form.horoscopeProfile.horoscopeDocuments) && 
+             form.horoscopeProfile.horoscopeDocuments.length > 0 ? (
+              <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
+                {form.horoscopeProfile.horoscopeDocuments.map((document: string, index: number) => (
+                  <div key={index} style={{ flex: "0 0 auto", textAlign: "center", position: "relative" }}>                    <img 
+                      src={document} 
+                      alt={`Horoscope Chart ${index + 1}`}
+                      style={{ 
+                        width: 300, 
+                        height: 300, 
+                        objectFit: "contain", 
+                        border: "1px solid #eee", 
+                        borderRadius: 8,
+                        background: "#fafafa",
+                        cursor: "pointer",
+                        boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+                      }}
+                      onClick={() => handleImageClick(form.horoscopeProfile.horoscopeDocuments, index, 'horoscope')}
+                      title="Click to view gallery"
+                    />
+                    {editMode && (
+                      <button
+                        onClick={() => handleRemoveImage(index, 'horoscope')}
+                        style={{
+                          position: "absolute",
+                          top: 10,
+                          right: 10,
+                          background: "#ff4d4f",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: 24,
+                          height: 24,
+                          fontSize: 14,
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          boxShadow: "0 2px 4px rgba(0,0,0,0.2)"
+                        }}
+                        title="Remove chart"
+                      >
+                        ×
+                      </button>
+                    )}
+                    <div style={{ textAlign: "center", marginTop: 8, fontSize: 14, color: "#666" }}>
+                      Chart {index + 1}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
+                {!editMode && (
+                  <div style={{ padding: "10px", background: "#e6f7ff", border: "1px solid #91d5ff", borderRadius: 8, marginBottom: 12, fontSize: 14, color: "#0050b3" }}>
+                    DEBUG: Showing default horoscope images because horoscope documents are not available
+                  </div>
+                )}
+                <div style={{ width: "100%", display: "flex", gap: 24, flexWrap: "wrap" }}>
+                  <div style={{ flex: "0 0 auto", textAlign: "center" }}>                    <img 
+                      src="/images/h1.jpg" 
+                      alt="Default Horoscope Chart 1"
+                      style={{ 
+                        width: 300, 
+                        height: 300, 
+                        objectFit: "contain", 
+                        border: "1px solid #eee", 
+                        borderRadius: 8,
+                        background: "#fafafa",
+                        cursor: "pointer",
+                        boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+                      }}
+                      onClick={() => handleImageClick(["/images/h1.jpg", "/images/h2.jpg"], 0, 'horoscope')}
+                      title="Click to view gallery"
+                    />
+                    <div style={{ textAlign: "center", marginTop: 8, fontSize: 14, color: "#666" }}>
+                      Default Chart 1
+                    </div>
+                  </div>
+                  <div style={{ flex: "0 0 auto", textAlign: "center" }}>                    <img 
+                      src="/images/h2.jpg" 
+                      alt="Default Horoscope Chart 2"
+                      style={{ 
+                        width: 300, 
+                        height: 300, 
+                        objectFit: "contain", 
+                        border: "1px solid #eee", 
+                        borderRadius: 8,
+                        background: "#fafafa",
+                        cursor: "pointer",
+                        boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+                      }}
+                      onClick={() => handleImageClick(["/images/h1.jpg", "/images/h2.jpg"], 1, 'horoscope')}
+                      title="Click to view gallery"
+                    />
+                    <div style={{ textAlign: "center", marginTop: 8, fontSize: 14, color: "#666" }}>
+                      Default Chart 2
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {horoscopeUploading && (
+              <div style={{ padding: "10px", background: "#f0f8f0", border: "1px solid #52c41a", borderRadius: 8, marginTop: 12, fontSize: 14, color: "#389e0d" }}>
+                Uploading horoscope charts...
+              </div>
+            )}          </div>
+        </div>
+      </main>
+
+      {/* Image Gallery Modal */}
+      {showImageGallery && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: "rgba(0, 0, 0, 0.9)",
+          zIndex: 60,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}>
+          <div style={{
+            position: "relative",
+            maxWidth: "90vw",
+            maxHeight: "90vh",
+            width: "100%",
+            margin: "0 16px"
+          }}>
+            {/* Close button */}
+            <button
+              onClick={handleGalleryClose}
+              style={{
+                position: "absolute",
+                top: 16,
+                right: 16,
+                color: "white",
+                background: "none",
+                border: "none",
+                fontSize: 32,
+                cursor: "pointer",
+                zIndex: 10,
+                width: 40,
+                height: 40,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+              title="Close gallery"
+            >
+              ×
+            </button>
+
+            {/* Main image */}
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "100%"
+            }}>
+              <img
+                src={galleryImages[currentImageIndex]}
+                alt={`${galleryType} image ${currentImageIndex + 1}`}
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  objectFit: "contain"
+                }}
+              />
+            </div>
+
+            {/* Navigation arrows */}
+            {galleryImages.length > 1 && (
+              <>
+                <button
+                  onClick={handlePrevImage}
+                  style={{
+                    position: "absolute",
+                    left: 16,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    color: "white",
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    border: "none",
+                    borderRadius: "50%",
+                    width: 48,
+                    height: 48,
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 20
+                  }}
+                  title="Previous image"
+                >
+                  ‹
+                </button>
+                <button
+                  onClick={handleNextImage}
+                  style={{
+                    position: "absolute",
+                    right: 16,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    color: "white",
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    border: "none",
+                    borderRadius: "50%",
+                    width: 48,
+                    height: 48,
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 20
+                  }}
+                  title="Next image"
+                >
+                  ›
+                </button>
+              </>
+            )}
+
+            {/* Image thumbnails */}
+            {galleryImages.length > 1 && (
+              <div style={{
+                position: "absolute",
+                bottom: 16,
+                left: "50%",
+                transform: "translateX(-50%)"
+              }}>
+                <div style={{
+                  display: "flex",
+                  gap: 8,
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                  borderRadius: 8,
+                  padding: 8
+                }}>
+                  {galleryImages.map((img, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentImageIndex(index)}
+                      style={{
+                        width: 64,
+                        height: 64,
+                        borderRadius: 4,
+                        overflow: "hidden",
+                        border: index === currentImageIndex ? "2px solid #ff9000" : "2px solid transparent",
+                        cursor: "pointer",
+                        background: "none",
+                        padding: 0
+                      }}
+                    >
+                      <img
+                        src={img}
+                        alt={`Thumbnail ${index + 1}`}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover"
+                        }}
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Image counter */}
+            <div style={{
+              position: "absolute",
+              top: 16,
+              left: 16,
+              color: "white",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              borderRadius: 4,
+              padding: "8px 12px",
+              fontSize: 14
+            }}>
+              {currentImageIndex + 1} / {galleryImages.length}
             </div>
           </div>
         </div>
-      </main>
+      )}
     </div>
   );
 };

@@ -7,13 +7,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTranslation } from 'react-i18next';
 import '@/i18n';
+import { withAuth } from '@/hooks/useAuth';
 
 const HoroscopeRegistrationForm = () => {
   const router = useRouter();
   const { t, i18n } = useTranslation();
-  const [currentStep, setCurrentStep] = useState(3);
-  const [form, setForm] = useState({
-    userId: '', // You must set this from a prop, context, or previous step
+  const [currentStep, setCurrentStep] = useState(3);  const [form, setForm] = useState({
     zodiacSign: '',
     tamilYear: '',
     tamilMonth: '',
@@ -24,57 +23,126 @@ const HoroscopeRegistrationForm = () => {
     ascendant: '',
     birthplace: '',
     natalDirection: '',
-  });
-  const [documents, setDocuments] = useState<File[]>([]);
-
-   useEffect(() => {
-       // Get userId from localStorage and set it in form state
-       const userId = localStorage.getItem('userId');
-       if (userId) {
-         setForm((prev) => ({ ...prev, userId }));
-       }
-     }, []);
+  });const [horoscopeImages, setHoroscopeImages] = useState<File[]>([]);
+  const [existingImages, setExistingImages] = useState<string[]>([]);
+  const [submittedData, setSubmittedData] = useState<any>(null); // State to hold submitted data
+  useEffect(() => {
+    // Fetch existing horoscope data if available
+    fetchExistingHoroscopeData();
+  }, []);
+  // Fetch existing horoscope data
+  const fetchExistingHoroscopeData = async () => {
+    try {
+      const res = await fetch('/api/profiledataapi/userprofile/parentsinfo/horoscopeprofile', {
+        method: 'GET',
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.horoscopeDocuments && Array.isArray(data.horoscopeDocuments)) {
+          setExistingImages(data.horoscopeDocuments);
+        }
+        // Populate form with existing data
+        setForm(prev => ({
+          ...prev,
+          zodiacSign: data.zodiacSign || '',
+          tamilYear: data.tamilYear || '',
+          tamilMonth: data.tamilMonth || '',
+          udayathiNatchat: data.udayathiNatchat || '',
+          day: data.day || '',
+          birthTime: data.birthTime || '',
+          starFoot: data.starFoot || '',
+          ascendant: data.ascendant || '',
+          birthplace: data.birthplace || '',
+          natalDirection: data.natalDirection || '',
+        }));
+      }
+    } catch (error) {
+      console.log('No existing horoscope data found');
+    }
+  };
 
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  // Handle file selection
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  };  // Handle image file selection (limit to 2 images)
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
-      // Avoid duplicates by name and size
-      setDocuments((prev) => {
-        const allFiles = [...prev, ...newFiles];
-        const uniqueFiles = Array.from(
-          new Map(allFiles.map(file => [file.name + file.size, file])).values()
-        );
-        return uniqueFiles;
+      const imageFiles = newFiles.filter(file => file.type.startsWith('image/'));
+      
+      // Validate file sizes (max 5MB per image)
+      const validFiles = imageFiles.filter(file => {
+        if (file.size > 5 * 1024 * 1024) {
+          toast.error(t('file_too_large', `File ${file.name} is too large. Maximum size is 5MB.`));
+          return false;
+        }
+        return true;
       });
+
+      // Validate file types more strictly
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      const typeValidFiles = validFiles.filter(file => {
+        if (!allowedTypes.includes(file.type)) {
+          toast.error(t('invalid_file_type', `File ${file.name} is not a supported image format. Please use JPEG, PNG, or WebP.`));
+          return false;
+        }
+        return true;
+      });
+      
+      setHoroscopeImages((prev) => {
+        const currentTotal = prev.length + existingImages.length;
+        const availableSlots = 2 - currentTotal;
+        
+        if (availableSlots <= 0) {
+          toast.warning(t('horoscope_max_images', 'You can upload maximum 2 horoscope chart images. Please remove an existing image first.'));
+          return prev;
+        }
+        
+        if (typeValidFiles.length > availableSlots) {
+          toast.warning(t('horoscope_max_images', `You can only upload ${availableSlots} more image(s). Only the first ${availableSlots} images will be added.`));
+          return [...prev, ...typeValidFiles.slice(0, availableSlots)];
+        }
+        
+        if (typeValidFiles.length > 0) {
+          toast.success(t('images_added', `${typeValidFiles.length} horoscope chart image(s) added successfully.`));
+        }
+        
+        return [...prev, ...typeValidFiles];
+      });
+      
+      // Clear the input value to allow re-selection of the same files
+      e.target.value = '';
     }
   };
 
-  // Remove a file from the list
-  const handleRemoveFile = (index: number) => {
-    setDocuments((prev) => prev.filter((_, i) => i !== index));
+  // Remove an uploaded image from the list
+  const handleRemoveImage = (index: number) => {
+    setHoroscopeImages((prev) => prev.filter((_, i) => i !== index));
   };
 
+  // Remove an existing image
+  const handleRemoveExistingImage = (index: number) => {
+    setExistingImages((prev) => prev.filter((_, i) => i !== index));
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-     if (!form.userId) {
-    toast.error(t('horoscope_userid_required', 'UserProfileId is required.'));
-    return;
-  }
-
     // Log form data and files
     console.log('Form Data:', form);
-    console.log('Selected Documents:', documents);
+    console.log('Selected Horoscope Images:', horoscopeImages);
 
     const formData = new FormData();
-    Object.entries(form).forEach(([key, value]) => formData.append(key, value));
-    documents.forEach((file) => formData.append('horoscopeDocuments', file));
+    Object.entries(form).forEach(([key, value]) => {
+      formData.append(key, value as string);
+    });
+    
+    // Add existing images that weren't removed
+    existingImages.forEach((imageUrl) => {
+      formData.append('existingImages', imageUrl);
+    });
+    
+    // Add new horoscope images
+    horoscopeImages.forEach((file) => formData.append('horoscopeImages', file));
 
     try {
       const res = await fetch('/api/profiledataapi/userprofile/parentsinfo/horoscopeprofile', {
@@ -82,14 +150,24 @@ const HoroscopeRegistrationForm = () => {
         body: formData,
       });
 
+      console.log(res, "res");
+      
+
       if (res.ok) {
+        const responseData = await res.json(); // Get the response data
+        setSubmittedData(responseData); // Set the submitted data
         toast.success(t('horoscope_success', 'Horoscope profile created successfully!'));
         setTimeout(() => {
-          router.push('/profilelists');
+          router.push('/auth/login'); // Navigate to next step
         }, 1500);
       } else {
         const errorData = await res.json();
-        toast.error(errorData.error || t('horoscope_failed', 'Failed to create horoscope profile'));
+        // Show more details if the error is a foreign key violation
+        if (errorData.error && errorData.error.includes('Foreign key constraint')) {
+          toast.error(t('horoscope_userid_not_found', 'UserProfileId does not exist. Please complete the previous steps or contact support.'));
+        } else {
+          toast.error(errorData.error || t('horoscope_failed', 'Failed to create horoscope profile'));
+        }
       }
     } catch (err) {
       console.error('Submission error:', err);
@@ -110,26 +188,23 @@ const HoroscopeRegistrationForm = () => {
   };
   
   return (
-    <div className="max-w-3xl mx-auto p-6">
+    <div className="flex flex-col items-center py-8 px-4">
       <ToastContainer position="top-right" autoClose={2000} />
       {/* Language Switcher */}
      
       {/* Logo */}
-      <div className="flex justify-center mb-6">
-        <div className="bg-orange-500 rounded-full p-3">
-          <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M12 2V4M12 20V22M2 12H4M20 12H22M17.7 6.3L16.3 7.7M7.7 16.3L6.3 17.7M6.3 6.3L7.7 7.7M16.3 16.3L17.7 17.7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+     <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          <img
+            alt="Your Company"
+            src="/images/loginlogo.png"
+            className="mx-auto h-20 w-auto"
+          />
+          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-[#F98B1D] text-900">
+            {t("register_title")}
+          </h2>
         </div>
-      </div>
-
-      {/* Form Title */}
-      <h1 className="text-center text-2xl font-semibold mb-8">{t('register_title')}</h1>
-
       {/* Form Section */}
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
+      <form className="w-full max-w-4xl bg-white p-8 rounded-lg shadow" onSubmit={handleSubmit} lang={i18n.language}>
         <div className="mb-8">
           <h2 className="text-lg font-medium mb-6">{t('horoscope_info', 'Horoscope Information')}</h2>
           <div className="grid grid-cols-2 gap-6">
@@ -296,48 +371,111 @@ const HoroscopeRegistrationForm = () => {
               />
             </div>
           </div>
-        </div>
-
-        {/* Horoscope Document Section */}
-        {documents.length > 0 && (
-          <div className="mb-4 flex flex-row flex-wrap gap-4">
-            {documents.map((file, idx) => (
-              <div
-                key={file.name + file.size}
-                className="flex items-center bg-gray-100 rounded px-3 py-2"
-              >
-                <span className="mr-2 text-sm text-gray-700 truncate max-w-[120px]">{file.name}</span>
-                <button
-                  type="button"
-                  className="ml-2 text-gray-400 hover:text-red-500"
-                  onClick={() => handleRemoveFile(idx)}
-                  title={t('remove_button', 'Remove')}
-                >
-                  <X size={16} />
-                </button>
-              </div>
-            ))}
+        </div>        {/* Horoscope Images Preview Section */}
+        {(horoscopeImages.length > 0 || existingImages.length > 0) && (
+          <div className="mb-6">
+            <h3 className="text-md font-medium mb-4 text-gray-700">{t('horoscope_images_preview', 'Horoscope Chart Images Preview')}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Existing Images */}
+              {existingImages.map((imageUrl, idx) => (
+                <div key={`existing-${idx}`} className="relative group">
+                  <div className="relative overflow-hidden rounded-lg border-2 border-green-200 bg-green-50">
+                    <img 
+                      src={imageUrl} 
+                      alt={`Horoscope Chart ${idx + 1}`}
+                      className="w-full h-64 object-cover transition-transform group-hover:scale-105"
+                      onError={(e) => {
+                        e.currentTarget.src = '/images/placeholder-image.png';
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-opacity"></div>
+                  </div>
+                  <button
+                    type="button"
+                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-lg"
+                    onClick={() => handleRemoveExistingImage(idx)}
+                    title={t('remove_button', 'Remove')}
+                  >
+                    <X size={16} />
+                  </button>
+                  <div className="absolute bottom-2 left-2 bg-green-500 text-white px-2 py-1 rounded text-xs font-medium">
+                    {t('existing_image', 'Saved')}
+                  </div>
+                  <p className="text-xs text-gray-600 mt-2 text-center font-medium">
+                    {t('horoscope_chart', 'Horoscope Chart')} {idx + 1}
+                  </p>
+                </div>
+              ))}
+              
+              {/* New Images */}
+              {horoscopeImages.map((file, idx) => (
+                <div key={`new-${file.name}-${file.size}`} className="relative group">
+                  <div className="relative overflow-hidden rounded-lg border-2 border-orange-200 bg-orange-50">
+                    <img 
+                      src={URL.createObjectURL(file)} 
+                      alt={`New Horoscope Chart ${idx + 1}`}
+                      className="w-full h-64 object-cover transition-transform group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-opacity"></div>
+                  </div>
+                  <button
+                    type="button"
+                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-lg"
+                    onClick={() => handleRemoveImage(idx)}
+                    title={t('remove_button', 'Remove')}
+                  >
+                    <X size={16} />
+                  </button>
+                  <div className="absolute bottom-2 left-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-medium">
+                    {t('new_image', 'New')}
+                  </div>
+                  <p className="text-xs text-gray-600 mt-2 text-center font-medium">
+                    {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
-        )}
-
-        {/* Horoscope Document Section */}
+        )}{/* Horoscope Images Upload Section */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-medium">{t('horoscope_document_label', 'Horoscope Document')}</h2>
+            <h2 className="text-lg font-medium">{t('horoscope_images_label', 'Horoscope Chart Images')}</h2>
+            <span className="text-sm text-gray-500">
+              {t('upload_limit', `${horoscopeImages.length + existingImages.length}/2 images`)}
+            </span>
           </div>
-          <div className="grid grid-cols-2 gap-6">
-            <div className="border border-dashed border-gray-300 rounded p-6 flex flex-col items-center justify-center bg-gray-50">
+          <div className="grid grid-cols-1 gap-6">
+            <div className={`border border-dashed rounded p-6 flex flex-col items-center justify-center transition-colors ${
+              horoscopeImages.length + existingImages.length >= 2 
+                ? 'border-gray-200 bg-gray-100' 
+                : 'border-orange-300 bg-orange-50 hover:border-orange-400 hover:bg-orange-100'
+            }`}>
               <div className="mb-2">
-                <Upload size={24} className="text-gray-400" />
+                <Upload size={24} className={horoscopeImages.length + existingImages.length >= 2 ? "text-gray-400" : "text-orange-500"} />
               </div>
+              <p className="text-sm text-gray-600 mb-2 text-center">
+                {horoscopeImages.length + existingImages.length >= 2 
+                  ? t('upload_horoscope_limit_reached', 'Maximum 2 images uploaded. Remove an image to upload new one.')
+                  : t('upload_horoscope_text', 'Upload your horoscope chart images (Max 2 images, 5MB each)')
+                }
+              </p>
               <input
                 type="file"
-                name="horoscopeDocuments"
+                name="horoscopeImages"
                 multiple
-                accept="image/*,application/pdf"
-                className="text-gray-400 text-sm"
-                onChange={handleFileChange}
+                accept="image/jpeg,image/jpg,image/png,image/webp"
+                className={`text-sm ${horoscopeImages.length + existingImages.length >= 2 ? 'text-gray-400 cursor-not-allowed' : 'text-orange-600 hover:text-orange-700'}`}
+                onChange={handleImageChange}
+                disabled={horoscopeImages.length + existingImages.length >= 2}
               />
+              {horoscopeImages.length + existingImages.length >= 2 && (
+                <p className="text-xs text-orange-500 mt-2 text-center">
+                  {t('max_images_reached', 'Maximum 2 images allowed. Remove an image to upload new one.')}
+                </p>
+              )}
+              <p className="text-xs text-gray-500 mt-2 text-center">
+                {t('supported_formats', 'Supported formats: JPEG, PNG, WebP (Max 5MB each)')}
+              </p>
             </div>
           </div>
         </div>
@@ -359,8 +497,16 @@ const HoroscopeRegistrationForm = () => {
           </button>
         </div>
       </form>
+
+      {/* Show submitted data after successful submission */}
+      {/* {submittedData && (
+        <div className="mt-8 p-4 border border-green-400 rounded bg-green-50">
+          <h2 className="text-lg font-semibold mb-2 text-green-700">{t('submitted_data', 'Submitted Data')}</h2>
+          <pre className="text-sm text-gray-800 whitespace-pre-wrap">{JSON.stringify(submittedData, null, 2)}</pre>
+        </div>
+      )} */}
     </div>
   );
 }
 
-export default HoroscopeRegistrationForm
+export default withAuth(HoroscopeRegistrationForm)

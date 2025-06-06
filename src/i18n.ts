@@ -85,13 +85,13 @@ const resources = {
       register_caste_placeholder: 'Type',
       register_marriage_status_label: 'Marriage Status',
       register_marriage_status_choose: 'Choose',
-      register_marriage_status_single: 'Single',
-      register_marriage_status_divorced: 'Divorced',
+      register_marriage_status_single: 'Single',      register_marriage_status_divorced: 'Divorced',
       register_marriage_status_widowed: 'Widowed',
       register_profile_photo_label: 'Profile Photo',
       register_uploading: 'Uploading...',
       register_upload_button: 'Upload Selected Photos',
       // Parent & Family Info (added for multilingual support)
+      personal_info: 'Personal information',
       parent_info: 'Parent information',
       father_name_label: "Father's Name",
       mother_name_label: "Mother's Name",
@@ -121,8 +121,10 @@ const resources = {
       // Horoscope Profile (added for multilingual support)
       horoscope_info: 'Horoscope Information',
       horoscope_document_label: 'Horoscope Document',
-      horoscope_userid_required: 'UserProfileId is required.',
+      horoscope_userid_required: 'UserProfileId is required.',      
       horoscope_success: 'Horoscope profile created successfully!',
+      parents_success: 'Parents information added successfully!',
+      personalinfo_success: 'Personal information added successfully!',
       horoscope_failed: 'Failed to create horoscope profile',
       horoscope_error: 'An error occurred while submitting the form',
       zodiac_sign_label: 'Zodiac Sign',
@@ -198,8 +200,32 @@ const resources = {
       per_year: 'year',
       member_plan_renewal: 'Renewal Charges – Rs.500 / year',
       member_plan_downloads: '50 Downloads can available',
-      member_plan_lorem: 'Lorem ipsum dolor sit amet',
-      edit_button: 'Edit',
+      member_plan_lorem: 'Lorem ipsum dolor sit amet',      edit_button: 'Edit',
+      
+      // Landing Page (Homepage) translations
+      hero_title: 'We Bring People Together, Love Unites Them..',
+      trusted_service_title: 'Trusted Matrimony & Matchmaking Service',
+      trusted_service_description: 'Discover meaningful connections with a platform trusted by thousands. Our personalized approach to matchmaking ensures you find a partner who truly complements your values, lifestyle, and future aspirations. Join a community built on trust, respect, and lasting relationships.',
+      best_matching_title: 'Best Matching',
+      best_matching_description: 'Our intelligent matchmaking system uses advanced compatibility algorithms and personal preferences to connect you with the most suitable matches.',
+      verified_profile_title: 'Verified Profile',
+      verified_profile_description: 'All profiles are carefully verified to ensure genuine and trustworthy matches.',
+      direct_communication_title: 'Direct Communication',
+      direct_communication_description: 'Connect directly with potential matches through secure and private messaging to build genuine relationships with ease.',
+      about_us_title: 'About Us',
+      about_us_description: 'We are a trusted matrimony platform dedicated to helping individuals find meaningful, lifelong relationships. With a focus on verified profiles, personalized matchmaking, and a secure user experience, we connect hearts with honesty, integrity, and care. With years of experience in matchmaking, we combine technology and human insight to help you find the right partner. Our platform is built on trust, privacy, and a genuine commitment to your happiness.',
+      success_stories_title: 'Success Stories',
+      success_stories_description: 'Real connections. Real love. Hear from couples who found their perfect match through our platform and started beautiful journeys together.',
+      gift_section_title: 'The Best Gift From You',
+      gift_section_subtitle: 'Will Be Your Presentation In Our Wedding',      contact_information_title: 'Contact Information',
+      contact_phone_label: 'PHONE:',
+      contact_phone_number: '+91 9833737743 / 0431 2781555',
+      contact_email_label: 'EMAIL:',      contact_email: 'vrrmatrimony@gmail.com',
+      working_hours_label: 'Working Hours:',
+      working_hours: 'Monday to Sunday 10AM - 6PM',
+      address_label: 'ADDRESS:',
+      address_line1: 'Trichy Vayalur Road Reddy Matrimony,',
+      address_line2: 'No:1, Geetha Nagar, Vayalur Road,',      address_line3: 'Trichy - 620017.',
     },
   },
   ta: {
@@ -286,12 +312,18 @@ const resources = {
       register_marriage_status_label: 'திருமண நிலை',
       register_marriage_status_choose: 'தேர்ந்தெடுக்கவும்',
       register_marriage_status_single: 'திருமணம் ஆகாதவர்',
-      register_marriage_status_divorced: 'விவாகரத்து',
-      register_marriage_status_widowed: 'விதவை',
+      register_marriage_status_divorced: 'விவாகரத்து',      register_marriage_status_widowed: 'விதவை',
       register_profile_photo_label: 'சுயவிவர படம்',
-      register_uploading: 'பதிவேற்றுகிறது...',
+      register_photo_instruction: '4 படங்கள் வரை பதிவேற்றவும். முதல் படம் உங்கள் முக்கிய சுயவிவர படமாக இருக்கும்.',
+      register_main_profile_picture: 'முக்கிய சுயவிவர படம்',
+      register_main: 'முக்கியம்',
+      register_gallery_photos: 'கேலரி படங்கள்',
+      register_click_to_make_main: 'உங்கள் முக்கிய சுயவிவர படமாக மாற்ற எந்த படத்தையும் கிளிக் செய்யவும்',
+      register_click_to_main: 'முக்கியமாக மாற்ற கிளிக் செய்யவும்',
+      register_uploading: 'பதிவேற்றுகிறது...',      
       register_upload_button: 'தேர்ந்தெடுத்த படங்களை பதிவேற்றவும்',
       // Parent & Family Info (added for multilingual support)
+      personal_info: 'தனிப்பட்ட தகவல்கள்',
       parent_info: 'பெற்றோர் விவரம்',
       father_name_label: 'தந்தையின் பெயர்',
       mother_name_label: 'தாயின் பெயர்',
@@ -320,9 +352,9 @@ const resources = {
       next_button: 'அடுத்தது',
       // Horoscope Profile (added for multilingual support)
       horoscope_info: 'ஜாதக விவரம்',
-      horoscope_document_label: 'ஜாதக ஆவணம்',
-      horoscope_userid_required: 'பயனர் ஐடி தேவை.',
-      horoscope_success: 'ஜாதக விவரம் வெற்றிகரமாக உருவாக்கப்பட்டது!',
+      horoscope_document_label: 'ஜாதக ஆவணம்',      horoscope_userid_required: 'பயனர் ஐடி தேவை.',      horoscope_success: 'ஜாதக விவரம் வெற்றிகரமாக உருவாக்கப்பட்டது!',
+      parents_success: 'பெற்றோர் தகவல்கள் வெற்றிகரமாக சேர்க்கப்பட்டது!',
+      personalinfo_success: 'தனிப்பட்ட தகவல்கள் வெற்றிகரமாக சேர்க்கப்பட்டது!',
       horoscope_failed: 'ஜாதக விவரம் உருவாக்க முடியவில்லை',
       horoscope_error: 'படிவத்தை சமர்ப்பிக்கும்போது பிழை ஏற்பட்டது',
       zodiac_sign_label: 'ராசி',
@@ -400,17 +432,57 @@ const resources = {
       member_plan_downloads: '50 பதிவிறக்கங்கள் கிடைக்கும்',
       member_plan_lorem: 'லோரம் இப்சம் DTொலர் சிட் அமெட்',
       edit_button: 'திருத்து',
+      
+      // Landing Page (Homepage) translations
+      hero_title: 'நாங்கள் மக்களை ஒன்றிணைக்கிறோம், அன்பு அவர்களை ஒன்றிணைக்கிறது..',
+      trusted_service_title: 'நம்பகமான திருமண சேவை',
+      trusted_service_description: 'ஆயிரக்கணக்கான மக்களால் நம்பப்படும் தளத்துடன் அர்த்தமுள்ள தொடர்புகளைக் கண்டறியுங்கள். எங்களின் தனிப்பயனாக்கப்பட்ட திருமண அணுகுமுறை, உங்கள் மதிப்புகள், வாழ்க்கை முறை மற்றும் எதிர்கால आकांक्षाओं को உண்மையில் பூர்த்தி செய்யும் ஒரு பங்காளியைக் கண்டறிய உறுதி செய்கிறது.',
+      best_matching_title: 'சிறந்த பொருத்தம்',
+      best_matching_description: 'எங்கள் அறிவார்ந்த திருமண அமைப்பு மேம்பட்ட பொருத்த வழிமுறைகள் மற்றும் தனிப்பட்ட விருப்பங்களைப் பயன்படுத்தி மிகவும் பொருத்தமான பொருத்தங்களுடன் உங்களை இணைக்கிறது.',
+      verified_profile_title: 'சரிபார்க்கப்பட்ட சுயவிவரம்',
+      verified_profile_description: 'அனைத்து சுயவிவரங்களும் உண்மையான மற்றும் நம்பகமான பொருத்தங்களை உறுதி செய்ய கவனமாக சரிபார்க்கப்படுகின்றன.',
+      direct_communication_title: 'நேரடி தொடர்பு',
+      direct_communication_description: 'பாதுகாப்பான மற்றும் தனியார் செய்திகள் மூலம் சாத்தியமான பொருத்தங்களுடன் நேரடியாக தொடர்பு கொண்டு உண்மையான உறவுகளை எளிதாக உருவாக்குங்கள்.',
+      about_us_title: 'எங்களைப் பற்றி',
+      about_us_description: 'நாங்கள் தனிநபர்கள் அர்த்தமுள்ள, வாழ்நாள் முழுவதும் உறவுகளைக் கண்டறிய உதவுவதில் அர்ப்பணிக்கப்பட்ட நம்பகமான திருமண தளம். சரிபார்க்கப்பட்ட சுயவிவரங்கள், தனிப்பயனாக்கப்பட்ட திருமண சேவை மற்றும் பாதுகாப்பான பயனர் அனுபவத்தில் கவனம் செலுத்தி, நாங்கள் நேர்மை, நேர்மை மற்றும் அக்கறையுடன் இதயங்களை இணைக்கிறோம்.',
+      success_stories_title: 'வெற்றிக் கதைகள்',
+      success_stories_description: 'உண்மையான தொடர்புகள். உண்மையான அன்பு. எங்கள் தளத்தின் மூலம் தங்கள் சரியான பொருத்தத்தைக் கண்டறிந்து அழகான பயணங்களைத் தொடங்கிய தம்பதிகளிடமிருந்து கேளுங்கள்.',
+      gift_section_title: 'உங்களிடமிருந்து சிறந்த பரிசு',
+      gift_section_subtitle: 'எங்கள் திருமணத்தில் உங்கள் பங்கேற்பாக இருக்கும்',      contact_information_title: 'தொடர்பு தகவல்',
+      contact_phone_label: 'தொலைபேசி:',
+      contact_phone_number: '+91 9833737743 / 0431 2781555',
+      contact_email_label: 'மின்னஞ்சல்:',
+      contact_email: 'vrrmatrimony@gmail.com',
+      working_hours_label: 'வேலை நேரம்:',
+      working_hours: 'திங்கள் முதல் ஞாயிறு வரை காலை 10 மணி - மாலை 6 மணி',      address_label: 'முகவரி:',
+      address_line1: 'திருச்சி வயலூர் சாலை ரெட்டி மேட்ரிமோனி,',      address_line2: 'எண்: 1, கீதா நகர், வயலூர் சாலை,',
+      address_line3: 'திருச்சி - 620017.',
     },
   },
 };
 
+// Get saved language from localStorage or default to 'en'
+const getSavedLanguage = (): string => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('i18nextLng') || 'en';
+  }
+  return 'en';
+};
+
 i18n.use(initReactI18next).init({
   resources,
-  lng: 'en',
+  lng: getSavedLanguage(),
   fallbackLng: 'en',
   interpolation: {
     escapeValue: false,
   },
+});
+
+// Save language to localStorage whenever it changes
+i18n.on('languageChanged', (lng) => {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('i18nextLng', lng);
+  }
 });
 
 export default i18n;

@@ -4,15 +4,15 @@ import React, { useEffect, useState } from 'react';
 import { CalendarIcon, CameraIcon } from '@heroicons/react/24/solid';
 import { ChevronDownIcon } from '@heroicons/react/16/solid';
 import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import "@/i18n";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { withAuth } from '@/hooks/useAuth';
 
 const Page = () => {
   const router = useRouter();
-  const { t, i18n } = useTranslation();
-  const [form, setForm] = useState({
-    userId: '', // Set this from session/auth context if available
+  const { t, i18n } = useTranslation();  const [form, setForm] = useState({
     firstName: '',
     lastName: '',
     type: '',
@@ -30,17 +30,7 @@ const Page = () => {
     caste: '',
     marriageStatus: '',
     profilePhotos: [] as string[],
-  });
-
-   useEffect(() => {
-    // Get userId from localStorage and set it in form state
-    const userId = localStorage.getItem('userId');
-    if (userId) {
-      setForm((prev) => ({ ...prev, userId }));
-    }
-  }, []);
-
-  const handleChange = (
+  });  const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
@@ -94,6 +84,8 @@ const Page = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Log the data being submitted (form data)
+    console.log('Submitting user profile form data:', form);
     if (selectedFiles.length > 0 && form.profilePhotos.length === 0) {
       await handleUpload();
     }
@@ -102,7 +94,17 @@ const Page = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form),
     });
+    console.log(res, 'Response from userprofile API');
     if (res.ok) {
+      const createdUserProfile = await res.json();
+      // Log the data received from the DB after creation
+      console.log('User profile created and stored in DB:', createdUserProfile);
+       toast.success(t('personalinfo_success', 'Personal information added successfully!'));
+      // Show the response in the console
+      // alert('Data submitted! Check the console for details.');
+      // if (createdUserProfile && createdUserProfile.id) {
+      //   localStorage.setItem('userProfileId', createdUserProfile.id);
+      // }
       router.push('/auth/userprofile/parentsinfo');
     } else {
       toast.error(t('register_failed'));
@@ -112,39 +114,41 @@ const Page = () => {
   // Tamil font for input fields if Tamil is selected
   const tamilFont = i18n.language === "ta" ? { fontFamily: "Latha, Arial, sans-serif" } : {};
 
-  // Language switcher UI
-  // const LanguageSwitcher = () => (
-  //   <div className="flex gap-2 mb-4">
-  //     <button
-  //       type="button"
-  //       onClick={() => i18n.changeLanguage('en')}
-  //       className={`px-2 py-1 rounded ${i18n.language === 'en' ? 'bg-orange-500 text-white' : 'bg-gray-200'}`}
-  //     >
-  //       English
-  //     </button>
-  //     <button
-  //       type="button"
-  //       onClick={() => i18n.changeLanguage('ta')}
-  //       className={`px-2 py-1 rounded ${i18n.language === 'ta' ? 'bg-orange-500 text-white' : 'bg-gray-200'}`}
-  //     >
-  //       தமிழ்
-  //     </button>
-  //   </div>
-  // );
+  // Function to reorder photos (make clicked gallery photo the main profile picture)
+  const handleReorderPhotos = (clickedIndex: number) => {
+    if (clickedIndex === 0) return; // Already the main photo
+    
+    const newPhotos = [...form.profilePhotos];
+    const clickedPhoto = newPhotos[clickedIndex];
+    
+    // Remove clicked photo from its current position
+    newPhotos.splice(clickedIndex, 1);
+    
+    // Insert it at the beginning (make it main profile picture)
+    newPhotos.unshift(clickedPhoto);
+    
+    setForm((prev) => ({ ...prev, profilePhotos: newPhotos }));
+  };
 
-  return (
-    <div className="flex flex-col items-center py-8 px-4">
+    return (
+      <div className="flex flex-col items-center py-8 px-4">
+       <ToastContainer position="top-right" autoClose={2000} />
       {/* Logo and Title */}
-      <div className="flex flex-col items-center mb-6">
-        <div className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center mb-2">
-          <span className="text-white text-2xl font-bold">M</span>
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          <img
+            alt="Your Company"
+            src="/images/loginlogo.png"
+            className="mx-auto h-20 w-auto"
+          />
+          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-[#F98B1D] text-900">
+            {t("register_title")}
+          </h2>
         </div>
-        <h1 className="text-xl font-semibold text-gray-800">Matrimony</h1>
-      </div>
-      {/* <LanguageSwitcher /> */}
-      <h2 className="text-lg font-medium text-gray-900 mb-6">{t('register_title')}</h2>
       {/* Form */}
       <form className="w-full max-w-4xl bg-white p-8 rounded-lg shadow" onSubmit={handleSubmit} lang={i18n.language}>
+         <h3 className="text-md font-semibold text-gray-800 mb-4">
+          {t("personal_info", "Personal information")}
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* First Name */}
           <div>
@@ -491,12 +495,14 @@ const Page = () => {
               <ChevronDownIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
             </div>
           </div>
-        </div>
-        {/* Profile Photos */}
+        </div>        {/* Profile Photos */}
         <div className="mt-6">
           <label className="block text-sm font-medium text-gray-700 mb-3">
             {t('register_profile_photo_label', 'Profile Photo')} <span className="text-red-500">*</span>
           </label>
+          <p className="text-sm text-gray-600 mb-3">
+            {t('register_photo_instruction', 'Upload up to 4 photos. The first photo will be your main profile picture.')}
+          </p>
           <input
             type="file"
             accept="image/*"
@@ -512,16 +518,54 @@ const Page = () => {
           >
             {uploading ? t('register_uploading', 'Uploading...') : t('register_upload_button', 'Upload Selected Photos')}
           </button>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {form.profilePhotos.map((url, idx) => (
-              <img
-                key={idx}
-                src={url}
-                alt={`Profile ${idx + 1}`}
-                className="w-full h-32 object-cover rounded"
-              />
-            ))}
-          </div>
+          
+          {form.profilePhotos.length > 0 && (
+            <div className="mt-4">
+              {/* Main Profile Picture */}
+              <div className="mb-4">
+                <h4 className="text-sm font-medium text-gray-700 mb-2">
+                  {t('register_main_profile_picture', 'Main Profile Picture')}
+                </h4>
+                <div className="relative inline-block">
+                  <img
+                    src={form.profilePhotos[0]}
+                    alt="Main Profile"
+                    className="w-32 h-32 object-cover rounded-lg border-4 border-orange-500 cursor-pointer shadow-lg"
+                    onClick={() => handleReorderPhotos(0)}
+                  />
+                  <div className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs px-2 py-1 rounded-full">
+                    {t('register_main', 'MAIN')}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Gallery Photos */}
+              {form.profilePhotos.length > 1 && (
+                <div>
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">
+                    {t('register_gallery_photos', 'Gallery Photos')} - {t('register_click_to_make_main', 'Click any photo to make it your main profile picture')}
+                  </h4>
+                  <div className="grid grid-cols-3 md:grid-cols-3 gap-4">
+                    {form.profilePhotos.slice(1).map((url, idx) => (
+                      <div key={idx + 1} className="relative group">
+                        <img
+                          src={url}
+                          alt={`Gallery ${idx + 1}`}
+                          className="w-full h-24 object-cover rounded cursor-pointer border-2 border-gray-200 hover:border-orange-300 transition-colors"
+                          onClick={() => handleReorderPhotos(idx + 1)}
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black bg-opacity-50 rounded">
+                          <span className="text-white text-xs text-center">
+                            {t('register_click_to_main', 'Click to make main')}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
         {/* Next Button */}
         <div className="mt-8 flex justify-end">
@@ -531,10 +575,8 @@ const Page = () => {
           >
             {t('register_button', 'Next')}
           </button>
-        </div>
-      </form>
-    </div>
+        </div>      </form>    </div>
   );
 };
 
-export default Page;
+export default withAuth(Page);

@@ -15,22 +15,26 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+   id             Int      @id @default(autoincrement())
   email     String   @unique // ✅ From register form
   password  String // ✅ From register form  
   firstName String // ✅ From register form
   lastName  String // ✅ From register form
+  isActive  Boolean  @default(true) // User status (active/inactive)
+  credits   Int      @default(2) // Default 2 credits for new users
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Relation to Profile
   profile     Profile?
-  userProfile UserProfile?
+  
+  // Relation to ProfileViews (profiles this user has viewed)
+  profileViews ProfileView[]
 }
 
 model Profile {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @unique
+  id             Int      @id @default(autoincrement())
+  userId         Int      @unique
   firstName String
   lastName  String
   age       Int?
@@ -41,6 +45,10 @@ model Profile {
 
   // Relation to User
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  userProfile UserProfile?
+  parentInfo ParentInfo?
+  horoscopeProfile HoroscopeProfile?
 }
 
 model UserProfile {
@@ -64,15 +72,12 @@ model UserProfile {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  parentInfo       ParentInfo?
-  horoscopeProfile HoroscopeProfile?
+  profile        Profile  @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }
 
 model ParentInfo {
-  id               Int    @id @default(autoincrement())
-  userId    Int    @unique
+  id             Int      @id @default(autoincrement())
+  userId         Int      @unique
   fatherName       String
   motherName       String
   fatherNative     String
@@ -90,12 +95,12 @@ model ParentInfo {
   youngerSisters   Int
   marriedSisters   Int
 
-  userProfile UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profile          Profile @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }
 
 model HoroscopeProfile {
-  id                 Int    @id @default(autoincrement())
-  userId      Int    @unique
+  id             Int      @id @default(autoincrement())
+  userId         Int      @unique
   zodiacSign         String
   tamilYear          String
   tamilMonth         String
@@ -108,5 +113,27 @@ model HoroscopeProfile {
   natalDirection     String
   horoscopeDocuments Json?
 
-  userProfile UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profile            Profile @relation(fields: [userId], references: [userId], onDelete: Cascade)
+}
+
+model ProfileView {
+  id        Int      @id @default(autoincrement())
+  userId    Int      // User who viewed the profile
+  profileId Int      // Profile that was viewed (refers to Profile.userId)
+  viewedAt  DateTime @default(now())
+  
+  // Relation to User
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Ensure a user can only view a specific profile once
+  @@unique([userId, profileId])
+}
+
+model Payment {
+  id              Int      @id @default(autoincrement())
+  customerName    String
+  transactionAmount Float
+  transactionDate DateTime
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

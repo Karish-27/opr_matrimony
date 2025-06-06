@@ -1,7 +1,11 @@
 import Link from 'next/link';
 import React from 'react';
+import { usePathname } from 'next/navigation';
 
-const Sidebar = () => (
+const Sidebar = () => {
+    const pathname = usePathname();
+
+    return (
     <aside
         style={{
             width: 220,
@@ -44,8 +48,7 @@ const Sidebar = () => (
                     style={{ maxHeight: 60, maxWidth: 120, objectFit: 'contain' }}
                 />
             </div>
-        </div>
-        <nav style={{ width: '100%' }}>
+        </div>        <nav style={{ width: '100%' }}>
             <Link
                 href="/admin/Dashboard"
                 style={{
@@ -57,6 +60,7 @@ const Sidebar = () => (
                     display: 'block',
                     textDecoration: 'none',
                     color: 'inherit',
+                    backgroundColor: pathname === '/admin/Dashboard' ? '#ff7700' : 'transparent',
                 }}
             >
                 Dashboard
@@ -72,11 +76,11 @@ const Sidebar = () => (
                     display: 'block',
                     textDecoration: 'none',
                     color: 'inherit',
+                    backgroundColor: pathname === '/admin/ManageUser' ? '#ff7700' : 'transparent',
                 }}
             >
                 Manage Users
-            </Link>
-            <Link
+            </Link>            <Link
              href="/admin/MemberLists"
                 style={{
                     padding: '14px 32px',
@@ -87,12 +91,29 @@ const Sidebar = () => (
                     display: 'block',
                     textDecoration: 'none',
                     color: 'inherit',
+                    backgroundColor: pathname === '/admin/MemberLists' ? '#ff7700' : 'transparent',
                 }}
             >
                 Members List
             </Link>
-        </nav>
-    </aside>
+            <Link
+                href="/admin/PaidUsers"
+                style={{
+                    padding: '14px 32px',
+                    fontWeight: 500,
+                    borderRadius: 6,
+                    margin: '0 12px 8px 12px',
+                    cursor: 'pointer',
+                    display: 'block',
+                    textDecoration: 'none',
+                    color: 'inherit',
+                    backgroundColor: pathname === '/admin/PaidUsers' ? '#ff7700' : 'transparent',
+                }}
+            >
+                Paid Users
+            </Link>
+        </nav>    </aside>
 );
+};
 
 export default Sidebar;

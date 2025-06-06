@@ -1,108 +1,224 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/generated/prisma";
 
 const prisma = new PrismaClient();
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    // Get all liked profiles (from Profile table)
-    const likedProfiles = await prisma.profile.findMany({
+    // Get query parameters for pagination
+    const { searchParams } = new URL(req.url);
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '10');
+    const skip = (page - 1) * limit;
+
+    // Get total count for pagination
+    const totalCount = await prisma.profile.count({
       where: { liked: true },
-      include: {
-        user: true, // include user info if needed
-      },
     });
 
-    // Get all userProfiles with parentInfo and horoscopeProfile
-    const userProfiles = await prisma.userProfile.findMany({
+    // Get all liked profiles (from Profile table) with pagination
+    const likedProfiles = await prisma.profile.findMany({
+      where: { liked: true },
+      skip,
+      take: limit,
+      orderBy: { createdAt: 'desc' },
       include: {
-        parentInfo: true,
-        horoscopeProfile: true,
         user: true,
       },
     });
 
-    // Match liked profiles with userProfiles by userId
-    const enrichedProfiles = likedProfiles.map((liked) => {
-      const userProfile = userProfiles.find((up) => up.userId === liked.userId);
-      if (!userProfile) {
-        return {
-          name: (liked.user?.firstName || "") + ' ' + (liked.user?.lastName || ""),
-          regNo: liked.regNo || `VKR${liked.id}`,
-          email: liked.user?.email || null,
-          age: liked.age || null,
-          // Only basic fields from Profile model
-          id: liked.id,
-          liked: true,
-        };
-      }
-      return {
-        name: `${userProfile.user.firstName} ${userProfile.user.lastName}`,
-        regNo: `VKR${userProfile.id}`,
-        email: userProfile.user.email,
-        phone: userProfile.phone,
-        dob: userProfile.dob ? userProfile.dob.toISOString().split("T")[0] : null,
-        age: userProfile.age,
-        star: userProfile.horoscopeProfile?.starFoot || "",
-        marriageStatus: userProfile.marriageStatus,
-        height: userProfile.height,
-        color: userProfile.color,
-        caste: userProfile.caste,
-        qualification: userProfile.education,
-        familyProperty: userProfile.familyProperty,
-        typeOfFood: userProfile.dietType,
-        career: userProfile.career,
-        salary: userProfile.salary,
-        expectation: userProfile.expectation,
-        image: Array.isArray(userProfile.profilePhotos) && userProfile.profilePhotos.length > 0
-          ? userProfile.profilePhotos[0]
-          : "/images/profilepicture.png",
-        gallery: Array.isArray(userProfile.profilePhotos)
-          ? userProfile.profilePhotos
-          : [],
-        family: userProfile.parentInfo
-          ? {
-              fatherName: userProfile.parentInfo.fatherName,
-              motherName: userProfile.parentInfo.motherName,
-              fatherNative: userProfile.parentInfo.fatherNative,
-              motherNative: userProfile.parentInfo.motherNative,
-              fatherProfession: userProfile.parentInfo.fatherProfession,
-              motherProfession: userProfile.parentInfo.motherProfession,
-              phoneNumber: userProfile.parentInfo.phone,
-              address: userProfile.parentInfo.address,
-              brothers: userProfile.parentInfo.brothers,
-              sisters: userProfile.parentInfo.sisters,
-              elderBrother: userProfile.parentInfo.elderBrothers,
-              youngerBrother: userProfile.parentInfo.youngerBrothers,
-              marriedBrother: userProfile.parentInfo.marriedBrothers,
-              elderSister: userProfile.parentInfo.elderSisters,
-              youngerSister: userProfile.parentInfo.youngerSisters,
-              marriedSister: userProfile.parentInfo.marriedSisters,
-            }
-          : {},
-        horoscope: userProfile.horoscopeProfile
-          ? {
-              zodiacSign: userProfile.horoscopeProfile.zodiacSign,
-              tamilYear: userProfile.horoscopeProfile.tamilYear,
-              tamilMonth: userProfile.horoscopeProfile.tamilMonth,
-              udayathiNatchat: userProfile.horoscopeProfile.udayathiNatchat,
-              day: userProfile.horoscopeProfile.day,
-              birthTime: userProfile.horoscopeProfile.birthTime,
-              starFoot: userProfile.horoscopeProfile.starFoot,
-              ascendant: userProfile.horoscopeProfile.ascendant,
-              birthplace: userProfile.horoscopeProfile.birthplace,
-              natalDirection: userProfile.horoscopeProfile.natalDirection,
-            }
-          : {},
-        chart: [],
-        liked: true,
-        id: userProfile.id,
-      };
-    });
+    console.log("Found liked profiles:", likedProfiles.length);
 
-    return NextResponse.json({ profiles: enrichedProfiles });
+    // Get all related data separately to avoid join issues
+    const enrichedProfiles = await Promise.all(
+      likedProfiles.map(async (profile) => {
+        try {
+          // Get UserProfile data
+          const userProfile = await prisma.userProfile.findUnique({
+            where: { userId: profile.userId },
+          });
+
+          // Get ParentInfo data
+          const parentInfo = await prisma.parentInfo.findUnique({
+            where: { userId: profile.userId },
+          });
+
+          // Get HoroscopeProfile data
+          const horoscopeProfile = await prisma.horoscopeProfile.findUnique({
+            where: { userId: profile.userId },
+          });
+
+          return {
+            id: profile.id,
+            name: `${profile.user.firstName} ${profile.user.lastName}`,
+            regNo: profile.regNo || `VKR${profile.id}`,
+            email: profile.user.email,
+            phone: userProfile?.phone || "",
+            dob: userProfile?.dob ? userProfile.dob.toISOString().split("T")[0] : null,
+            age: userProfile?.age || profile.age,
+            star: horoscopeProfile?.starFoot || "",
+            marriageStatus: userProfile?.marriageStatus || "",
+            height: userProfile?.height || "",
+            color: userProfile?.color || "",
+            caste: userProfile?.caste || "",
+            qualification: userProfile?.education || "",
+            familyProperty: userProfile?.familyProperty || "",
+            typeOfFood: userProfile?.dietType || "",
+            career: userProfile?.career || "",
+            salary: userProfile?.salary || "",
+            expectation: userProfile?.expectation || "",
+            image: userProfile?.profilePhotos && Array.isArray(userProfile.profilePhotos) && userProfile.profilePhotos.length > 0
+              ? userProfile.profilePhotos[0]
+              : "/images/profilepicture.png",
+            gallery: userProfile?.profilePhotos && Array.isArray(userProfile.profilePhotos)
+              ? userProfile.profilePhotos
+              : [],
+            family: parentInfo
+              ? {
+                  fatherName: parentInfo.fatherName || "",
+                  motherName: parentInfo.motherName || "",
+                  fatherNative: parentInfo.fatherNative || "",
+                  motherNative: parentInfo.motherNative || "",
+                  fatherProfession: parentInfo.fatherProfession || "",
+                  motherProfession: parentInfo.motherProfession || "",
+                  phoneNumber: parentInfo.phone || "",
+                  address: parentInfo.address || "",
+                  brothers: parentInfo.brothers || 0,
+                  sisters: parentInfo.sisters || 0,
+                  elderBrother: parentInfo.elderBrothers || 0,
+                  youngerBrother: parentInfo.youngerBrothers || 0,
+                  marriedBrother: parentInfo.marriedBrothers || 0,
+                  elderSister: parentInfo.elderSisters || 0,
+                  youngerSister: parentInfo.youngerSisters || 0,
+                  marriedSister: parentInfo.marriedSisters || 0,
+                }
+              : {
+                  fatherName: "",
+                  motherName: "",
+                  fatherNative: "",
+                  motherNative: "",
+                  fatherProfession: "",
+                  motherProfession: "",
+                  phoneNumber: "",
+                  address: "",
+                  brothers: 0,
+                  sisters: 0,
+                  elderBrother: 0,
+                  youngerBrother: 0,
+                  marriedBrother: 0,
+                  elderSister: 0,
+                  youngerSister: 0,
+                  marriedSister: 0,
+                },            horoscope: horoscopeProfile
+              ? {
+                  zodiacSign: horoscopeProfile.zodiacSign || "",
+                  tamilYear: horoscopeProfile.tamilYear || "",
+                  tamilMonth: horoscopeProfile.tamilMonth || "",
+                  udayathiNatchat: horoscopeProfile.udayathiNatchat || "",
+                  day: horoscopeProfile.day || "",
+                  birthTime: horoscopeProfile.birthTime || "",
+                  starFoot: horoscopeProfile.starFoot || "",
+                  ascendant: horoscopeProfile.ascendant || "",
+                  birthplace: horoscopeProfile.birthplace || "",
+                  natalDirection: horoscopeProfile.natalDirection || "",
+                  horoscopeDocuments: horoscopeProfile.horoscopeDocuments || [],
+                }
+              : {
+                  zodiacSign: "",
+                  tamilYear: "",
+                  tamilMonth: "",
+                  udayathiNatchat: "",
+                  day: "",
+                  birthTime: "",
+                  starFoot: "",
+                  ascendant: "",
+                  birthplace: "",
+                  natalDirection: "",
+                  horoscopeDocuments: [],
+                },
+            chart: [],
+            liked: true,
+          };
+        } catch (profileError) {
+          console.error(`Error processing profile ${profile.id}:`, profileError);
+          // Return basic profile info if detailed info fails
+          return {
+            id: profile.id,
+            name: `${profile.user.firstName} ${profile.user.lastName}`,
+            regNo: profile.regNo || `VKR${profile.id}`,
+            email: profile.user.email,
+            phone: "",
+            dob: null,
+            age: profile.age,
+            star: "",
+            marriageStatus: "",
+            height: "",
+            color: "",
+            caste: "",
+            qualification: "",
+            familyProperty: "",
+            typeOfFood: "",
+            career: "",
+            salary: "",
+            expectation: "",
+            image: "/images/profilepicture.png",
+            gallery: [],
+            family: {
+              fatherName: "",
+              motherName: "",
+              fatherNative: "",
+              motherNative: "",
+              fatherProfession: "",
+              motherProfession: "",
+              phoneNumber: "",
+              address: "",
+              brothers: 0,
+              sisters: 0,
+              elderBrother: 0,
+              youngerBrother: 0,
+              marriedBrother: 0,
+              elderSister: 0,
+              youngerSister: 0,
+              marriedSister: 0,
+            },            horoscope: {
+              zodiacSign: "",
+              tamilYear: "",
+              tamilMonth: "",
+              udayathiNatchat: "",
+              day: "",
+              birthTime: "",
+              starFoot: "",
+              ascendant: "",
+              birthplace: "",
+              natalDirection: "",
+              horoscopeDocuments: [],
+            },
+            chart: [],
+            liked: true,
+          };
+        }
+      })
+    );    console.log("Enriched profiles:", enrichedProfiles.length);
+    return NextResponse.json({ 
+      profiles: enrichedProfiles,
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil(totalCount / limit),
+        totalItems: totalCount,
+        itemsPerPage: limit,
+        hasNextPage: page * limit < totalCount,
+        hasPreviousPage: page > 1,
+      }
+    });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch liked profiles" }, { status: 500 });
+    console.error("Error fetching liked profiles:", error);
+    return NextResponse.json(
+      { 
+        error: "Failed to fetch liked profiles", 
+        details: typeof error === "object" && error !== null && "message" in error ? (error as { message: string }).message : String(error) 
+      }, 
+      { status: 500 }
+    );
   } finally {
     await prisma.$disconnect();
   }

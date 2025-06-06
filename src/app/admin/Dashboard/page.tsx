@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Sidebar from '@/components/Sidebar';
+import AvatarDropdown from '@/components/AvatarDropdown';
+import { withAdminAuth } from '@/hooks/useAuth';
 
-const Dashboard = () => {
-	const [counts, setCounts] = useState({
+const Dashboard = () => {	const [counts, setCounts] = useState({
 		totalProfiles: 0,
 		totalMaleProfiles: 0,
 		totalFemaleProfiles: 0,
@@ -15,18 +16,52 @@ const Dashboard = () => {
 		email: string;
 		avatar: string;
 		mobile: string;
+		createdAt?: Date | string;
 	}>>([]);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [totalPages, setTotalPages] = useState(1);
+	const [totalUsers, setTotalUsers] = useState(0);
+	const [loading, setLoading] = useState(false);
+	const usersPerPage = 10;
+
+	// Utility function to format date to yyyy/mm/dd
+	const formatDate = (dateString: Date | string | undefined): string => {
+		if (!dateString) return "-";
+		try {
+			const date = new Date(dateString);
+			if (isNaN(date.getTime())) return "-";
+			
+			const year = date.getFullYear();
+			const month = String(date.getMonth() + 1).padStart(2, '0');
+			const day = String(date.getDate()).padStart(2, '0');
+			
+			return `${year}/${month}/${day}`;
+		} catch (error) {
+			return "-";
+		}
+	};const fetchUsers = async (page: number) => {
+		setLoading(true);
+		try {
+			const response = await fetch(`/api/admin/users?page=${page}&limit=${usersPerPage}`);
+			const data = await response.json();
+			setUsers(data.users || []);
+			setTotalPages(data.pagination?.totalPages || 1);
+			setTotalUsers(data.pagination?.totalItems || 0);
+		} catch (error) {
+			console.error('Error fetching users:', error);
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	useEffect(() => {
 		fetch('/api/dashboard/counts')
 			.then((res) => res.json())
 			.then((data) => setCounts(data));
 
-		// Fetch dynamic users for table
-		fetch('/api/admin/users')
-			.then((res) => res.json())
-			.then((data) => setUsers(data.users || []));
-	}, []);
+		// Fetch dynamic users for table with pagination
+		fetchUsers(currentPage);
+	}, [currentPage]);
 
 	return (
 		<div
@@ -45,13 +80,12 @@ const Dashboard = () => {
 					padding: '0 0 0 0',
 					background: '#f7f7f7',
 				}}
-			>
-				{/* Top Bar */}
+			>				{/* Top Bar */}
 				<div
 					style={{
 						display: 'flex',
 						alignItems: 'center',
-						justifyContent: 'space-between',
+						justifyContent: 'flex-end',
 						padding: '10px 40px 10px 40px',
 						background: '#fff',
 						borderBottom: '1px solid #eee',
@@ -59,42 +93,16 @@ const Dashboard = () => {
            
 					}}
 				>
-					<div
-						style={{
-							fontSize: 18,
-							fontWeight: 500,
-						}}
-					>
-						Welcome{' '}
-						<span role="img" aria-label="wave">
-							👋
-						</span>{' '}
-						Jenny Wilson
-					</div>
-					<div
+							<div
 						style={{
 							display: 'flex',
 							alignItems: 'center',
 							gap: 24,
 						}}
 					>
-						<span
-							style={{
-								fontSize: 22,
-								color: '#aaa',
-								cursor: 'pointer',
-							}}
-						>
-							🔔
-						</span>
-						<img
-							src="https://randomuser.me/api/portraits/men/6.jpg"
-							alt="avatar"
-							style={{
-								width: 40,
-								height: 40,
-								borderRadius: '50%',
-							}}
+						<AvatarDropdown 
+							userEmail="admin@gmail.com"
+							avatarSrc="/icons/profileicon.svg"
 						/>
 					</div>
 				</div>
@@ -210,16 +218,43 @@ const Dashboard = () => {
 						padding: 0,
 						overflow: 'hidden',
 					}}
-				>
-					<div
+				>					<div
 						style={{
 							padding: '20px 24px',
 							fontWeight: 600,
 							fontSize: 18,
 							borderBottom: '1px solid #eee',
+							display: 'flex',
+							justifyContent: 'space-between',
+							alignItems: 'center',
 						}}
-					>
-						New Users
+					>						<span>All Users</span>
+						<div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+							{!loading && (
+								<span style={{ fontSize: 14, fontWeight: 400, color: '#888' }}>
+									Total: {totalUsers} users
+								</span>
+							)}
+							<button
+								onClick={() => fetchUsers(currentPage)}
+								disabled={loading}
+								style={{
+									padding: '6px 12px',
+									border: '1px solid #ddd',
+									borderRadius: 6,
+									background: '#fff',
+									color: '#333',
+									cursor: loading ? 'not-allowed' : 'pointer',
+									fontSize: 12,
+									display: 'flex',
+									alignItems: 'center',
+									gap: 4,
+								}}
+								title="Refresh"
+							>
+								🔄 {loading ? 'Loading...' : 'Refresh'}
+							</button>
+						</div>
 					</div>
 					<table
 						style={{
@@ -259,8 +294,7 @@ const Dashboard = () => {
 									}}
 								>
 									Email
-								</th>
-								<th
+								</th>								<th
 									style={{
 										padding: '14px 16px',
 										fontWeight: 500,
@@ -274,12 +308,45 @@ const Dashboard = () => {
 										fontWeight: 500,
 									}}
 								>
+									Created At
+								</th>
+								<th
+									style={{
+										padding: '14px 16px',
+										fontWeight: 500,
+									}}
+								>
 									Action
 								</th>
 							</tr>
-						</thead>
-						<tbody>
-							{users.map((user, idx) => (
+						</thead>						<tbody>							{loading ? (
+								<tr>
+									<td
+										colSpan={6}
+										style={{
+											padding: '40px',
+											textAlign: 'center',
+											color: '#888',
+										}}
+									>
+										Loading users...
+									</td>
+								</tr>
+							) : users.length === 0 ? (
+								<tr>
+									<td
+										colSpan={6}
+										style={{
+											padding: '40px',
+											textAlign: 'center',
+											color: '#888',
+										}}
+									>
+										No users found
+									</td>
+								</tr>
+							) : (
+								users.map((user, idx) => (
 								<tr
 									key={idx}
 									style={{
@@ -328,6 +395,13 @@ const Dashboard = () => {
 										}}
 									>
 										{user.email}
+									</td>									<td
+										style={{
+											padding: '14px 16px',
+											color: '#222',
+										}}
+									>
+										{user.mobile}
 									</td>
 									<td
 										style={{
@@ -335,7 +409,7 @@ const Dashboard = () => {
 											color: '#222',
 										}}
 									>
-										{user.mobile}
+										{formatDate(user.createdAt)}
 									</td>
 									<td
 										style={{
@@ -353,21 +427,105 @@ const Dashboard = () => {
 												const id = user.regNo.replace(/^VKR/, '');
 												window.location.href = `/admin/profile/${id}`;
 											}}
-											title="View Profile"
-										>
+											title="View Profile"										>
 											👁️
 										</span>
 									</td>
 								</tr>
-							))}
+							))
+							)}
 						</tbody>
 					</table>
+					
+					{/* Pagination Controls */}
+					<div
+						style={{
+							padding: '20px 24px',
+							borderTop: '1px solid #eee',
+							display: 'flex',
+							justifyContent: 'space-between',
+							alignItems: 'center',
+						}}
+					>
+						<div style={{ color: '#888', fontSize: 14 }}>
+							Showing {users.length > 0 ? ((currentPage - 1) * usersPerPage) + 1 : 0} to{' '}
+							{Math.min(currentPage * usersPerPage, totalUsers)} of {totalUsers} users
+						</div>
+						
+						<div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+							<button
+								onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+								disabled={currentPage === 1 || loading}
+								style={{
+									padding: '8px 12px',
+									border: '1px solid #ddd',
+									borderRadius: 6,
+									background: currentPage === 1 ? '#f5f5f5' : '#fff',
+									color: currentPage === 1 ? '#888' : '#333',
+									cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+									fontSize: 14,
+								}}
+							>
+								Previous
+							</button>
+							
+							{/* Page Numbers */}
+							{Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+								let pageNum;
+								if (totalPages <= 5) {
+									pageNum = i + 1;
+								} else if (currentPage <= 3) {
+									pageNum = i + 1;
+								} else if (currentPage >= totalPages - 2) {
+									pageNum = totalPages - 4 + i;
+								} else {
+									pageNum = currentPage - 2 + i;
+								}
+								
+								return (
+									<button
+										key={pageNum}
+										onClick={() => setCurrentPage(pageNum)}
+										disabled={loading}
+										style={{
+											padding: '8px 12px',
+											border: '1px solid #ddd',
+											borderRadius: 6,
+											background: currentPage === pageNum ? '#ff9000' : '#fff',
+											color: currentPage === pageNum ? '#fff' : '#333',
+											cursor: 'pointer',
+											fontSize: 14,
+											minWidth: 36,
+										}}
+									>
+										{pageNum}
+									</button>
+								);
+							})}
+							
+							<button
+								onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+								disabled={currentPage === totalPages || loading}
+								style={{
+									padding: '8px 12px',
+									border: '1px solid #ddd',
+									borderRadius: 6,
+									background: currentPage === totalPages ? '#f5f5f5' : '#fff',
+									color: currentPage === totalPages ? '#888' : '#333',
+									cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+									fontSize: 14,
+								}}
+							>
+								Next
+							</button>
+						</div>
+					</div>
 				</div>
 				{/* Footer */}
 			
-			</main>
+		</main>
 		</div>
 	);
 };
 
-export default Dashboard;
+export default withAdminAuth(Dashboard);

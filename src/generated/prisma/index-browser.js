@@ -126,6 +126,8 @@ exports.Prisma.UserScalarFieldEnum = {
   password: 'password',
   firstName: 'firstName',
   lastName: 'lastName',
+  isActive: 'isActive',
+  credits: 'credits',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -199,6 +201,22 @@ exports.Prisma.HoroscopeProfileScalarFieldEnum = {
   birthplace: 'birthplace',
   natalDirection: 'natalDirection',
   horoscopeDocuments: 'horoscopeDocuments'
+};
+
+exports.Prisma.ProfileViewScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  profileId: 'profileId',
+  viewedAt: 'viewedAt'
+};
+
+exports.Prisma.PaymentScalarFieldEnum = {
+  id: 'id',
+  customerName: 'customerName',
+  transactionAmount: 'transactionAmount',
+  transactionDate: 'transactionDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -283,13 +301,19 @@ exports.Prisma.HoroscopeProfileOrderByRelevanceFieldEnum = {
   natalDirection: 'natalDirection'
 };
 
+exports.Prisma.PaymentOrderByRelevanceFieldEnum = {
+  customerName: 'customerName'
+};
+
 
 exports.Prisma.ModelName = {
   User: 'User',
   Profile: 'Profile',
   UserProfile: 'UserProfile',
   ParentInfo: 'ParentInfo',
-  HoroscopeProfile: 'HoroscopeProfile'
+  HoroscopeProfile: 'HoroscopeProfile',
+  ProfileView: 'ProfileView',
+  Payment: 'Payment'
 };
 
 /**

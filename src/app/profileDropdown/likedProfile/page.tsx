@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
+import { withAuth } from '@/hooks/useAuth';
 import "@/i18n";
 import React from "react";
 
@@ -32,6 +33,7 @@ type Profile = {
   gallery: string[];
    liked?: boolean;
   isBlurred?: boolean;
+  isLocked?: boolean; // New field to track if profile details should be locked
   family: {
     fatherName: string;
     motherName: string;
@@ -49,8 +51,7 @@ type Profile = {
     elderSister: number;
     youngerSister: number;
     marriedSister: number;
-  };
-  horoscope: {
+  };  horoscope: {
     zodiacSign: string;
     tamilYear: string;
     tamilMonth: string;
@@ -61,6 +62,7 @@ type Profile = {
     ascendant: string;
     birthplace: string;
     natalDirection: string;
+    horoscopeDocuments?: string[];
   };
   chart: string[][];
 };
@@ -70,34 +72,17 @@ const LikedProfilePage = () => {
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [langDropdown, setLangDropdown] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);  const [totalProfiles, setTotalProfiles] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const profilesPerPage = 8; // 4 columns x 2 rows
   const router = useRouter();
   const { t, i18n } = useTranslation();
 
-   const fetchProfiles = async () => {
-      try {
-        const res = await fetch("/api/profilelists");
-        if (!res.ok) throw new Error("Failed to fetch");
-        const data = await res.json();
-        const fixedData = data.map((profile: any, idx: number) => ({
-          ...profile,
-          age: String(profile.age ?? ""),
-          isBlurred: idx > 1, // Only first two profiles are not blurred
-        }));
-        setProfiles(fixedData);
-        console.log(fixedData, "fixedData");
-      } catch (err) {
-        setProfiles([]);
-        console.error("Failed to fetch profiles:", err);
-      }
-    };
-  
-    useEffect(() => {
-      fetchProfiles();
-    }, []);
-
-  useEffect(() => {
-    const fetchLikedProfiles = async () => {
-      const res = await fetch("/api/profilelists/liked-profiles");
+  const fetchLikedProfiles = async (page: number = 1) => {
+    setIsLoading(true);
+    try {
+      const res = await fetch(`/api/profilelists/liked-profiles?page=${page}&limit=${profilesPerPage}`);
       const data = await res.json();
       
       // Map API data to Profile type, fallback for missing fields
@@ -156,11 +141,88 @@ const LikedProfilePage = () => {
         },
         chart: profile.chart || [],
       }));
-      setProfiles(mappedProfiles);
+        setProfiles(mappedProfiles);
+      setTotalProfiles(data.pagination?.totalItems || mappedProfiles.length);
+      setTotalPages(data.pagination?.totalPages || Math.ceil(mappedProfiles.length / profilesPerPage));
       console.log(mappedProfiles, "Mapped Profiles"); // Debugging line to check mapped profiles
-    };
-    fetchLikedProfiles();
-  }, []);
+    } catch (error) {
+      console.error("Failed to fetch liked profiles:", error);
+      setProfiles([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLikedProfiles(currentPage);
+  }, [currentPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const renderPagination = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+    
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    // Previous button
+    pages.push(
+      <button
+        key="prev"
+        onClick={() => handlePageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className={`px-3 py-2 mx-1 rounded ${
+          currentPage === 1
+            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            : 'bg-white text-gray-700 border hover:bg-gray-50'
+        }`}
+      >
+        {t('previous', 'Previous')}
+      </button>
+    );
+
+    // Page numbers
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={`px-3 py-2 mx-1 rounded ${
+            currentPage === i
+              ? 'bg-orange-500 text-white'
+              : 'bg-white text-gray-700 border hover:bg-gray-50'
+          }`}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    // Next button
+    pages.push(
+      <button
+        key="next"
+        onClick={() => handlePageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className={`px-3 py-2 mx-1 rounded ${
+          currentPage === totalPages
+            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            : 'bg-white text-gray-700 border hover:bg-gray-50'
+        }`}
+      >
+        {t('next', 'Next')}
+      </button>
+    );
+
+    return pages;
+  };
   
 
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -227,10 +289,8 @@ const tamilQualificationMap: Record<string, string> = {
   'M.A': 'எம்.ஏ',
   'PhD': 'பி.எச்.டி',
   // Add more as needed
-};
-
-  return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+};  return (
+      <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
      
 
@@ -270,98 +330,130 @@ const tamilQualificationMap: Record<string, string> = {
             <rect width="16" height="4" x="2" y="12" rx="2" />
           </svg>
         </button>
-      </div>
-
-      {/* Profiles Grid */}
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-4 gap-6 px-6 mt-4">
-        {profiles.length === 0 ? (
-          <div className="col-span-4 text-center text-gray-500 py-10">
-            {t('noLiked')}
+      </div>      {/* Profiles Grid */}
+      <div className="max-w-7xl mx-auto w-full px-6 mt-4">
+        {/* Loading State */}
+        {isLoading ? (
+          <div className="grid grid-cols-4 gap-6">
+            {[...Array(8)].map((_, idx) => (
+              <div key={idx} className="bg-white rounded shadow border p-3 animate-pulse">
+                <div className="h-40 bg-gray-200 rounded mb-3"></div>
+                <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                <div className="h-3 bg-gray-200 rounded mb-2 w-3/4"></div>
+                <div className="flex gap-2">
+                  <div className="h-6 bg-gray-200 rounded w-16"></div>
+                  <div className="h-6 bg-gray-200 rounded w-20"></div>
+                </div>
+              </div>
+            ))}
           </div>
         ) : (
-          profiles.map((profile, idx) => (
-            <div
-              key={profile.id || idx}
-              className="bg-white rounded shadow border p-3 flex flex-col relative"
-               onClick={() => handleProfileClick(profile)}
-            >
-              {/* Unlike Button (Heart) */}
-              {profile.liked && (
-                <button
-                  className="absolute top-3 right-3 bg-black bg-opacity-30 rounded-sm p-1 border z-10"
-                  onClick={async (e) => {
-                    e.stopPropagation();
-                    // Optimistically update UI
-                    const updatedProfiles = [...profiles];
-                    updatedProfiles.splice(idx, 1);
-                    setProfiles(updatedProfiles);
-                    // Update backend
-                    await fetch(`/api/profilelists/${profile.regNo}/like`, {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ liked: false }),
-                    });
-                  }}
+          <div className="grid grid-cols-4 gap-6">
+            {profiles.length === 0 ? (
+              <div className="col-span-4 text-center text-gray-500 py-10">
+                {t('noLiked')}
+              </div>
+            ) : (
+              profiles.map((profile, idx) => (
+                <div
+                  key={profile.id || idx}
+                  className="bg-white rounded shadow border p-3 flex flex-col relative cursor-pointer hover:shadow-lg transition-shadow"
+                  onClick={() => handleProfileClick(profile)}
                 >
-                  {/* Filled liked heart icon */}
-                  <svg width="24" height="21" viewBox="0 0 24 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M20.8401 2.61085C20.3294 2.09985 19.7229 1.6945 19.0555 1.41793C18.388 1.14137 17.6726 0.999023 16.9501 0.999023C16.2276 0.999023 15.5122 1.14137 14.8448 1.41793C14.1773 1.6945 13.5709 2.09985 13.0601 2.61085L12.0001 3.67085L10.9401 2.61085C9.90843 1.57916 8.50915 0.999558 7.05012 0.999558C5.59109 0.999558 4.19181 1.57916 3.16012 2.61085C2.12843 3.64254 1.54883 5.04182 1.54883 6.50085C1.54883 7.95988 2.12843 9.35916 3.16012 10.3908L4.22012 11.4508L12.0001 19.2308L19.7801 11.4508L20.8401 10.3908C21.3511 9.88009 21.7565 9.27366 22.033 8.6062C22.3096 7.93875 22.4519 7.22334 22.4519 6.50085C22.4519 5.77836 22.3096 5.06295 22.033 4.39549C21.7565 3.72803 21.3511 3.12161 20.8401 2.61085V2.61085Z"
-                      stroke="#F98B1D"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-              )}
-              {/* Profile Image */}
-              <img
-                src={profile.image || "/images/profilepicture.png"}
-                alt={profile.name || "Profile"}
-                className="h-40 w-full object-cover rounded"
-              />
-              <div className="mt-3 font-semibold text-gray-800">
-                {profile.name}
-              </div>
-              <div className="text-xs text-gray-500 truncate">
-                {profile.qualification}
-              </div>
-              <div className="flex flex-wrap items-center gap-2 mt-2">
-                <span className="flex items-center text-xs text-orange-500 bg-orange-50 px-2 py-1 rounded">
-                  <svg
-                    className="w-3 h-3 mr-1"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <circle cx="10" cy="10" r="10" />
-                  </svg>
-                  {profile.star || "star"}
-                </span>
-                <span className="flex items-center text-xs text-gray-700">
-                  <svg
-                    className="w-3 h-3 mr-1"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M10 2a8 8 0 100 16 8 8 0 000-16z" />
-                  </svg>
-                  {profile.age ? `${profile.age} Years` : ""}
-                </span>
-                <span className="flex items-center text-xs text-gray-700">
-                  <svg
-                    className="w-3 h-3 mr-1"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <rect width="16" height="4" x="2" y="8" rx="2" />
-                  </svg>
-                  {profile.marriageStatus || "status"}
-                </span>
-              </div>
-              {/* Additional fields can be rendered here as needed */}
+                  {/* Unlike Button (Heart) */}
+                  {profile.liked && (
+                    <button
+                      className="absolute top-3 right-3 bg-black bg-opacity-30 rounded-sm p-1 border z-10"
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        // Optimistically update UI
+                        const updatedProfiles = [...profiles];
+                        updatedProfiles.splice(idx, 1);
+                        setProfiles(updatedProfiles);
+                        setTotalProfiles(prev => prev - 1);
+                        // Update backend
+                        await fetch(`/api/profilelists/${profile.regNo}/like`, {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ liked: false }),
+                        });
+                        // Refresh the current page
+                        fetchLikedProfiles(currentPage);
+                      }}
+                    >
+                      {/* Filled liked heart icon */}
+                      <svg width="24" height="21" viewBox="0 0 24 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M20.8401 2.61085C20.3294 2.09985 19.7229 1.6945 19.0555 1.41793C18.388 1.14137 17.6726 0.999023 16.9501 0.999023C16.2276 0.999023 15.5122 1.14137 14.8448 1.41793C14.1773 1.6945 13.5709 2.09985 13.0601 2.61085L12.0001 3.67085L10.9401 2.61085C9.90843 1.57916 8.50915 0.999558 7.05012 0.999558C5.59109 0.999558 4.19181 1.57916 3.16012 2.61085C2.12843 3.64254 1.54883 5.04182 1.54883 6.50085C1.54883 7.95988 2.12843 9.35916 3.16012 10.3908L4.22012 11.4508L12.0001 19.2308L19.7801 11.4508L20.8401 10.3908C21.3511 9.88009 21.7565 9.27366 22.033 8.6062C22.3096 7.93875 22.4519 7.22334 22.4519 6.50085C22.4519 5.77836 22.3096 5.06295 22.033 4.39549C21.7565 3.72803 21.3511 3.12161 20.8401 2.61085V2.61085Z"
+                          stroke="#F98B1D"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  )}
+                  {/* Profile Image */}
+                  <img
+                    src={profile.image || "/images/profilepicture.png"}
+                    alt={profile.name || "Profile"}
+                    className="h-40 w-full object-cover rounded"
+                  />
+                  <div className="mt-3 font-semibold text-gray-800">
+                    {profile.name}
+                  </div>
+                  <div className="text-xs text-gray-500 truncate">
+                    {profile.qualification}
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2 mt-2">
+                    <span className="flex items-center text-xs text-orange-500 bg-orange-50 px-2 py-1 rounded">
+                      <svg
+                        className="w-3 h-3 mr-1"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <circle cx="10" cy="10" r="10" />
+                      </svg>
+                      {profile.star || "star"}
+                    </span>
+                    <span className="flex items-center text-xs text-gray-700">
+                      <svg
+                        className="w-3 h-3 mr-1"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M10 2a8 8 0 100 16 8 8 0 000-16z" />
+                      </svg>
+                      {profile.age ? `${profile.age} Years` : ""}
+                    </span>
+                    <span className="flex items-center text-xs text-gray-700">
+                      <svg
+                        className="w-3 h-3 mr-1"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <rect width="16" height="4" x="2" y="8" rx="2" />
+                      </svg>
+                      {profile.marriageStatus || "status"}
+                    </span>
+                  </div>
+                  {/* Additional fields can be rendered here as needed */}
+                </div>
+              ))
+            )}
+          </div>
+        )}
+
+        {/* Pagination Controls */}
+        {!isLoading && profiles.length > 0 && totalPages > 1 && (
+          <div className="flex justify-between items-center mt-8 mb-6">
+            <div className="text-sm text-gray-500">
+              {t('showing_results', `Showing ${((currentPage - 1) * profilesPerPage) + 1} to ${Math.min(currentPage * profilesPerPage, totalProfiles)} of ${totalProfiles} results`)}
             </div>
-          ))
+            <div className="flex items-center">
+              {renderPagination()}
+            </div>
+          </div>
         )}
       </div>
        {selectedProfile && (
@@ -647,44 +739,91 @@ const tamilQualificationMap: Record<string, string> = {
                 ) : (
                   <div className="text-gray-500 text-sm">{t('no_horoscope_info', 'No horoscope information available.')}</div>
                 )}
-              </div>
-              {/* Horoscope Chart */}
+              </div>              {/* Horoscope Chart */}
               <div className="mt-8">
                 <div className="font-semibold text-base mb-2">
                   {t('horoscope_chart_label', 'Horoscope Chart')}
                 </div>
-                {selectedProfile.chart && selectedProfile.chart.length > 0 ? (
-                  <div className="border rounded">
-                    <table className="w-full text-center text-sm">
-                      <tbody>
-                        {selectedProfile.chart.map((row, i) => (
-                          <tr key={i}>
-                            {row.map((cell, j) => (
-                              <td
-                                key={j}
-                                className="border px-4 py-2 min-w-[80px]"
-                              >
-                                {cell}
-                              </td>
-                            ))}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                {selectedProfile.horoscope.horoscopeDocuments && 
+                 Array.isArray(selectedProfile.horoscope.horoscopeDocuments) && 
+                 selectedProfile.horoscope.horoscopeDocuments.length > 0 ? (
+                  /* Show uploaded horoscope documents */
+                  <div className="grid grid-cols-2 gap-4">
+                    {selectedProfile.horoscope.horoscopeDocuments.map((document: string, index: number) => (
+                      <div key={index} className="relative">
+                        <img 
+                          src={document} 
+                          alt={`Horoscope Chart ${index + 1}`}
+                          className="w-full h-80 object-contain border border-gray-200 rounded-lg bg-gray-50 cursor-pointer hover:shadow-lg transition-shadow"
+                          onClick={() => window.open(document, '_blank')}
+                          title="Click to view full size"
+                        />
+                        <div className="text-center mt-2 text-sm text-gray-600">
+                          Chart {index + 1}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 ) : (
-                  <div className="text-gray-500 text-sm">{t('no_chart_info', 'No chart information available.')}</div>
+                  /* Show default horoscope images when no documents uploaded */
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="relative">
+                      <img 
+                        src="/images/h1.jpg" 
+                        alt="Default Horoscope Chart 1"
+                        className="w-full h-80 object-contain border border-gray-200 rounded-lg bg-gray-50 cursor-pointer hover:shadow-lg transition-shadow"
+                        onClick={() => window.open('/images/h1.jpg', '_blank')}
+                        title="Click to view full size"
+                      />
+                      <div className="text-center mt-2 text-sm text-gray-600">
+                        Default Chart 1
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <img 
+                        src="/images/h2.jpg" 
+                        alt="Default Horoscope Chart 2"
+                        className="w-full h-80 object-contain border border-gray-200 rounded-lg bg-gray-50 cursor-pointer hover:shadow-lg transition-shadow"
+                        onClick={() => window.open('/images/h2.jpg', '_blank')}
+                        title="Click to view full size"
+                      />
+                      <div className="text-center mt-2 text-sm text-gray-600">
+                        Default Chart 2
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {selectedProfile.chart && selectedProfile.chart.length > 0 && (
+                  <div className="mt-6">
+                    <div className="font-medium text-sm mb-2">Chart Data</div>
+                    <div className="border rounded">
+                      <table className="w-full text-center text-sm">
+                        <tbody>
+                          {selectedProfile.chart.map((row, i) => (
+                            <tr key={i}>
+                              {row.map((cell, j) => (
+                                <td
+                                  key={j}
+                                  className="border px-4 py-2 min-w-[80px]"
+                                >
+                                  {cell}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
           </div>
         </div>
-      )}
-
-      {/* Footer */}
+      )}      {/* Footer */}
       
     </div>
   );
 };
 
-export default LikedProfilePage;
+export default withAuth(LikedProfilePage);

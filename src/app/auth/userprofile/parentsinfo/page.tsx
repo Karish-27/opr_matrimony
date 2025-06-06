@@ -3,6 +3,9 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import "@/i18n";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { withAuth } from "@/hooks/useAuth";
 
 const ParentFamilyPage = () => {
   const router = useRouter();
@@ -10,8 +13,7 @@ const ParentFamilyPage = () => {
   const [selected, setSelected] = useState({
     father: false,
     mother: false,
-  });
-  const [form, setForm] = useState({
+  });  const [form, setForm] = useState({
     fatherName: "",
     motherName: "",
     fatherNative: "",
@@ -28,18 +30,7 @@ const ParentFamilyPage = () => {
     elderSisters: 0,
     youngerSisters: 0,
     marriedSisters: 0,
-    userId: "", // Set to the correct UserProfile.id
   });
-
-  // Example: Set userProfileId from localStorage or context (replace as needed)
-  useEffect(() => {
-     // Get userId from localStorage and set it in form state
-     const userId = localStorage.getItem('userId');
-     if (userId) {
-       setForm((prev) => ({ ...prev, userId }));
-     }
-   }, []);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
     setSelected((prev) => ({
@@ -48,16 +39,24 @@ const ParentFamilyPage = () => {
     }));
   };
 
+  const numericFields = [
+    "brothers",
+    "elderBrothers",
+    "youngerBrothers",
+    "marriedBrothers",
+    "sisters",
+    "elderSisters",
+    "youngerSisters",
+    "marriedSisters"
+  ];
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
-      [name]:
-        name.includes("Brothers") || name.includes("Sisters")
-          ? Number(value)
-          : value,
+      [name]: numericFields.includes(name) ? Number(value) : value,
     }));
   };
 
@@ -68,14 +67,10 @@ const ParentFamilyPage = () => {
   const handleBack = () => {
     router.push("/auth/userprofile"); // Navigate to userprofile age page
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Set userProfileId from context/session
-    // if (!form.userId) {
-    //   alert("User Profile ID is required.");
-    //   return;
-    // }
+    console.log("Submitting form:", form);
+    
     const res = await fetch("/api/profiledataapi/userprofile/parentsinfo", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -84,7 +79,8 @@ const ParentFamilyPage = () => {
     console.log("Response:", res);
 
     if (res.ok) {
-      console.log("Form data submitted:", form); // Log form data on success
+      console.log("Form data submitted:", form);
+       toast.success(t('parents_success', 'Parents information added successfully!'));
       router.push("/auth/userprofile/parentsinfo/horoscopeprofile");
     } else {
       alert(t("register_failed"));
@@ -105,20 +101,20 @@ const ParentFamilyPage = () => {
 
   return (
     <div className="flex flex-col items-center py-8 px-4">
+       <ToastContainer position="top-right" autoClose={2000} />
       {/* Language Switcher */}
      
       {/* Logo and Title */}
-      <div className="flex flex-col items-center mb-6">
-        <div className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center mb-2">
-          <span className="text-white text-2xl font-bold">M</span>
+     <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          <img
+            alt="Your Company"
+            src="/images/loginlogo.png"
+            className="mx-auto h-20 w-auto"
+          />
+          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-[#F98B1D] text-900">
+            {t("register_title")}
+          </h2>
         </div>
-        <h1 className="text-xl font-semibold text-gray-800">Matrimony</h1>
-      </div>
-
-      <h2 className="text-lg font-medium text-gray-900 mb-6">
-        {t("register_title")}
-      </h2>
-
       {/* Parent Information Form */}
       <form
         className="w-full max-w-3xl bg-white p-8 rounded-lg shadow"
@@ -408,4 +404,4 @@ const ParentFamilyPage = () => {
   );
 };
 
-export default ParentFamilyPage;
+export default withAuth(ParentFamilyPage);
