@@ -1,0 +1,12 @@
+import Cookies from 'js-cookie';
+// ...existing code...
+
+// In your handleSubmit function, after successful login:
+if (res.ok) {
+  // Store userId in localStorage if returned by backend
+  if (data.user && data.user.id) {
+    Cookies.set('userId', data.user.id, { expires: 7, path: '/' });
+  }
+  // ...existing code...
+}
+// ...existing code...
