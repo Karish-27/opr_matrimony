@@ -9,6 +9,7 @@ const Dashboard = () => {	const [counts, setCounts] = useState({
 		totalProfiles: 0,
 		totalMaleProfiles: 0,
 		totalFemaleProfiles: 0,
+		totalPaidUsers: 0,
 	});
 	const [users, setUsers] = useState<Array<{
 		regNo: string;
@@ -187,15 +188,14 @@ const Dashboard = () => {	const [counts, setCounts] = useState({
 							}}
 						>
 							🏅
-						</div>
-						<div>
+						</div>						<div>
 							<div
 								style={{
 									fontSize: 28,
 									fontWeight: 700,
 								}}
 							>
-								100
+								{counts.totalPaidUsers}
 							</div>
 							<div
 								style={{

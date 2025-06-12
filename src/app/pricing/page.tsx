@@ -11,10 +11,9 @@ const PricingPage = () => {
     const { t, i18n } = useTranslation();
     
     const toggleDropdown = () => setIsOpen(!isOpen);
-    
-    const handlePlanSelection = (plan: string, amount: number) => {
-        // For unauthenticated users, redirect to auth page with plan info
-        router.push(`/auth?redirect=/pricingPlan/payment&plan=${plan}&amount=${amount}`);
+      const handlePlanSelection = (plan: string, amount: number) => {
+        // Redirect to login page
+        router.push('/auth/login');
     };
     
     return (

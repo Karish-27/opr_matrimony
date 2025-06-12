@@ -8,6 +8,88 @@ import html2canvas from "html2canvas";
 import AvatarDropdown from "@/components/AvatarDropdown";
 import { withAdminAuth } from '@/hooks/useAuth';
 
+// Helper function to render Tamil text to image using canvas
+const renderTamilTextToImage = async (text: string, fontSize: number = 12, fontWeight: string = 'normal'): Promise<string> => {
+  return new Promise((resolve) => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    if (!ctx) {
+      resolve('');
+      return;
+    }
+
+    // Set canvas font with Tamil-supporting font
+    ctx.font = `${fontWeight} ${fontSize}px "Noto Sans Tamil", "Latha", "Bamini", Arial, sans-serif`;
+    
+    // Measure text to set canvas size
+    const metrics = ctx.measureText(text);
+    const textWidth = metrics.width;
+    const textHeight = fontSize * 1.4; // Some padding for Tamil characters
+    
+    canvas.width = Math.max(textWidth + 10, 50);
+    canvas.height = Math.max(textHeight + 10, 25);
+    
+    // Set background to transparent
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Re-set font after canvas resize
+    ctx.font = `${fontWeight} ${fontSize}px "Noto Sans Tamil", "Latha", "Bamini", Arial, sans-serif`;
+    ctx.fillStyle = '#000000';
+    ctx.textBaseline = 'top';
+    ctx.textAlign = 'start';
+    
+    // Draw the text
+    ctx.fillText(text, 5, 5);
+    
+    // Convert to base64 image
+    resolve(canvas.toDataURL('image/png'));
+  });
+};
+
+// Helper function to add Tamil text to PDF using canvas rendering
+const addTamilTextToPDF = async (doc: any, text: string, x: number, y: number, fontSize: number = 12, fontWeight: string = 'normal'): Promise<void> => {
+  try {
+    const imageData = await renderTamilTextToImage(text, fontSize, fontWeight);
+    if (imageData && imageData !== '') {
+      // Create a temporary image to get dimensions
+      return new Promise<void>((resolve) => {
+        const img = new window.Image();
+        img.onload = () => {
+          const aspectRatio = img.width / img.height;
+          const displayHeight = fontSize * 1.2;
+          const displayWidth = displayHeight * aspectRatio;
+          
+          doc.addImage(
+            imageData,
+            'PNG',
+            x,
+            y - displayHeight + 3, // Adjust y position to align with text baseline
+            displayWidth,
+            displayHeight,
+            undefined,
+            'FAST'
+          );
+          resolve();
+        };
+        img.onerror = () => {
+          // Fallback to regular text if image fails
+          doc.text(text, x, y);
+          resolve();
+        };
+        img.src = imageData;
+      });
+    } else {
+      // Fallback to regular text
+      doc.text(text, x, y);
+    }
+  } catch (error) {
+    console.error('Error rendering Tamil text:', error);
+    // Fallback to regular text if Tamil rendering fails
+    doc.text(text, x, y);
+  }
+};
+
 interface FamilyInfo {
   fatherName?: string;
   motherName?: string;
@@ -349,12 +431,11 @@ const ManageUser = () => {
     } catch (e) {
       console.log('Could not load footer image:', e);
     }
-  };
-  // Helper function to add a single profile to the PDF
+  };  // Helper function to add a single profile to the PDF (No Images Version)
   const addProfileToPDF = async (doc: any, profile: User, isFirst: boolean = false) => {
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
-    let y = 80; // Start below header (increased from 40)
+    let y = 80; // Start below header
     let leftX = 40;
 
     // Add new page if not the first profile
@@ -363,249 +444,230 @@ const ManageUser = () => {
     }
 
     // Add header and footer to every page
-    await addHeaderFooterToPDF(doc);    // Function to check if we need a new page for content overflow
-    const checkPageBreak = async (requiredSpace: number) => {
-      if (y + requiredSpace > pageHeight - 120) { // 120pt margin from bottom (60 for footer + 60 buffer)
-        doc.addPage();
-        await addHeaderFooterToPDF(doc);
-        y = 80; // Reset Y position for new page (below header)
-      }};    // --- Profile Image (top, centered) ---
-    await checkPageBreak(280); // Check space for profile image and gallery
-    if (profile.image) {
-      try {
-        const imgData = await toDataUrl(profile.image);
-        doc.addImage(
-          imgData,
-          "JPEG",
-          pageWidth / 2 - 85,
-          y,
-          170,
-          210,
-          undefined,
-          "FAST"
-        );
-      } catch (e) {}
-    }
-
-    // --- Gallery Images (below main image, centered) ---
-    let galleryY = y + 220;
-    let galleryX = pageWidth / 2 - 90;
-    if (Array.isArray(profile.gallery)) {
-      for (let i = 0; i < profile.gallery.length && i < 4; i++) {
-        try {
-          const imgData = await toDataUrl(profile.gallery[i]);
-          doc.addImage(
-            imgData,
-            "JPEG",
-            galleryX,
-            galleryY,
-            40,
-            40,
-            undefined,
-            "FAST"
-          );
-          galleryX += 45;
-        } catch (e) {}
-      }
-    }
-    y = galleryY + 60;    // --- Profile Info (two columns) ---
-    await checkPageBreak(200); // Check space for profile info section
+    await addHeaderFooterToPDF(doc);    // Tamil labels - pure Tamil text only
+    const tamilLabels = {
+      regNo: "பதிவு எண்",
+      profileInfo: "சுயவிவர தகவல்",
+      email: "மின்னஞ்சல்",
+      phone: "தொலைபேசி",
+      dob: "பிறந்த தேதி",
+      age: "வயது",
+      star: "நட்சத்திரம்",
+      marriageStatus: "திருமண நிலை",
+      height: "உயரம்",
+      qualification: "கல்வித் தகுதி",
+      color: "நிறம்",
+      caste: "சாதி",
+      familyProperty: "குடும்ப சொத்து",
+      typeOfFood: "உணவு வகை",
+      career: "தொழில்",
+      salary: "சம்பளம்",
+      expectation: "எதிர்பார்ப்பு",
+      familyInfo: "குடும்ப தகவல்",
+      fatherName: "தந்தை பெயர்",
+      motherName: "தாய் பெயர்",
+      fatherNative: "தந்தை ஊர்",
+      motherNative: "தாய் ஊர்",
+      fatherProfession: "தந்தை தொழில்",
+      motherProfession: "தாய் தொழில்",
+      phoneNumber: "தொலைபேசி எண்",
+      address: "முகவரி",
+      brothers: "சகோதரர்கள்",
+      elderBrother: "மூத்த சகோதரன்",
+      youngerBrother: "இளைய சகோதரன்",
+      marriedBrother: "திருமணமான சகோதரன்",
+      sisters: "சகோதரிகள்",
+      elderSister: "மூத்த சகோதரி",
+      youngerSister: "இளைய சகோதரி",
+      marriedSister: "திருமணமான சகோதரி",
+      horoscopeInfo: "ஜாதக தகவல்",
+      zodiacSign: "ராசி",
+      tamilYear: "தமிழ் ஆண்டு",
+      tamilMonth: "தமிழ் மாதம்",
+      udayathiNatchat: "உதயாதி நட்சத்திரம்",
+      day: "நாள்",
+      birthTime: "பிறந்த நேரம்",
+      starFoot: "நட்சத்திரம்/பாதம்",
+      ascendant: "லக்னம்",
+      birthplace: "பிறந்த இடம்",
+      natalDirection: "ஜென்ம திசை",
+      horoscopeChart: "ஜாதக அட்டவணை"
+    };    // No images - start directly with profile info    // --- Profile Info (Header) - Name removed, only Reg No ---
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(18);
-    doc.text(profile.name || "-", leftX, y);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(11);
-    y += 24;
-    doc.text(`Reg. No : ${profile.regNo || "-"}`, leftX, y);
-    y += 18;
-
-    // 2 columns for main info
+    doc.setFontSize(14);
+    await addTamilTextToPDF(doc, `${tamilLabels.regNo} : ${profile.regNo || "-"}`, leftX, y, 14, 'bold');
+    y += 25;    // --- Main Profile Information (Compact 2-column layout) ---
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    await addTamilTextToPDF(doc, tamilLabels.profileInfo, leftX, y, 14, 'bold');
+    y += 15;
+    
     const infoRows = [
       [
-        { label: "Email", value: profile.email },
-        { label: "Phone", value: profile.phone || profile.mobile },
+        { label: tamilLabels.email, value: profile.email },
+        { label: tamilLabels.phone, value: profile.phone || profile.mobile },
       ],
       [
-        { label: "Date Of Birth", value: profile.dob },
-        { label: "Age", value: profile.age },
+        { label: tamilLabels.dob, value: profile.dob },
+        { label: tamilLabels.age, value: profile.age },
       ],
       [
-        { label: "Star", value: profile.star },
-        { label: "Marriage Status", value: profile.marriageStatus },
+        { label: tamilLabels.star, value: profile.star },
+        { label: tamilLabels.marriageStatus, value: profile.marriageStatus },
       ],
       [
-        { label: "Height", value: profile.height },
-        { label: "Qualification", value: profile.qualification },
+        { label: tamilLabels.height, value: profile.height },
+        { label: tamilLabels.qualification, value: profile.qualification },
       ],
       [
-        { label: "Color", value: profile.color },
-        { label: "Caste", value: profile.caste },
+        { label: tamilLabels.color, value: profile.color },
+        { label: tamilLabels.caste, value: profile.caste },
       ],
       [
-        { label: "Family Property", value: profile.familyProperty },
-        { label: "Type of food", value: profile.typeOfFood },
+        { label: tamilLabels.familyProperty, value: profile.familyProperty },
+        { label: tamilLabels.typeOfFood, value: profile.typeOfFood },
       ],
       [
-        { label: "Career", value: profile.career },
-        { label: "Salary", value: profile.salary },
+        { label: tamilLabels.career, value: profile.career },
+        { label: tamilLabels.salary, value: profile.salary },
       ],
       [
-        { label: "Expectation", value: profile.expectation },
+        { label: tamilLabels.expectation, value: profile.expectation },
         { label: "", value: "" },
       ],
-    ];
-
-    infoRows.forEach((row) => {
-      let colX = leftX;
-      row.forEach((cell) => {
-        if (cell.label) {
-          doc.setFont("helvetica", "bold");
-          doc.text(cell.label, colX, y);
-          doc.setFont("helvetica", "normal");
-          doc.text(cell.value ? String(cell.value) : "-", colX + 90, y, {
-            maxWidth: 120,
-          });
-        }
-        colX += 250;
-      });      y += 18;
-    });
-    y += 18;    // --- Family Information Section (two columns) ---
-    await checkPageBreak(200); // Check space for family section
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
-    doc.text("Family Information", leftX, y);
-    doc.setFont("helvetica", "normal");
+    ];    doc.setFont("helvetica", "normal");
     doc.setFontSize(11);
-    y += 18;
+    for (const row of infoRows) {
+      let colX = leftX;
+      for (const cell of row) {        if (cell.label) {
+          doc.setFont("helvetica", "bold");
+          await addTamilTextToPDF(doc, cell.label, colX, y, 13, 'bold');
+          doc.setFont("helvetica", "normal");
+          const value = cell.value ? String(cell.value) : "-";
+          doc.text(value, colX + 120, y, { maxWidth: 140 });
+        }
+        colX += 260;
+      }
+      y += 16;
+    }
+    y += 10;    // --- Family Information Section (Compact) ---
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    await addTamilTextToPDF(doc, tamilLabels.familyInfo, leftX, y, 14, 'bold');
+    y += 15;
 
     const fam = profile.family || {};
     const famRows = [
       [
-        { label: "Father's Name", value: fam.fatherName },
-        { label: "Mother's Name", value: fam.motherName },
+        { label: tamilLabels.fatherName, value: fam.fatherName },
+        { label: tamilLabels.motherName, value: fam.motherName },
       ],
       [
-        { label: "Father's Native", value: fam.fatherNative },
-        { label: "Mother's Native", value: fam.motherNative },
+        { label: tamilLabels.fatherNative, value: fam.fatherNative },
+        { label: tamilLabels.motherNative, value: fam.motherNative },
       ],
       [
-        { label: "Father's Profession", value: fam.fatherProfession },
-        { label: "Mother's Profession", value: fam.motherProfession },
+        { label: tamilLabels.fatherProfession, value: fam.fatherProfession },
+        { label: tamilLabels.motherProfession, value: fam.motherProfession },
       ],
       [
-        { label: "Phone Number", value: fam.phoneNumber },
-        { label: "Address", value: fam.address },
+        { label: tamilLabels.phoneNumber, value: fam.phoneNumber },
+        { label: tamilLabels.address, value: fam.address },
       ],
       [
-        { label: "Brothers", value: fam.brothers },
-        { label: "Elder Brother", value: fam.elderBrother },
+        { label: tamilLabels.brothers, value: fam.brothers },
+        { label: tamilLabels.elderBrother, value: fam.elderBrother },
       ],
       [
-        { label: "Younger Brother", value: fam.youngerBrother },
-        { label: "Married", value: fam.marriedBrother },
+        { label: tamilLabels.youngerBrother, value: fam.youngerBrother },
+        { label: tamilLabels.marriedBrother, value: fam.marriedBrother },
       ],
       [
-        { label: "Sisters", value: fam.sisters },
-        { label: "Elder Sister", value: fam.elderSister },
+        { label: tamilLabels.sisters, value: fam.sisters },
+        { label: tamilLabels.elderSister, value: fam.elderSister },
       ],
       [
-        { label: "Younger Sister", value: fam.youngerSister },
-        { label: "Married", value: fam.marriedSister },
+        { label: tamilLabels.youngerSister, value: fam.youngerSister },
+        { label: tamilLabels.marriedSister, value: fam.marriedSister },
       ],
-    ];
-
-    famRows.forEach((row) => {
-      let colX = leftX;
-      row.forEach((cell) => {
-        doc.setFont("helvetica", "bold");
-        doc.text(cell.label, colX, y);
-        doc.setFont("helvetica", "normal");
-        doc.text(
-          cell.value !== undefined && cell.value !== null
-            ? String(cell.value)
-            : "-",
-          colX + 110,
-          y,
-          { maxWidth: 120 }
-        );
-        colX += 270;
-      });
-      y += 18;    });
-    y += 18;    // --- Horoscope Information Section (two columns) ---
-    await checkPageBreak(150); // Check space for horoscope section
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
-    doc.text("Horoscope Information", leftX, y);
-    doc.setFont("helvetica", "normal");
+    ];    doc.setFont("helvetica", "normal");
     doc.setFontSize(11);
-    y += 18;
+    for (const row of famRows) {
+      let colX = leftX;
+      for (const cell of row) {
+        doc.setFont("helvetica", "bold");
+        await addTamilTextToPDF(doc, cell.label, colX, y, 11, 'bold');
+        doc.setFont("helvetica", "normal");
+        const value = cell.value !== undefined && cell.value !== null ? String(cell.value) : "-";
+        doc.text(value, colX + 120, y, { maxWidth: 140 });
+        colX += 260;
+      }
+      y += 14;
+    }
+    y += 10;    // --- Horoscope Information Section (Compact) ---
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    await addTamilTextToPDF(doc, tamilLabels.horoscopeInfo, leftX, y, 14, 'bold');
+    y += 15;
 
     const horo = profile.horoscope || profile.horoscopeProfile || {};
     const horoRows = [
       [
-        { label: "Zodiac Sign", value: horo.zodiacSign },
-        { label: "Tamil year", value: horo.tamilYear },
+        { label: tamilLabels.zodiacSign, value: horo.zodiacSign },
+        { label: tamilLabels.tamilYear, value: horo.tamilYear },
       ],
       [
-        { label: "Tamil month", value: horo.tamilMonth },
-        { label: "Udayathi Natchat", value: horo.udayathiNatchat },
+        { label: tamilLabels.tamilMonth, value: horo.tamilMonth },
+        { label: tamilLabels.udayathiNatchat, value: horo.udayathiNatchat },
       ],
       [
-        { label: "Day", value: horo.day },
-        { label: "Birth Time", value: horo.birthTime },
+        { label: tamilLabels.day, value: horo.day },
+        { label: tamilLabels.birthTime, value: horo.birthTime },
       ],
       [
-        { label: "Star/Foot", value: horo.starFoot },
-        { label: "Ascendant (Lagnam)", value: horo.ascendant },
+        { label: tamilLabels.starFoot, value: horo.starFoot },
+        { label: tamilLabels.ascendant, value: horo.ascendant },
       ],
       [
-        { label: "Birthplace", value: horo.birthplace },
-        { label: "Presence of natal direction", value: horo.natalDirection },
+        { label: tamilLabels.birthplace, value: horo.birthplace },
+        { label: tamilLabels.natalDirection, value: horo.natalDirection },
       ],
-    ];
-
-    horoRows.forEach((row) => {
+    ];    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
+    for (const row of horoRows) {
       let colX = leftX;
-      row.forEach((cell) => {
+      for (const cell of row) {
         doc.setFont("helvetica", "bold");
-        doc.text(cell.label, colX, y);
+        await addTamilTextToPDF(doc, cell.label, colX, y, 11, 'bold');
         doc.setFont("helvetica", "normal");
-        doc.text(
-          cell.value !== undefined && cell.value !== null
-            ? String(cell.value)
-            : "-",
-          colX + 110,
-          y,
-          { maxWidth: 120 }
-        );
-        colX += 270;
-      });
-      y += 18;
-    });
-    y += 18;
-
-    // --- Horoscope Chart (if available) ---
+        const value = cell.value !== undefined && cell.value !== null ? String(cell.value) : "-";
+        doc.text(value, colX + 120, y, { maxWidth: 140 });
+        colX += 260;
+      }
+      y += 14;
+    }
+    y += 10;    // --- Horoscope Chart (Compact) ---
     if (Array.isArray(profile.chart) && profile.chart.length > 0) {
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(13);
-      doc.text("Horoscope Chart", leftX, y);
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(11);
-      y += 18;
+      doc.setFontSize(14);
+      await addTamilTextToPDF(doc, tamilLabels.horoscopeChart, leftX, y, 14, 'bold');
+      y += 15;
 
-      // Draw a 4x4 grid for chart
-      const cellW = 100,
-        cellH = 40;
+      // Draw a compact 4x4 grid for chart
+      const cellW = 60; // Reduced from 100
+      const cellH = 25; // Reduced from 40
       for (let row = 0; row < 4; row++) {
         for (let col = 0; col < 4; col++) {
           const idx = row * 4 + col;
           doc.rect(leftX + col * cellW, y + row * cellH, cellW, cellH);
           if (profile.chart[idx]) {
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(8);
             doc.text(
               String(profile.chart[idx]),
-              leftX + col * cellW + 5,
-              y + row * cellH + 20,
-              { maxWidth: cellW - 10 }
+              leftX + col * cellW + 3,
+              y + row * cellH + 15,
+              { maxWidth: cellW - 6 }
             );
           }
         }
@@ -717,256 +779,263 @@ const ManageUser = () => {
   // const testClick = () => {
   //   alert('Button clicked!');
   //   console.log('Button click works!');
-  // };
-  // Download PDF for a user
+  // };  // Download PDF for a user
   const handleDownload = async (profile: any) => {
     const doc = new jsPDF({ orientation: "p", unit: "pt", format: "a4" });
     const pageWidth = doc.internal.pageSize.getWidth();
-    let y = 80; // Start below header (increased from 40)
+    let y = 80; // Start below header
     let leftX = 40;
-    let rightX = pageWidth - 220;
 
     // Add header and footer to the page
     await addHeaderFooterToPDF(doc);
 
-    // --- Profile Image (top, centered) ---
-    if (profile.image) {
-      try {
-        const imgData = await toDataUrl(profile.image);
-        doc.addImage(
-          imgData,
-          "JPEG",
-          pageWidth / 2 - 85,
-          y,
-          170,
-          210,
-          undefined,
-          "FAST"
-        );
-      } catch (e) {}
-    }
+    // Tamil labels - same as multiple profile download
+    const tamilLabels = {
+      regNo: "பதிவு எண்",
+      profileInfo: "சுயவிவர தகவல்",
+      email: "மின்னஞ்சல்",
+      phone: "தொலைபேசி",
+      dob: "பிறந்த தேதி",
+      age: "வயது",
+      star: "நட்சத்திரம்",
+      marriageStatus: "திருமண நிலை",
+      height: "உயரம்",
+      qualification: "கல்வித் தகுதி",
+      color: "நிறம்",
+      caste: "சாதி",
+      familyProperty: "குடும்ப சொத்து",
+      typeOfFood: "உணவு வகை",
+      career: "தொழில்",
+      salary: "சம்பளம்",
+      expectation: "எதிர்பார்ப்பு",
+      familyInfo: "குடும்ப தகவல்",
+      fatherName: "தந்தை பெயர்",
+      motherName: "தாய் பெயர்",
+      fatherNative: "தந்தை ஊர்",
+      motherNative: "தாய் ஊர்",
+      fatherProfession: "தந்தை தொழில்",
+      motherProfession: "தாய் தொழில்",
+      phoneNumber: "தொலைபேசி எண்",
+      address: "முகவரி",
+      brothers: "சகோதரர்கள்",
+      elderBrother: "மூத்த சகோதரன்",
+      youngerBrother: "இளைய சகோதரன்",
+      marriedBrother: "திருமணமான சகோதரன்",
+      sisters: "சகோதரிகள்",
+      elderSister: "மூத்த சகோதரி",
+      youngerSister: "இளைய சகோதரி",
+      marriedSister: "திருமணமான சகோதரி",
+      horoscopeInfo: "ஜாதக தகவல்",
+      zodiacSign: "ராசி",
+      tamilYear: "தமிழ் ஆண்டு",
+      tamilMonth: "தமிழ் மாதம்",
+      udayathiNatchat: "உதயாதி நட்சத்திரம்",
+      day: "நாள்",
+      birthTime: "பிறந்த நேரம்",
+      starFoot: "நட்சத்திரம்/பாதம்",
+      ascendant: "லக்னம்",
+      birthplace: "பிறந்த இடம்",
+      natalDirection: "ஜென்ம திசை",
+      horoscopeChart: "ஜாதக அட்டவணை"
+    };
 
-    // --- Gallery Images (below main image, centered) ---
-    let galleryY = y + 220;
-    let galleryX = pageWidth / 2 - 90;
-    if (Array.isArray(profile.gallery)) {
-      for (let i = 0; i < profile.gallery.length && i < 4; i++) {
-        try {
-          const imgData = await toDataUrl(profile.gallery[i]);
-          doc.addImage(
-            imgData,
-            "JPEG",
-            galleryX,
-            galleryY,
-            40,
-            40,
-            undefined,
-            "FAST"
-          );
-          galleryX += 45;
-        } catch (e) {}
-      }
-    }
-    y = galleryY + 60;
-
-    // --- Profile Info (two columns) ---
+    // --- Profile Info (Header) - Registration Number ---
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(18);
-    doc.text(profile.name || "-", leftX, y);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(11);
-    y += 24;
-    doc.text(`Reg. No : ${profile.regNo || "-"}`, leftX, y);
-    y += 18;
-    // 2 columns for main info
+    doc.setFontSize(14);
+    await addTamilTextToPDF(doc, `${tamilLabels.regNo} : ${profile.regNo || "-"}`, leftX, y, 14, 'bold');
+    y += 25;
+
+    // --- Main Profile Information (Compact 2-column layout) ---
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    await addTamilTextToPDF(doc, tamilLabels.profileInfo, leftX, y, 14, 'bold');
+    y += 15;
+    
     const infoRows = [
       [
-        { label: "Email", value: profile.email },
-        { label: "Phone", value: profile.phone },
+        { label: tamilLabels.email, value: profile.email },
+        { label: tamilLabels.phone, value: profile.phone || profile.mobile },
       ],
       [
-        { label: "Date Of Birth", value: profile.dob },
-        { label: "Age", value: profile.age },
+        { label: tamilLabels.dob, value: profile.dob },
+        { label: tamilLabels.age, value: profile.age },
       ],
       [
-        { label: "Star", value: profile.star },
-        { label: "Marriage Status", value: profile.marriageStatus },
+        { label: tamilLabels.star, value: profile.star },
+        { label: tamilLabels.marriageStatus, value: profile.marriageStatus },
       ],
       [
-        { label: "Height", value: profile.height },
-        { label: "Qualification", value: profile.qualification },
+        { label: tamilLabels.height, value: profile.height },
+        { label: tamilLabels.qualification, value: profile.qualification },
       ],
       [
-        { label: "Color", value: profile.color },
-        { label: "Caste", value: profile.caste },
+        { label: tamilLabels.color, value: profile.color },
+        { label: tamilLabels.caste, value: profile.caste },
       ],
       [
-        { label: "Family Property", value: profile.familyProperty },
-        { label: "Type of food", value: profile.typeOfFood },
+        { label: tamilLabels.familyProperty, value: profile.familyProperty },
+        { label: tamilLabels.typeOfFood, value: profile.typeOfFood },
       ],
       [
-        { label: "Career", value: profile.career },
-        { label: "Salary", value: profile.salary },
+        { label: tamilLabels.career, value: profile.career },
+        { label: tamilLabels.salary, value: profile.salary },
       ],
       [
-        { label: "Expectation", value: profile.expectation },
+        { label: tamilLabels.expectation, value: profile.expectation },
         { label: "", value: "" },
       ],
     ];
-    infoRows.forEach((row) => {
-      let colX = leftX;
-      row.forEach((cell) => {
-        if (cell.label) {
-          doc.setFont("helvetica", "bold");
-          doc.text(cell.label, colX, y);
-          doc.setFont("helvetica", "normal");
-          doc.text(cell.value ? String(cell.value) : "-", colX + 90, y, {
-            maxWidth: 120,
-          });
-        }
-        colX += 250;
-      });
-      y += 18;
-    });
-    y += 18;
 
-    // --- Family Information Section (two columns) ---
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
-    doc.text("Family Information", leftX, y);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(11);
-    y += 18;
+    for (const row of infoRows) {
+      let colX = leftX;
+      for (const cell of row) {
+        if (cell.label) {
+          doc.setFont("helvetica", "bold");
+          await addTamilTextToPDF(doc, cell.label, colX, y, 13, 'bold');
+          doc.setFont("helvetica", "normal");
+          const value = cell.value ? String(cell.value) : "-";
+          doc.text(value, colX + 120, y, { maxWidth: 140 });
+        }
+        colX += 260;
+      }
+      y += 16;
+    }
+    y += 10;
+
+    // --- Family Information Section (Compact) ---
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    await addTamilTextToPDF(doc, tamilLabels.familyInfo, leftX, y, 14, 'bold');
+    y += 15;
+
     const fam = profile.family || {};
     const famRows = [
       [
-        { label: "Father's Name", value: fam.fatherName },
-        { label: "Mother's Name", value: fam.motherName },
+        { label: tamilLabels.fatherName, value: fam.fatherName },
+        { label: tamilLabels.motherName, value: fam.motherName },
       ],
       [
-        { label: "Father's Native", value: fam.fatherNative },
-        { label: "Mother's Native", value: fam.motherNative },
+        { label: tamilLabels.fatherNative, value: fam.fatherNative },
+        { label: tamilLabels.motherNative, value: fam.motherNative },
       ],
       [
-        { label: "Father's Profession", value: fam.fatherProfession },
-        { label: "Mother's Profession", value: fam.motherProfession },
+        { label: tamilLabels.fatherProfession, value: fam.fatherProfession },
+        { label: tamilLabels.motherProfession, value: fam.motherProfession },
       ],
       [
-        { label: "Phone Number", value: fam.phoneNumber },
-        { label: "Address", value: fam.address },
+        { label: tamilLabels.phoneNumber, value: fam.phoneNumber },
+        { label: tamilLabels.address, value: fam.address },
       ],
       [
-        { label: "Brothers", value: fam.brothers },
-        { label: "Elder Brother", value: fam.elderBrother },
+        { label: tamilLabels.brothers, value: fam.brothers },
+        { label: tamilLabels.elderBrother, value: fam.elderBrother },
       ],
       [
-        { label: "Younger Brother", value: fam.youngerBrother },
-        { label: "Married", value: fam.marriedBrother },
+        { label: tamilLabels.youngerBrother, value: fam.youngerBrother },
+        { label: tamilLabels.marriedBrother, value: fam.marriedBrother },
       ],
       [
-        { label: "Sisters", value: fam.sister },
-        { label: "Elder Sister", value: fam.elderSister },
+        { label: tamilLabels.sisters, value: fam.sisters },
+        { label: tamilLabels.elderSister, value: fam.elderSister },
       ],
       [
-        { label: "Younger Sister", value: fam.youngerSister },
-        { label: "Married", value: fam.marriedSister },
+        { label: tamilLabels.youngerSister, value: fam.youngerSister },
+        { label: tamilLabels.marriedSister, value: fam.marriedSister },
       ],
     ];
-    famRows.forEach((row) => {
-      let colX = leftX;
-      row.forEach((cell) => {
-        doc.setFont("helvetica", "bold");
-        doc.text(cell.label, colX, y);
-        doc.setFont("helvetica", "normal");
-        doc.text(
-          cell.value !== undefined && cell.value !== null
-            ? String(cell.value)
-            : "-",
-          colX + 110,
-          y,
-          { maxWidth: 120 }
-        );
-        colX += 270;
-      });
-      y += 18;
-    });
-    y += 18;
 
-    // --- Horoscope Information Section (two columns) ---
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
-    doc.text("Horoscope Information", leftX, y);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(11);
-    y += 18;
+    for (const row of famRows) {
+      let colX = leftX;
+      for (const cell of row) {
+        doc.setFont("helvetica", "bold");
+        await addTamilTextToPDF(doc, cell.label, colX, y, 11, 'bold');
+        doc.setFont("helvetica", "normal");
+        const value = cell.value !== undefined && cell.value !== null ? String(cell.value) : "-";
+        doc.text(value, colX + 120, y, { maxWidth: 140 });
+        colX += 260;
+      }
+      y += 14;
+    }
+    y += 10;
+
+    // --- Horoscope Information Section (Compact) ---
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    await addTamilTextToPDF(doc, tamilLabels.horoscopeInfo, leftX, y, 14, 'bold');
+    y += 15;
+
     const horo = profile.horoscope || profile.horoscopeProfile || {};
     const horoRows = [
       [
-        { label: "Zodiac Sign", value: horo.zodiacSign },
-        { label: "Tamil year", value: horo.tamilYear },
+        { label: tamilLabels.zodiacSign, value: horo.zodiacSign },
+        { label: tamilLabels.tamilYear, value: horo.tamilYear },
       ],
       [
-        { label: "Tamil month", value: horo.tamilMonth },
-        { label: "Udayathi Natchat", value: horo.udayathiNatchat },
+        { label: tamilLabels.tamilMonth, value: horo.tamilMonth },
+        { label: tamilLabels.udayathiNatchat, value: horo.udayathiNatchat },
       ],
       [
-        { label: "Day", value: horo.day },
-        { label: "Birth Time", value: horo.birthTime },
+        { label: tamilLabels.day, value: horo.day },
+        { label: tamilLabels.birthTime, value: horo.birthTime },
       ],
       [
-        { label: "Star/Foot", value: horo.starFoot },
-        { label: "Ascendant (Lagnam)", value: horo.ascendant },
+        { label: tamilLabels.starFoot, value: horo.starFoot },
+        { label: tamilLabels.ascendant, value: horo.ascendant },
       ],
       [
-        { label: "Birthplace", value: horo.birthplace },
-        { label: "Presence of natal direction", value: horo.natalDirection },
+        { label: tamilLabels.birthplace, value: horo.birthplace },
+        { label: tamilLabels.natalDirection, value: horo.natalDirection },
       ],
     ];
-    horoRows.forEach((row) => {
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(11);
+    for (const row of horoRows) {
       let colX = leftX;
-      row.forEach((cell) => {
+      for (const cell of row) {
         doc.setFont("helvetica", "bold");
-        doc.text(cell.label, colX, y);
+        await addTamilTextToPDF(doc, cell.label, colX, y, 11, 'bold');
         doc.setFont("helvetica", "normal");
-        doc.text(
-          cell.value !== undefined && cell.value !== null
-            ? String(cell.value)
-            : "-",
-          colX + 110,
-          y,
-          { maxWidth: 120 }
-        );
-        colX += 270;
-      });
-      y += 18;
-    });
-    y += 18;    // --- Horoscope Chart (if available) ---
+        const value = cell.value !== undefined && cell.value !== null ? String(cell.value) : "-";
+        doc.text(value, colX + 120, y, { maxWidth: 140 });
+        colX += 260;
+      }
+      y += 14;
+    }
+    y += 10;
+
+    // --- Horoscope Chart (Compact) ---
     if (Array.isArray(profile.chart) && profile.chart.length > 0) {
-      await checkPageBreak(180); // Check space for horoscope chart section
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(13);
-      doc.text("Horoscope Chart", leftX, y);
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(11);
-      y += 18;
-      // Draw a 4x4 grid for chart
-      const cellW = 100,
-        cellH = 40;
+      doc.setFontSize(14);
+      await addTamilTextToPDF(doc, tamilLabels.horoscopeChart, leftX, y, 14, 'bold');
+      y += 15;
+
+      // Draw a compact 4x4 grid for chart
+      const cellW = 60; // Reduced from 100
+      const cellH = 25; // Reduced from 40
       for (let row = 0; row < 4; row++) {
         for (let col = 0; col < 4; col++) {
           const idx = row * 4 + col;
           doc.rect(leftX + col * cellW, y + row * cellH, cellW, cellH);
           if (profile.chart[idx]) {
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(8);
             doc.text(
               String(profile.chart[idx]),
-              leftX + col * cellW + 5,
-              y + row * cellH + 20,
-              { maxWidth: cellW - 10 }
+              leftX + col * cellW + 3,
+              y + row * cellH + 15,
+              { maxWidth: cellW - 6 }
             );
           }
         }
       }
     }
+
     doc.save(`${profile.name || "profile"}_profile.pdf`);
   };
 

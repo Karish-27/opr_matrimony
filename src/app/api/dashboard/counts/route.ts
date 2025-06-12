@@ -14,10 +14,13 @@ export async function GET() {
   const totalFemaleProfiles = await prisma.userProfile.count({
     where: { type: 'bride' },
   });
+  // Count total paid users from Payment table
+  const totalPaidUsers = await prisma.payment.count();
 
   return NextResponse.json({
     totalProfiles,
     totalMaleProfiles,
     totalFemaleProfiles,
+    totalPaidUsers,
   });
 }

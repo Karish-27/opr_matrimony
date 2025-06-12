@@ -1,0 +1,21 @@
+/* Tamil Font Support for PDF Generation */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* Load Tamil fonts with fallback */
+.tamil-font {
+  font-family: 'Noto Sans Tamil', 'Latha', 'Bamini', 'Mukti', 'Code2000', Arial, sans-serif;
+}
+
+/* Ensure Tamil text renders properly in all contexts */
+* {
+  text-rendering: optimizeLegibility;
+  -webkit-font-feature-settings: "kern" 1;
+  font-feature-settings: "kern" 1;
+}
+
+/* Specific styles for Tamil script */
+[lang="ta"], .tamil {
+  font-family: 'Noto Sans Tamil', 'Latha', 'Bamini', 'Mukti', 'Code2000', Arial, sans-serif;
+  direction: ltr;
+  unicode-bidi: embed;
+}

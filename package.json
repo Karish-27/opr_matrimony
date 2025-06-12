@@ -9,14 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fontsource-variable/noto-sans-tamil": "^5.2.5",
     "@heroicons/react": "^2.2.0",
     "@prisma/client": "^6.8.2",
     "bcryptjs": "^3.0.2",
     "formidable": "^3.5.4",
     "html2canvas": "^1.4.1",
+    "html2canvas-pro": "^1.5.11",
     "i18next": "^25.2.1",
     "js-cookie": "^3.0.5",
     "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
+    "jspdf-customfonts": "^0.0.4-rc.4",
     "lucide-react": "^0.511.0",
     "mysql2": "^3.14.1",
     "next": "15.3.2",

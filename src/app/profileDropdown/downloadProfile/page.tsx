@@ -146,9 +146,9 @@ const DownloadProfilePage = () => {
     const checkPageBreak = (requiredSpace: number) => {
       if (y + requiredSpace > pageHeight - 50) { // 50pt margin from bottom
         doc.addPage();
-        y = 40; // Reset Y position for new page
         // Add orange header to new page as well
         addOrangeHeader();
+        y = 80; // Reset Y position AFTER header (header is 60pt + 20pt margin)
       }
     };
 

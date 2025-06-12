@@ -15,9 +15,16 @@ interface Payment {
   createdAt: string;
 }
 
+interface User {
+  id: number;
+  name: string;
+}
+
 const PaidUsers = () => {
   const [payments, setPayments] = useState<Payment[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [usersLoading, setUsersLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -31,10 +38,30 @@ const PaidUsers = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-
   useEffect(() => {
     fetchPayments(currentPage, itemsPerPage);
+    fetchUsers();
   }, [currentPage, itemsPerPage]);
+
+  const fetchUsers = async () => {
+    try {
+      setUsersLoading(true);
+      const res = await fetch('/api/admin/users-list');
+      if (!res.ok) {
+        throw new Error('Failed to fetch users');
+      }
+      const data = await res.json();
+      if (data.success) {
+        setUsers(data.users || []);
+      } else {
+        console.error('Failed to fetch users:', data.error);
+      }
+    } catch (err) {
+      console.error('Error fetching users:', err);
+    } finally {
+      setUsersLoading(false);
+    }
+  };
   const fetchPayments = async (page = 1, limit = 10) => {
     try {
       setLoading(true);
@@ -61,8 +88,7 @@ const PaidUsers = () => {
       setLoading(false);
     }
   };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -212,9 +238,13 @@ const PaidUsers = () => {
         {/* Top Bar */}
         <div className="flex items-center justify-between px-8 py-4 bg-white border-b">
           <h2 className="text-lg font-semibold">Paid Users</h2>
-          <div className="flex items-center gap-4">
-            <button 
-              onClick={() => setShowAddForm(!showAddForm)}
+          <div className="flex items-center gap-4">            <button 
+              onClick={() => {
+                setShowAddForm(!showAddForm);
+                if (!showAddForm) {
+                  fetchUsers(); // Refresh users when opening the form
+                }
+              }}
               className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded flex items-center gap-2"
             >
               <span>+</span>
@@ -231,20 +261,27 @@ const PaidUsers = () => {
         {showAddForm && (
           <div className="bg-white border-b p-6">
             <h3 className="text-md font-medium mb-4">Add New Payment</h3>
-            <form onSubmit={handleSubmit} className="flex gap-4 items-end">
-              <div>
+            <form onSubmit={handleSubmit} className="flex gap-4 items-end">              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Customer Name
                 </label>
-                <input
-                  type="text"
+                <select
                   name="customerName"
                   value={formData.customerName}
                   onChange={handleInputChange}
                   className="border rounded px-3 py-2 w-48"
-                  placeholder="Enter customer name"
                   required
-                />
+                >
+                  <option value="">Select a customer</option>
+                  {users.map((user) => (
+                    <option key={user.id} value={user.name}>
+                      {user.name}
+                    </option>
+                  ))}
+                </select>
+                {usersLoading && (
+                  <div className="text-xs text-gray-500 mt-1">Loading users...</div>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
