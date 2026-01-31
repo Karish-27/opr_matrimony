@@ -194,7 +194,7 @@ export const withAdminAuth = (WrappedComponent: React.ComponentType<any>) => {
               setIsAdmin(false);
               router.push('/profilelists'); // Redirect non-admin users
             }
-          } catch (error) {
+          } catch (_error) {
             setIsAdmin(false);
             router.push('/profilelists');
           } finally {

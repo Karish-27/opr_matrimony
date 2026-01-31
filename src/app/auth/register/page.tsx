@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import "@/i18n";
 import { setUserIdInLocalStorage } from "@/utils/auth";
 
-const register = () => {
+const Register = () => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { t, i18n } = useTranslation();
@@ -294,4 +294,4 @@ const register = () => {
   );
 };
 
-export default register;
+export default Register;

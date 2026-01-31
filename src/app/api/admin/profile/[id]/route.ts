@@ -3,9 +3,8 @@ import { PrismaClient } from "@/generated/prisma";
 
 const prisma = new PrismaClient();
 
-export async function GET(req: Request, context: { params: { id: string } }) {
-  const params = await context.params;
-  let { id } = params;
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   let userProfile = null;
 
   // Try numeric id
@@ -72,9 +71,8 @@ export async function GET(req: Request, context: { params: { id: string } }) {
   return NextResponse.json(data);
 }
 
-export async function PUT(req: Request, context: { params: { id: string } }) {
-  const params = await context.params;
-  const { id } = params;
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   let body: any;
   
   try {
