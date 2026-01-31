@@ -21,6 +21,7 @@ yarn-error.log*
 
 # Prisma generated files
 prisma/migrations/*/README.md
+src/generated/
 
 # Build artifacts
 *.log
