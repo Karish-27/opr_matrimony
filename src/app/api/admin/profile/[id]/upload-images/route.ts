@@ -7,11 +7,10 @@ const prisma = new PrismaClient();
 
 export async function POST(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const params = await context.params;
-    const { id } = params;
+    const { id } = await params;
     
     const formData = await req.formData();
     const files = formData.getAll('files') as File[];
